@@ -98,7 +98,7 @@ The `rag/` subdirectory contains examples for Retrieval-Augmented Generation app
 - Complete trace visualization of the RAG pipeline
 - Multiple query execution with trace capture
 
-**NOTE:** This example uses deterministic embeddings for educational purposes. The embeddings are generated using hash functions, not semantic understanding. For production RAG systems, use proper embedding models like:
+**NOTE:** This example uses deterministic embeddings for Show Case purposes. The embeddings are generated using hash functions, not semantic understanding. For production RAG systems, use proper embedding models like:
 - OpenAI embeddings (`text-embedding-ada-002`)
 - HuggingFace sentence transformers (`all-MiniLM-L6-v2`)
 - Cohere embeddings
@@ -180,7 +180,7 @@ This gives you **full visibility** into which documents were retrieved for each 
        │
        ▼
 ┌─────────────┐
-│ Embeddings  │ ← Deterministic (educational)
+│ Embeddings  │ ← Deterministic (Show Case)
 └──────┬──────┘
        │
        ▼
@@ -201,7 +201,7 @@ This gives you **full visibility** into which documents were retrieved for each 
 - **Knowledge base Q&A**: Company documentation, technical manuals
 - **Customer support**: Automated responses from knowledge base
 - **Research assistance**: Query scientific papers, legal documents
-- **Educational tools**: Textbook Q&A, course material assistance
+- **Show Case tools**: Textbook Q&A, course material assistance
 - **Compliance**: Policy document queries, regulatory guidance
 
 **Key concepts learned:**
@@ -211,7 +211,7 @@ This gives you **full visibility** into which documents were retrieved for each 
 - **Trace visualization**: Observing the complete RAG pipeline
 - **LangChain LCEL**: Composable chains for RAG systems
 
-**Educational Simplifications:**
+**Show Case Simplifications:**
 - Uses deterministic hash-based embeddings (not semantic)
 - Small in-memory vector store (not persistent)
 - Simple chunking strategy (not domain-specific)

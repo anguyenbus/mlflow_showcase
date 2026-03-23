@@ -1,4 +1,4 @@
-"""Configuration management for MLflow LLM educational repository.
+"""Configuration management for MLflow LLM Show Case repository.
 
 This module loads and validates environment variables for Zhipu AI
 and MLflow configuration.

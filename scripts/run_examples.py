@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Example execution script for MLflow LLM educational repository.
+"""Example execution script for MLflow LLM Show Case repository.
 
 Runs all examples in sequence and verifies expected outputs.
 """
@@ -81,7 +81,7 @@ def run_example(name: str, script: str) -> bool:
 
 def main() -> None:
     """Run all examples and report results."""
-    rprint("[bold cyan]MLflow LLM Educational Repository - Example Execution[/bold cyan]")
+    rprint("[bold cyan]MLflow LLM Show Case Repository - Example Execution[/bold cyan]")
     rprint("=" * 80)
 
     # Check if .env file exists

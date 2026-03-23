@@ -1,7 +1,7 @@
 [project]
-name = "mlflow-llm-educational"
+name = "mlflow-llm-Show Case"
 version = "0.1.0"
-description = "Educational repository demonstrating MLflow's LLM observability capabilities with Zhipu AI GLM-5 models"
+description = "Show Case repository demonstrating MLflow's LLM observability capabilities with Zhipu AI GLM-5 models"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

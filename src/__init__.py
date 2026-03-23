@@ -1,6 +1,6 @@
-"""MLflow LLM Educational Repository.
+"""MLflow LLM Show Case Repository.
 
-An educational repository demonstrating MLflow's LLM observability
+An Show Case repository demonstrating MLflow's LLM observability
 capabilities with Zhipu AI GLM-5 models.
 """
 

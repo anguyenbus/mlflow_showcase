@@ -43,13 +43,13 @@ class VectorStore:
             collection_name: Name for the ChromaDB collection.
             persist_directory: Directory to persist database (None for in-memory).
 
-        NOTE: Uses deterministic embeddings for educational demonstration.
+        NOTE: Uses deterministic embeddings for Show Case demonstration.
         For production, replace with OpenAIEmbeddings or HuggingFaceEmbeddings.
         """
         self.collection_name = collection_name
         self.persist_directory = Path(persist_directory) if persist_directory else None
 
-        # NOTE: Using deterministic embeddings for educational demonstration
+        # NOTE: Using deterministic embeddings for Show Case demonstration
         # This allows RAG tracing without external API dependencies
         # For production, replace with:
         # - OpenAIEmbeddings() (requires OPENAI_API_KEY)

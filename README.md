@@ -1,6 +1,6 @@
-# MLflow LLM Educational Repository
+# MLflow LLM Show Case Repository
 
-An educational repository demonstrating MLflow's LLM observability capabilities with Zhipu AI GLM-5 models. This repository provides progressive examples from basic tracing to advanced RAG systems with comprehensive evaluation.
+An Show Case repository demonstrating MLflow's LLM observability capabilities with Zhipu AI GLM-5 models. This repository provides progressive examples from basic tracing to advanced RAG systems with comprehensive evaluation.
 
 ## Overview
 

@@ -1,8 +1,8 @@
-"""Simple deterministic embeddings for educational RAG demonstrations.
+"""Simple deterministic embeddings for Show Case RAG demonstrations.
 
 This module provides a mock embeddings implementation that generates
 deterministic vectors from text using hash functions. This is suitable
-for educational purposes to demonstrate RAG concepts without requiring
+for Show Case purposes to demonstrate RAG concepts without requiring
 external API calls or dependencies.
 
 WARNING: Not suitable for production use. For real applications, use
@@ -18,7 +18,7 @@ from langchain_core.embeddings import Embeddings
 
 @beartype
 class DeterministicEmbeddings(Embeddings):
-    """Deterministic embeddings for educational RAG demonstrations.
+    """Deterministic embeddings for Show Case RAG demonstrations.
 
     Generates consistent embeddings using SHA256 hash of input text.
     Same text always produces the same embedding vector.

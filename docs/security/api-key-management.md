@@ -1,6 +1,6 @@
 # API Key Management and Security Practices
 
-This document outlines security practices for managing API keys and credentials in the MLflow LLM educational repository.
+This document outlines security practices for managing API keys and credentials in the MLflow LLM Show Case repository.
 
 ## Overview
 
