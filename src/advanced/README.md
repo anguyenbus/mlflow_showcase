@@ -98,6 +98,115 @@ The `rag/` subdirectory contains examples for Retrieval-Augmented Generation app
 - Complete trace visualization of the RAG pipeline
 - Multiple query execution with trace capture
 
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+
+# RAG pipeline with explicit span tracing
+@mlflow.trace(name="rag_query")
+def query_rag(question: str, vector_store, llm) -> str:
+    """Query RAG system with full tracing."""
+
+    # Retrieval span - log retrieved documents
+    with mlflow.start_span(name="retrieve_documents") as retrieve_span:
+        retrieve_span.set_inputs({"query": question, "top_k": 3})
+
+        # Retrieve relevant documents
+        docs = vector_store.similarity_search(question, k=3)
+
+        # Format retrieved chunks for display
+        chunk_info = [
+            {
+                "content": doc.page_content[:200] + "..." if len(doc.page_content) > 200 else doc.page_content,
+                "metadata": doc.metadata
+            }
+            for doc in docs
+        ]
+
+        retrieve_span.set_outputs({
+            "num_chunks": len(docs),
+            "chunks": chunk_info
+        })
+
+    # Generation span - log answer generation
+    with mlflow.start_span(name="generate_answer") as generate_span:
+        generate_span.set_inputs({"query": question, "context_provided": True})
+
+        # Build prompt with retrieved context
+        context = "\n\n".join([doc.page_content for doc in docs])
+        prompt = f"""Context: {context}
+
+Question: {question}
+
+Answer:"""
+
+        # Generate answer
+        response = llm.invoke(prompt)
+        generate_span.set_outputs({"answer": response.content})
+
+    return response.content
+
+# Run RAG queries with tracing
+with mlflow.start_run():
+    questions = [
+        "What is the tax rate for income between $45,001 and $120,000?",
+        "What are allowable deductions in Australian tax law?"
+    ]
+
+    for question in questions:
+        answer = query_rag(question, vector_store, llm)
+
+        # Log each query as artifact
+        mlflow.log_text(
+            f"Q: {question}\n\nA: {answer}",
+            artifact_file=f"query_{questions.index(question)}.txt"
+        )
+```
+
+**RAG Chain with LangChain:**
+
+```python
+from langchain_core.output_parsers import StrOutputParser
+
+# Build RAG chain with LCEL
+retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+
+prompt_template = ChatPromptTemplate.from_template(
+    """Context: {context}
+
+Question: {question}
+
+Answer:"""
+)
+
+# Create chain
+rag_chain = (
+    {
+        "context": retriever | (lambda docs: "\n\n".join([d.page_content for d in docs])),
+        "question": RunnablePassthrough()
+    }
+    | prompt_template
+    | llm
+    | StrOutputParser()
+)
+
+# Enable MLflow autologging for LangChain
+mlflow.langchain.autolog()
+
+# Query RAG system - automatically traced
+with mlflow.start_run():
+    response = rag_chain.invoke("What is machine learning?")
+
+    # Trace shows:
+    # - Retriever invocation
+    # - Prompt construction
+    # - LLM call
+    # - Response parsing
+```
+
 **NOTE:** This example uses deterministic embeddings for Show Case purposes. The embeddings are generated using hash functions, not semantic understanding. For production RAG systems, use proper embedding models like:
 - OpenAI embeddings (`text-embedding-ada-002`)
 - HuggingFace sentence transformers (`all-MiniLM-L6-v2`)
@@ -237,6 +346,85 @@ This gives you **full visibility** into which documents were retrieved for each 
 - Metric logging and comparison in MLflow
 - Evaluation artifact logging (datasets, results)
 - Trace-based evaluation analysis
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+
+# Define evaluation dataset
+eval_data = [
+    {
+        "question": "What is the tax rate for income between $45,001 and $120,000?",
+        "expected_answer": "32.5%",
+        "category": "tax_rates"
+    },
+    {
+        "question": "What are allowable deductions in Australian tax law?",
+        "expected_answer": "Work-related expenses, self-education expenses, etc.",
+        "category": "deductions"
+    }
+]
+
+# Log evaluation dataset
+with mlflow.start_run(run_name="rag_evaluation"):
+    mlflow.log_dict(eval_data, artifact_file="evaluation_dataset.json")
+
+    # Evaluate retrieval quality
+    retrieval_scores = []
+    for item in eval_data:
+        docs = vector_store.similarity_search(item["question"], k=3)
+        retrieval_scores.append(len(docs))
+
+    avg_retrieval = sum(retrieval_scores) / len(retrieval_scores)
+    mlflow.log_metric("retrieval_avg_docs", avg_retrieval)
+
+    # Evaluate answer relevance
+    relevance_scores = []
+    for item in eval_data:
+        answer = rag_chain.invoke(item["question"])
+        relevance = calculate_relevance(answer, item["question"])
+        relevance_scores.append(relevance)
+
+    avg_relevance = sum(relevance_scores) / len(relevance_scores)
+    mlflow.log_metric("answer_relevance", avg_relevance)
+```
+
+**Chunking Strategy Comparison:**
+
+```python
+# Compare different chunking strategies
+chunk_strategies = [
+    {"name": "small", "chunk_size": 200, "overlap": 25},
+    {"name": "medium", "chunk_size": 500, "overlap": 50},
+    {"name": "large", "chunk_size": 1000, "overlap": 100}
+]
+
+with mlflow.start_run(run_name="chunking_comparison"):
+    for strategy in chunk_strategies:
+        with mlflow.start_run(nested=True, run_name=f"strategy_{strategy['name']}"):
+            # Log chunking parameters
+            mlflow.log_param("chunk_size", strategy["chunk_size"])
+            mlflow.log_param("overlap", strategy["overlap"])
+
+            # Create RAG system with this chunking strategy
+            vector_store = create_vector_store(
+                documents,
+                chunk_size=strategy["chunk_size"],
+                overlap=strategy["overlap"]
+            )
+
+            # Evaluate on test questions
+            relevance_scores = []
+            for question in test_questions:
+                answer = rag_chain.invoke(question)
+                relevance = calculate_relevance(answer, question)
+                relevance_scores.append(relevance)
+
+            # Log metrics
+            mlflow.log_metric("avg_relevance", sum(relevance_scores) / len(relevance_scores))
+            mlflow.log_metric("num_chunks", vector_store._collection.count())
+```
 
 **Evaluation Metrics:**
 - **Retrieval Metrics:**
@@ -531,6 +719,141 @@ The `conversation/` subdirectory contains examples for multi-turn conversation t
 - MLflow span tracing for each conversation turn
 - Memory state visualization in traces
 
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from langchain_core.memory import ConversationBufferMemory
+from langchain_core.messages import HumanMessage, AIMessage
+
+# Initialize conversation memory
+memory = ConversationBufferMemory(
+    return_messages=True,
+    memory_key="history"
+)
+
+# Trace each conversation turn
+@mlflow.trace(name="conversation_turn")
+def handle_conversation_turn(user_message: str) -> str:
+    """Handle a single conversation turn with tracing."""
+
+    # Add user message to memory
+    memory.chat_memory.add_user_message(user_message)
+
+    # Get conversation history
+    history = memory.load_memory_variables({})
+    history_text = history.get("history", "")
+
+    # Build prompt with history
+    prompt = f"""You are a helpful assistant.
+
+Conversation history:
+{history_text}
+
+User: {user_message}
+Assistant:"""
+
+    # Generate response
+    with mlflow.start_span(name="generate_response") as span:
+        span.set_inputs({
+            "user_message": user_message,
+            "history_length": len(history_text)
+        })
+
+        response = llm.invoke(prompt)
+
+        span.set_outputs({
+            "response": response.content,
+            "response_length": len(response.content)
+        })
+
+    # Add AI response to memory
+    memory.chat_memory.add_ai_message(response.content)
+
+    # Log memory metrics
+    mlflow.log_metric("total_messages", len(memory.chat_memory.messages))
+    mlflow.log_metric("user_messages", len([m for m in memory.chat_memory.messages if isinstance(m, HumanMessage)]))
+    mlflow.log_metric("ai_messages", len([m for m in memory.chat_memory.messages if isinstance(m, AIMessage)]))
+
+    return response.content
+
+# Multi-turn conversation
+with mlflow.start_run(run_name="multi_turn_conversation"):
+    turns = [
+        "Hello! What's your name?",
+        "What did I just ask you?",
+        "Can you help me calculate 15 * 23?",
+        "What was the result of that calculation?"
+    ]
+
+    for i, user_message in enumerate(turns, 1):
+        print(f"\nTurn {i}: {user_message}")
+        response = handle_conversation_turn(user_message)
+        print(f"AI: {response}")
+```
+
+**Memory Management with MLflow:**
+
+```python
+# Advanced memory tracking
+@mlflow.trace(name="conversation_with_memory_limit")
+def handle_conversation_with_limit(user_message: str, max_messages: int = 10):
+    """Handle conversation with memory limit tracking."""
+
+    # Check memory size
+    current_messages = len(memory.chat_memory.messages)
+
+    # Log memory usage
+    mlflow.log_metric("memory_size", current_messages)
+
+    if current_messages >= max_messages:
+        with mlflow.start_span(name="truncate_memory") as span:
+            # Truncate old messages
+            old_size = current_messages
+            memory.chat_memory.clear()  # Or implement sliding window
+
+            span.set_inputs({"old_size": old_size, "limit": max_messages})
+            span.set_outputs({"new_size": 0})
+
+            mlflow.log_param("memory_truncated", "true")
+
+    # Process message
+    response = handle_conversation_turn(user_message)
+
+    return response
+```
+
+**Conversation Analytics:**
+
+```python
+# Extract conversation analytics from traces
+def analyze_conversation_trace(trace_id: str):
+    """Analyze conversation patterns from trace."""
+    trace = mlflow.get_trace(trace_id)
+
+    total_turns = 0
+    total_tokens = 0
+    user_messages = []
+    ai_responses = []
+
+    for span in trace.data.spans:
+        if span.name == "conversation_turn":
+            total_turns += 1
+
+            # Extract user and AI messages from span data
+            if "user_message" in span.inputs:
+                user_messages.append(span.inputs["user_message"])
+
+            if "response" in span.outputs:
+                ai_responses.append(span.outputs["response"])
+
+    return {
+        "total_turns": total_turns,
+        "total_messages": len(user_messages) + len(ai_responses),
+        "avg_response_length": sum(len(r) for r in ai_responses) / len(ai_responses) if ai_responses else 0
+    }
+```
+
 **Run the example:**
 ```bash
 uv run python src/advanced/conversation/conversation_tracing.py
@@ -635,6 +958,194 @@ The `tools/` subdirectory contains examples for LangChain tool calling with MLfl
 - Tool selection and invocation tracing
 - Multi-step tool workflows
 - Tool input/output logging in spans
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from langchain_core.tools import tool
+from datetime import datetime
+
+# Define tools with @tool decorator
+@tool
+def get_current_time(format: str = "%Y-%m-%d %H:%M:%S") -> str:
+    """Get the current date and time.
+
+    Args:
+        format: strftime format string for output
+
+    Returns:
+        Current time formatted as specified
+    """
+    current_time = datetime.now()
+    return current_time.strftime(format)
+
+@tool
+def calculate(expression: str) -> float:
+    """Evaluate a mathematical expression.
+
+    Args:
+        expression: Mathematical expression to evaluate (e.g., "15 * 23")
+
+    Returns:
+        Result of the calculation
+    """
+    try:
+        result = eval(expression)
+        return float(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Bind tools to LLM
+tools = [get_current_time, calculate]
+llm_with_tools = llm.bind_tools(tools)
+
+# Trace tool calling
+@mlflow.trace(name="tool_query")
+def process_tool_query(query: str) -> str:
+    """Process query with tool calling and tracing."""
+
+    with mlflow.start_span(name="query_processing") as span:
+        span.set_inputs({"query": query, "available_tools": [t.name for t in tools]})
+
+        # Invoke LLM with tools
+        response = llm_with_tools.invoke(query)
+
+        # Track tool calls
+        if hasattr(response, 'tool_calls') and response.tool_calls:
+            tool_calls_made = []
+
+            for tool_call in response.tool_calls:
+                tool_name = tool_call['name']
+                tool_args = tool_call['args']
+
+                # Execute tool
+                with mlflow.start_span(name=f"tool_call_{tool_name}") as tool_span:
+                    tool_span.set_inputs({"tool": tool_name, "args": tool_args})
+
+                    # Find and call the tool
+                    for t in tools:
+                        if t.name == tool_name:
+                            result = t.invoke(tool_args)
+                            tool_span.set_outputs({"result": result})
+                            tool_calls_made.append({
+                                "tool": tool_name,
+                                "args": tool_args,
+                                "result": result
+                            })
+                            break
+
+            span.set_outputs({
+                "tool_calls": tool_calls_made,
+                "final_response": response.content
+            })
+
+            # Log tool usage metrics
+            mlflow.log_metric("tools_used", len(tool_calls_made))
+
+        return response.content
+
+# Run tool queries
+with mlflow.start_run(run_name="tool_calling_demo"):
+    queries = [
+        "What is 15 * 23?",
+        "What time is it right now?",
+        "What's 10 * 5 and what's today's date?"
+    ]
+
+    for query in queries:
+        print(f"\nQuery: {query}")
+        response = process_tool_query(query)
+        print(f"Response: {response}")
+```
+
+**Tool Definition Patterns:**
+
+```python
+# Simple tool
+@tool
+def add_numbers(a: float, b: float) -> float:
+    """Add two numbers together.
+
+    Args:
+        a: First number
+        b: Second number
+
+    Returns:
+        Sum of a and b
+    """
+    return a + b
+
+# Tool with error handling
+@tool
+def divide_numbers(a: float, b: float) -> float:
+    """Divide two numbers.
+
+    Args:
+        a: Numerator
+        b: Denominator
+
+    Returns:
+        Quotient of a divided by b
+
+    Raises:
+        ValueError: If b is zero
+    """
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+
+    with mlflow.start_span(name="divide_operation"):
+        result = a / b
+        mlflow.log_metric("division_result", result)
+        return result
+
+# Tool with side effects
+@tool
+def save_to_file(content: str, filename: str) -> str:
+    """Save content to a file.
+
+    Args:
+        content: Text content to save
+        filename: Name of the file
+
+    Returns:
+        Success message
+    """
+    with open(filename, 'w') as f:
+        f.write(content)
+
+    mlflow.log_artifact(filename)
+    return f"Saved {len(content)} characters to {filename}"
+```
+
+**Multi-Tool Workflows:**
+
+```python
+@mlflow.trace(name="multi_tool_workflow")
+def complex_workflow(query: str):
+    """Execute complex workflow with multiple tools."""
+
+    # Parse query to determine required tools
+    if "calculate" in query.lower() and "time" in query.lower():
+        # Need both calculate and get_current_time
+        with mlflow.start_span(name="workflow_planning"):
+            mlflow.log_param("workflow_type", "multi_tool")
+
+        # Execute tools in sequence
+        calculation_result = calculate.invoke({"expression": "15 * 23"})
+        time_result = get_current_time.invoke({"format": "%Y-%m-%d"})
+
+        return {
+            "calculation": calculation_result,
+            "time": time_result
+        }
+
+    elif "calculate" in query.lower():
+        return calculate.invoke({"expression": "10 * 5"})
+
+    else:
+        return get_current_time.invoke({})
+```
 
 **Built-in Tools:**
 - `get_current_time`: Get current date/time with custom formatting

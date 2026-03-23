@@ -38,6 +38,42 @@ Before running these examples, ensure you have:
 - Logging metrics (performance measurements)
 - Logging artifacts (output files)
 
+**Key MLflow APIs:**
+
+```python
+import mlflow
+
+# Creating an experiment
+experiment_id = mlflow.create_experiment(
+    name="mlflow-basics",
+    tags={"version": "1.0", "team": "data-science"}
+)
+
+# Starting a run and logging data
+with mlflow.start_run(experiment_id=experiment_id) as run:
+    # Log hyperparameters (configuration inputs)
+    mlflow.log_param("learning_rate", 0.01)
+    mlflow.log_param("batch_size", 32)
+    mlflow.log_param("epochs", 100)
+
+    # Log metrics (performance measurements)
+    mlflow.log_metric("accuracy", 0.95)
+    mlflow.log_metric("loss", 0.05)
+
+    # Log metrics with step (for time-series data)
+    for epoch in range(10):
+        accuracy = train_one_epoch(epoch)
+        mlflow.log_metric("accuracy", accuracy, step=epoch)
+
+    # Log artifacts (output files)
+    mlflow.log_artifact("model.pkl")
+    mlflow.log_text("Training completed successfully", "summary.txt")
+
+    # Get run info
+    run_id = run.info.run_id
+    print(f"Run ID: {run_id}")
+```
+
 **Run the example:**
 ```bash
 uv run python src/basics/mlflow_tracking.py
@@ -78,6 +114,50 @@ View results at: http://localhost:5000
 - Retrieving and displaying trace data programmatically
 - Visualizing function call hierarchies in MLflow UI
 
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from mlflow.entities import SpanType
+
+# Basic tracing with decorator
+@mlflow.trace(name="custom_operation", span_type="LLM")
+def process_data(input_text: str) -> str:
+    """Automatically tracks function inputs, outputs, and execution time."""
+    result = input_text.upper()
+    return result
+
+# Tracing with custom attributes
+@mlflow.trace
+def calculate_metrics(data: list) -> dict:
+    """Add custom metadata to spans."""
+    span = mlflow.get_current_span()
+    span.set_attribute("custom_field", "value")
+    span.set_attribute("data_length", len(data))
+
+    result = {"mean": sum(data) / len(data)}
+    return result
+
+# Nested function calls (automatic span hierarchy)
+@mlflow.trace
+def parent_function(x: int, y: int) -> int:
+    """Parent span that calls other traced functions."""
+    return child_function(x, y)
+
+@mlflow.trace
+def child_function(a: int, b: int) -> int:
+    """Child span - automatically linked to parent."""
+    return a + b
+
+# Retrieve and display trace information
+trace = mlflow.get_trace(trace_id)
+print(f"Trace ID: {trace.info.trace_id}")
+print(f"Execution time: {trace.info.execution_time_ms}ms")
+
+for span in trace.data.spans:
+    print(f"{span.name}: {span.inputs} → {span.outputs}")
+```
+
 **Run the example:**
 ```bash
 uv run python src/basics/tracing_decorators.py
@@ -117,6 +197,46 @@ Now run `mlflow ui` and open MLflow UI to see traces!
 - Making simple completion requests to GLM-5
 - Understanding the request/response pattern
 
+**Key Zhipu AI APIs:**
+
+```python
+from zhipuai import ZhipuAI
+import os
+
+# Initialize Zhipu AI client
+client = ZhipuAI(api_key=os.getenv("ZHIPU_API_KEY"))
+
+# Simple completion request
+response = client.chat.completions.create(
+    model="glm-5",  # Zhipu's latest model
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What is machine learning? Explain in one sentence."}
+    ],
+    temperature=0.7,
+    max_tokens=150
+)
+
+# Extract response
+answer = response.choices[0].message.content
+print(f"Response: {answer}")
+
+# With MLflow tracking
+import mlflow
+
+with mlflow.start_run():
+    mlflow.log_param("model", "glm-5")
+    mlflow.log_param("temperature", 0.7)
+
+    response = client.chat.completions.create(
+        model="glm-5",
+        messages=[{"role": "user", "content": "Hello!"}]
+    )
+
+    mlflow.log_metric("tokens_used", response.usage.total_tokens)
+    mlflow.log_text(response.choices[0].message.content, "response.txt")
+```
+
 **Run the example:**
 ```bash
 uv run python src/basics/zhipu_completions.py
@@ -144,6 +264,57 @@ being explicitly programmed.
 **Provides:**
 - `create_zhipu_langchain_llm()` - Creates a LangChain ChatOpenAI instance for Zhipu AI
 - `create_streaming_llm()` - Creates a streaming-enabled LangChain LLM
+
+**Key LangChain + MLflow APIs:**
+
+```python
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+import mlflow
+
+# Create LangChain LLM for Zhipu AI
+def create_zhipu_langchain_llm(model: str = "glm-5"):
+    """Create a LangChain ChatOpenAI instance configured for Zhipu AI."""
+    return ChatOpenAI(
+        model=model,
+        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
+        openai_api_key=os.getenv("ZHIPU_API_KEY"),
+        temperature=0.7,
+    )
+
+# Create LangChain chain with MLflow tracking
+llm = create_zhipu_langchain_llm()
+prompt = ChatPromptTemplate.from_template(
+    "You are a helpful assistant. Answer: {question}"
+)
+
+# Build chain with LCEL (LangChain Expression Language)
+chain = prompt | llm
+
+# Use chain with MLflow tracking
+with mlflow.start_run():
+    response = chain.invoke({"question": "What is MLflow?"})
+    print(response.content)
+
+    # Log metrics
+    mlflow.log_metric("response_length", len(response.content))
+```
+
+**With MLflow Autologging:**
+
+```python
+import mlflow
+from langchain_openai import ChatOpenAI
+
+# Enable MLflow autologging for LangChain
+mlflow.langchain.autolog()
+
+# All LangChain operations are automatically traced
+llm = ChatOpenAI(model="glm-5")
+response = llm.invoke("Hello!")
+
+# Traces and metrics are logged automatically
+```
 
 ---
 

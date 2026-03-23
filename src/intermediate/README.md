@@ -37,6 +37,72 @@ Before running these examples, ensure you have:
 - Capturing inputs and outputs at each span level
 - Document processing pipeline with multi-step tracing
 
+**Key MLflow APIs:**
+
+```python
+import mlflow
+
+# Manual span creation with full control
+with mlflow.start_run():
+    # Create parent span for document processing
+    with mlflow.start_span(name="process_document") as parent_span:
+        parent_span.set_inputs({"file_path": "document.pdf"})
+
+        # Child span for text extraction
+        with mlflow.start_span(name="extract_text") as extract_span:
+            extract_span.set_inputs({"file_path": "document.pdf"})
+            text = extract_text_from_pdf("document.pdf")
+            extract_span.set_outputs({
+                "text_length": len(text),
+                "num_pages": 10
+            })
+
+        # Child span for sentiment analysis
+        with mlflow.start_span(name="analyze_sentiment") as sentiment_span:
+            sentiment_span.set_inputs({"text": text[:100]})
+            sentiment = analyze_sentiment(text)
+            sentiment_span.set_outputs({
+                "sentiment": sentiment,
+                "confidence": 0.95
+            })
+
+        # Complete parent span
+        parent_span.set_outputs({
+            "status": "completed",
+            "sentiment": sentiment
+        })
+
+# Span hierarchy:
+# process_document (parent)
+# ├── extract_text (child)
+# └── analyze_sentiment (child)
+```
+
+**Conditional Tracing:**
+
+```python
+# Trace only specific conditions
+def process_document(file_path: str, enable_tracing: bool = False):
+    if not enable_tracing:
+        return simple_process(file_path)
+
+    with mlflow.start_span(name="process_document") as span:
+        span.set_inputs({"file_path": file_path})
+
+        # Only trace if file size > threshold
+        file_size = os.path.getsize(file_path)
+        if file_size > 10_000_000:  # 10MB
+            span.set_attribute("large_file", True)
+            # Detailed tracing for large files
+            with mlflow.start_span(name="detailed_processing"):
+                result = detailed_process(file_path)
+        else:
+            result = simple_process(file_path)
+
+        span.set_outputs({"status": "done"})
+        return result
+```
+
 **How it works:**
 
 Instead of using `@mlflow.trace` decorators, you explicitly create spans:
@@ -110,6 +176,74 @@ View in MLflow UI to see span hierarchy!
 - Timing information for each span and total execution time
 - Data pipeline visualization with sequential operations
 
+**Key MLflow APIs:**
+
+```python
+import mlflow
+import time
+
+# Nested span hierarchies with decorators
+@mlflow.trace
+def fetch_data(source: str) -> dict:
+    """Fetches data from external source."""
+    time.sleep(0.5)  # Simulate API call
+    return {"records": 1000, "source": source}
+
+@mlflow.trace
+def process_data(data: dict) -> dict:
+    """Processes the fetched data."""
+    time.sleep(0.3)  # Simulate processing
+    return {"processed": data["records"], "errors": 0}
+
+@mlflow.trace
+def generate_report(data: dict) -> str:
+    """Generates final report."""
+    time.sleep(0.2)  # Simulate report generation
+    return f"Report: {data['processed']} records processed"
+
+@mlflow.trace
+def run_data_pipeline(source: str) -> str:
+    """Orchestrates the entire data pipeline."""
+    # These calls automatically create nested spans
+    data = fetch_data(source)
+    processed = process_data(data)
+    report = generate_report(processed)
+    return report
+
+# Run pipeline - creates automatic hierarchy
+with mlflow.start_run():
+    result = run_data_pipeline("api.example.com")
+
+# Span hierarchy:
+# run_data_pipeline (root span)
+# ├── fetch_data (child span, ~500ms)
+# ├── process_data (child span, ~300ms)
+# └── generate_report (child span, ~200ms)
+```
+
+**Deep Nesting with Manual Spans:**
+
+```python
+# Complex nested structure with manual spans
+with mlflow.start_run():
+    with mlflow.start_span(name="data_pipeline") as root:
+        with mlflow.start_span(name="fetch") as span1:
+            data = fetch_from_api()
+            span1.set_outputs({"count": len(data)})
+
+        with mlflow.start_span(name="transform") as span2:
+            with mlflow.start_span(name="clean") as child1:
+                clean_data = clean(data)
+
+            with mlflow.start_span(name="validate") as child2:
+                valid_data = validate(clean_data)
+
+            span2.set_outputs({"valid": len(valid_data)})
+
+        with mlflow.start_span(name="load") as span3:
+            load_to_database(valid_data)
+```
+
 **The example creates a sequential pipeline hierarchy:**
 ```
 run_data_pipeline (root span)
@@ -161,6 +295,96 @@ Total execution time: 1.32s
 - Trace retrieval using `mlflow.get_trace()`
 - Searching traces with `mlflow.search_traces()`
 - Understanding span counts and trace metadata
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+import uuid
+
+# Distributed workflow with trace correlation
+@mlflow.trace
+def query_database(user_id: str) -> dict:
+    """Simulates database query."""
+    return {"user_id": user_id, "name": "John Doe"}
+
+@mlflow.trace
+def fetch_external_profile(user_id: str) -> dict:
+    """Simulates external API call."""
+    return {"profile": "complete"}
+
+@mlflow.trace
+def calculate_recommendations(user: dict) -> list:
+    """Calculates recommendations."""
+    return ["item1", "item2", "item3"]
+
+@mlflow.trace
+def update_statistics(user_id: str) -> bool:
+    """Updates user statistics."""
+    return True
+
+@mlflow.trace
+def user_workflow(user_id: str) -> dict:
+    """Orchestrates distributed user workflow."""
+    # All these calls are correlated in one trace
+    user_data = query_database(user_id)
+    profile = fetch_external_profile(user_id)
+    recommendations = calculate_recommendations(user_data)
+    update_statistics(user_id)
+
+    return {
+        "user": user_data,
+        "profile": profile,
+        "recommendations": recommendations
+    }
+
+# Run workflow
+with mlflow.start_run():
+    result = user_workflow("user_123")
+
+# Retrieve trace information
+trace = mlflow.get_trace(trace_id)
+print(f"Trace ID: {trace.info.trace_id}")
+print(f"Total spans: {len(trace.data.spans)}")
+
+# Search traces with filters
+traces = mlflow.search_traces(
+    experiment_ids=[experiment_id],
+    filter_string="user_workflow"
+)
+
+# Correlate across services with custom context
+@mlflow.trace
+def process_request(request_id: str):
+    """Process request with correlation ID."""
+    span = mlflow.get_current_span()
+    span.set_attribute("request_id", request_id)
+    span.set_attribute("correlation_id", str(uuid.uuid4()))
+
+    # Call other services - all correlated
+    result = service_a(request_id)
+    result = service_b(result)
+
+    return result
+```
+
+**Cross-Service Tracing:**
+
+```python
+# Service A
+@mlflow.trace
+def service_a(request_id: str) -> dict:
+    """Service A - Business logic."""
+    mlflow.get_current_span().set_attribute("service", "service-a")
+    return {"data": "from_service_a"}
+
+# Service B
+@mlflow.trace
+def service_b(data: dict) -> dict:
+    """Service B - Processing."""
+    mlflow.get_current_span().set_attribute("service", "service-b")
+    return {"result": "processed"}
+```
 
 **The example creates a distributed workflow hierarchy:**
 ```
@@ -217,6 +441,81 @@ Found 1 traces for this workflow
 - No manual span creation needed
 - Multiple trace capture from sequential invocations
 - Trace search and retrieval for LangChain operations
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+
+# Enable autologging - one line enables automatic tracing
+mlflow.langchain.autolog()
+
+# All LangChain operations are now automatically traced
+llm = ChatOpenAI(model="glm-5")
+prompt = ChatPromptTemplate.from_template(
+    "You are a helpful assistant. Answer: {question}"
+)
+
+# Build chain - automatically traced
+chain = prompt | llm
+
+# Invoke chain - all steps automatically logged
+with mlflow.start_run():
+    response1 = chain.invoke({"question": "What is the capital of Japan?"})
+    response2 = chain.invoke({"question": "How many animals are there?"})
+
+# All traces are automatically captured and searchable
+traces = mlflow.search_traces(experiment_names=["langchain_autolog"])
+for trace in traces:
+    print(f"Trace ID: {trace.info.trace_id}")
+    print(f"Spans: {len(trace.data.spans)}")
+```
+
+**Autologging with Complex Chains:**
+
+```python
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+
+# Enable autologging
+mlflow.langchain.autolog()
+
+# Complex chain with memory - automatically traced
+memory = ConversationBufferMemory()
+conversation = ConversationChain(
+    llm=llm,
+    memory=memory,
+    verbose=True
+)
+
+# All conversation turns automatically traced
+response1 = conversation.predict(input="Hi, I'm John")
+response2 = conversation.predict(input="What's my name?")
+
+# Trace shows:
+# - ConversationChain invocation
+# - Prompt construction with history
+# - LLM call
+# - Response parsing
+# - Memory update
+```
+
+**Autologging Configuration:**
+
+```python
+# Configure autologging behavior
+mlflow.langchain.autolog(
+    log_input_examples=True,  # Log sample inputs
+    log_model_signatures=True,  # Log model signatures
+    log_models=True,  # Log model artifacts
+    disable=False,  # Enable autologging
+    exclusive=False,  # Allow other instrumentation
+    disable_for_unsupported_versions=False,
+    silent=False  # Print confirmation
+)
+```
 
 **How it works:**
 
@@ -287,6 +586,104 @@ Spans: 4
 - Retrieving trace details and span information
 - Batch trace analysis
 - Trace metadata extraction
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+
+# Search traces by experiment name
+traces = mlflow.search_traces(
+    experiment_names=["my_experiment"],
+    max_results=10
+)
+
+# Filter traces by run ID
+traces = mlflow.search_traces(
+    run_ids=["abc123", "def456"]
+)
+
+# Search with experiment ID
+traces = mlflow.search_traces(
+    experiment_ids=[1, 2, 3],
+    max_results=50
+)
+
+# Analyze traces in batch
+for trace in traces:
+    print(f"Trace ID: {trace.info.trace_id}")
+    print(f"Execution time: {trace.info.execution_time_ms}ms")
+    print(f"Span count: {len(trace.data.spans)}")
+    print(f"Request: {trace.data.request}")
+
+    # Access individual spans
+    for span in trace.data.spans:
+        print(f"  {span.name}: {span.inputs} → {span.outputs}")
+
+# Get specific trace by ID
+trace = mlflow.get_trace(trace_id="tr-abc123")
+print(f"Trace: {trace.info.trace_id}")
+print(f"Status: {trace.info.status}")
+```
+
+**Advanced Trace Search:**
+
+```python
+# Search with time range
+from datetime import datetime, timedelta
+
+# Search traces from last hour
+cutoff_time = datetime.now() - timedelta(hours=1)
+traces = mlflow.search_traces(
+    experiment_names=["production"],
+    max_results=100
+)
+
+# Filter by time in Python
+recent_traces = [
+    t for t in traces
+    if datetime.fromtimestamp(t.info.timestamp_ms / 1000) > cutoff_time
+]
+
+# Analyze performance metrics
+slow_traces = []
+for trace in traces:
+    if trace.info.execution_time_ms > 5000:  # > 5 seconds
+        slow_traces.append({
+            "trace_id": trace.info.trace_id,
+            "duration": trace.info.execution_time_ms,
+            "span_count": len(trace.data.spans)
+        })
+
+print(f"Found {len(slow_traces)} slow traces")
+```
+
+**Trace Metadata Extraction:**
+
+```python
+# Extract metadata for analysis
+def extract_trace_metadata(trace):
+    """Extract key metadata from trace."""
+    return {
+        "trace_id": trace.info.trace_id,
+        "execution_time_ms": trace.info.execution_time_ms,
+        "span_count": len(trace.data.spans),
+        "status": trace.info.status,
+        "request": trace.data.request,
+        "response": trace.data.response,
+    }
+
+# Batch analyze traces
+traces = mlflow.search_traces(experiment_names=["rag_production"])
+metadata_list = [extract_trace_metadata(t) for t in traces]
+
+# Calculate statistics
+import statistics
+execution_times = [m["execution_time_ms"] for m in metadata_list]
+print(f"Average execution time: {statistics.mean(execution_times):.2f}ms")
+print(f"Median execution time: {statistics.median(execution_times):.2f}ms")
+print(f"Max execution time: {max(execution_times)}ms")
+```
 
 **Run the example:**
 ```bash
