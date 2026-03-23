@@ -279,19 +279,51 @@ Spans: 4
 
 ### 5. Trace Search (`tracing_search.py`)
 
-Coming soon...
+**Overview:** Demonstrates programmatic trace retrieval and filtering using MLflow's search API, enabling you to find and analyze traces matching specific criteria.
 
-### 6. Custom Metrics Evaluation (`evaluate_custom_metrics.py`)
+**What it demonstrates:**
+- Searching traces by experiment name
+- Filtering traces by run ID
+- Retrieving trace details and span information
+- Batch trace analysis
+- Trace metadata extraction
 
-Coming soon...
+**Run the example:**
+```bash
+uv run python src/intermediate/tracing_search.py
+```
 
-### 7. QA Evaluation (`evaluate_qa.py`)
+**Expected output:**
+```
+Running traced functions...
+✓ Traced 10 function calls
 
-Coming soon...
+Searching for traces...
+Found 10 traces
 
-### 8. Summarization Evaluation (`evaluate_summarization.py`)
+Filtering traces by experiment: 8
+Found 10 traces in experiment
 
-Coming soon...
+Sample trace:
+  ID: tr-99abde0bebc2cefc3a1cf9355f97ca6f
+  Span Count: 4
+  Execution Time: 1.23s
+
+View in MLflow UI: http://localhost:5000/#/experiments/8
+```
+
+**Real-World Use Cases:**
+- **Debugging**: Find traces for specific runs or time periods
+- **Performance analysis**: Filter slow traces for investigation
+- **Batch processing**: Analyze multiple traces programmatically
+- **Monitoring**: Build custom dashboards with trace data
+- **Compliance**: Export traces for auditing
+
+**Key concepts learned:**
+- **mlflow.search_traces()**: Search and filter traces
+- **Trace filtering**: By experiment, run ID, time range
+- **Trace metadata**: Extract span counts, execution times
+- **Batch analysis**: Process multiple traces efficiently
 
 ---
 
