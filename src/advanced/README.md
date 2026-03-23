@@ -232,7 +232,334 @@ Coming soon...
 
 ### 4. RAG Evaluation (`rag/evaluate_rag.py`)
 
-Coming soon...
+**Overview:** Demonstrates evaluating RAG system quality with MLflow metrics, measuring retrieval quality, answer relevance, and comparing different chunking strategies.
+
+**What it demonstrates:**
+- Evaluation dataset creation with ground truth answers
+- Retrieval quality metrics (documents retrieved, relevance)
+- Answer relevance evaluation using keyword overlap
+- Chunking strategy comparison (small vs medium vs large chunks)
+- MLflow metrics logging for evaluation results
+- Artifact logging for detailed results
+
+**Run the example:**
+```bash
+uv run python src/advanced/rag/evaluate_rag.py
+```
+
+**NOTE:** This example takes 2-3 minutes to complete as it evaluates multiple questions with the LLM.
+
+**Expected output:**
+```
+RAG System Evaluation
+==================================================
+
+Setting up RAG system...
+✓ Created LangChain LLM for Zhipu AI model: glm-5
+
+Loading evaluation dataset...
+✓ Created evaluation dataset: 5 questions
+
+Evaluating retrieval quality...
+✓ Retrieved 3.00 documents on average
+
+Evaluating answer relevance...
+✓ Average relevance score: 0.45
+
+Chunking Strategy Comparison
+Testing: small_chunks (size=200, overlap=25)
+  Answer: Based on the provided context...
+
+Testing: medium_chunks (size=500, overlap=50)
+  Answer: According to the tax law documents...
+
+Testing: large_chunks (size=1000, overlap=100)
+  Answer: The documents indicate that...
+
+RAG evaluation complete!
+View results in MLflow UI: http://localhost:5000
+
+Average relevance score: 0.45
+Average documents retrieved: 3.00
+```
+
+**Result in MLflow UI:**
+
+![RAG Evaluation Metrics](./screenshots/rag_evaluation_metrics.png)
+*Screenshot showing evaluation metrics: avg_documents_retrieved (3.0) and avg_relevance_score (0.31)*
+
+![RAG Evaluation Traces](./screenshots/rag_evaluation_traces.png)
+*Screenshot showing trace view with retrieval_eval and answer_eval spans for each question*
+
+![RAG Evaluation Artifacts](./screenshots/rag_evaluation_artifacts.png)
+*Screenshot showing artifacts: evaluation results CSV and chunking strategy comparison files*
+
+**What the Metrics Mean:**
+
+- **avg_documents_retrieved: 3.0** - The system consistently retrieves 3 documents (as configured with `retrieval_k=3`)
+
+- **avg_relevance_score: 0.31** - This indicates the keyword overlap between generated answers and ground truth. In this Show Case example with deterministic embeddings, the relevance is lower because:
+  - Deterministic embeddings don't capture semantic meaning
+  - Simple keyword matching is used for evaluation
+  - Production systems would use semantic similarity or LLM-based evaluation
+
+**Chunking Strategy Insights:**
+
+From the run output and artifacts, you can compare answers across different chunk sizes:
+- **small_chunks (200 chars)**: 11 chunks, more precise but may miss context
+- **medium_chunks (500 chars)**: 5 chunks, balanced approach
+- **large_chunks (1000 chars)**: 2 chunks, **best performance** - found the correct tax rate answer!
+
+The evaluation revealed that **larger chunks performed better** for this specific use case, demonstrating how RAG evaluation helps optimize system configuration.
+
+**Real-World Use Cases:**
+- **RAG system optimization**: Find optimal chunk size and overlap
+- **Quality assurance**: Monitor RAG system performance over time
+- **A/B testing**: Compare different retrieval strategies or embedding models
+- **Regression testing**: Ensure RAG quality doesn't degrade with changes
+- **Production monitoring**: Track retrieval and generation metrics in production
+
+**Key concepts learned:**
+- **Evaluation datasets**: Creating ground truth for testing
+- **Retrieval metrics**: Measuring document retrieval quality
+- **Answer relevance**: Simple keyword overlap vs LLM-based evaluation
+- **Chunking strategies**: Impact of chunk size on RAG performance
+- **MLflow artifacts**: Saving detailed results for analysis
+
+**Show Case Simplifications:**
+- Uses keyword overlap for relevance (production: use LLM judge or semantic similarity)
+- Small evaluation dataset (5 questions vs 100+ in production)
+- Simple retrieval metrics (production: add precision@k, recall, MRR)
+- Basic chunking comparison (production: test more parameters)
+
+**Production considerations:**
+- Use LLM-as-a-judge for answer quality evaluation
+- Implement semantic similarity metrics with embeddings
+- Add faithfulness metrics (does answer cite retrieved context?)
+- Test with larger, diverse evaluation datasets
+- Include edge cases and adversarial examples
+- Track latency and cost metrics alongside quality
+
+---
+
+## Conversation Examples
+
+The `conversation/` subdirectory contains examples for multi-turn conversation tracing:
+
+### 5. Multi-Turn Conversation Tracing (`conversation/conversation_tracing.py`)
+
+**Overview:** Demonstrates tracing multi-turn conversations with LangChain and MLflow, showing how to observe conversation history, context management, and message state across multiple exchanges.
+
+**What it demonstrates:**
+- Conversation memory management with ConversationBufferMemory
+- Message history tracking across turns
+- Context-aware responses using conversation history
+- MLflow span tracing for each conversation turn
+- Memory state visualization in traces
+
+**Run the example:**
+```bash
+uv run python src/advanced/conversation/conversation_tracing.py
+```
+
+**Expected output:**
+```
+Multi-Turn Conversation Tracing Demo
+==================================================
+
+Turn 1: Hello! What's your name?
+AI: I'm an AI assistant. I don't have a personal name, but you can call me Assistant!
+
+Messages in history: 2
+
+Turn 2: What did I just ask you?
+AI: You asked me what my name is.
+
+Messages in history: 4
+
+Turn 3: Can you help me calculate 15 * 23?
+AI: 15 multiplied by 23 equals 345.
+
+Messages in history: 6
+
+Turn 4: What was the result of that calculation?
+AI: The result of the calculation was 345.
+
+Conversation complete!
+Total exchanges: 4
+Total messages: 8
+```
+
+**Result in MLflow UI:**
+
+![Conversation Turn 1](./screenshots/conversation_tracing_1.png)
+*Screenshot showing Turn 1 trace with initial greeting*
+
+![Conversation Turn 2](./screenshots/conversation_tracing_2.png)
+*Screenshot showing Turn 2 with context from previous message*
+
+![Conversation Turn 3](./screenshots/conversation_tracing_3.png)
+*Screenshot showing Turn 3 with calculation request*
+
+![Conversation Turn 4](./screenshots/conversation_tracing_4.png)
+*Screenshot showing Turn 4 referencing previous calculation*
+
+**What you see in the traces:**
+- **Turn-level spans**: Each conversation turn is traced with `@mlflow.trace`
+- **User input spans**: Log user messages with history context
+- **Response generation spans**: Show LLM inputs (including history) and outputs
+- **Memory metrics**: Total messages, user messages, AI messages logged as metrics
+- **Conversation flow**: Click through each turn to see how history builds up
+
+**Real-World Use Cases:**
+- **Customer support chatbots**: Track conversation context across multiple turns
+- **Virtual assistants**: Maintain conversation history for contextual responses
+- **Dialogue systems**: Debug conversation flow and context handling
+- **Chat analytics**: Analyze conversation patterns and user behavior
+- **Memory optimization**: Monitor memory usage and history truncation
+
+**Key concepts learned:**
+- **ConversationBufferMemory**: LangChain's in-memory conversation history
+- **Message types**: HumanMessage, AIMessage, and their roles
+- **History injection**: Including conversation context in prompts
+- **Memory management**: Controlling history length and token limits
+- **Span relationships**: Parent-child spans in conversation turns
+
+**Architecture:**
+```
+┌─────────────────────────────────────────────────────┐
+│            Conversation Turn                        │
+│  ┌──────────────┐      ┌──────────────────┐        │
+│  │ User Input   │─────▶│ Add to Memory    │        │
+│  └──────────────┘      └──────────────────┘        │
+│                               │                     │
+│                               ▼                     │
+│  ┌──────────────┐      ┌──────────────────┐        │
+│  │ Get History  │─────▶│ LLM with Context │        │
+│  └──────────────┘      └──────────────────┘        │
+│                               │                     │
+│                               ▼                     │
+│  ┌──────────────┐      ┌──────────────────┐        │
+│  │ AI Response  │─────▶│ Add to Memory    │        │
+│  └──────────────┘      └──────────────────┘        │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Tool Calling Examples
+
+The `tools/` subdirectory contains examples for LangChain tool calling with MLflow tracing:
+
+### 6. Tool Calling Tracing (`tools/tool_tracing.py`)
+
+**Overview:** Demonstrates tracing LangChain tool calling with MLflow, showing how to observe tool selection, execution, inputs/outputs, and multi-tool workflows.
+
+**What it demonstrates:**
+- Tool definitions with `@tool` decorator
+- Tool binding to LLM with `bind_tools()`
+- Tool selection and invocation tracing
+- Multi-step tool workflows
+- Tool input/output logging in spans
+
+**Built-in Tools:**
+- `get_current_time`: Get current date/time with custom formatting
+- `get_current_date`: Get today's date
+- `calculate`: Evaluate mathematical expressions (e.g., "15 * 23")
+- `add_numbers`: Add two numbers
+- `multiply_numbers`: Multiply two numbers
+
+**Run the example:**
+```bash
+uv run python src/advanced/tools/tool_tracing.py
+```
+
+**Expected output:**
+```
+Tool Calling Tracing Demo
+╔════════════════════════════════════════════════════════╗
+║       Tool Calling Tracing Demo                         ║
+╚════════════════════════════════════════════════════════╝
+
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Tool            ┃ Description                           ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ get_current_time│ Get current date/time with custom...  │
+│ get_current_date│ Get current date in YYYY-MM-DD format  │
+│ calculate       │ Evaluate mathematical expressions      │
+│ add_numbers     │ Add two numbers together               │
+│ multiply_numbers│ Multiply two numbers                   │
+└────────────────┴────────────────────────────────────────┘
+
+Query 1: What is 15 * 23?
+Response: 15 * 23 = 345
+
+Query 2: What time is it right now?
+Response: The current time is 2026-03-23 14:30:45
+
+Query 3: What's 10 * 5 and what's today's date?
+Response: 10 * 5 = 50 and today's date is 2026-03-23
+```
+
+**Result in MLflow UI:**
+
+![Tool Calling Tracing](./screenshots/tool_tracing.png)
+*Screenshot showing tool selection and execution with multiple tool calls*
+
+**What you see in the traces:**
+- **Query processing span**: Logs query and available tools
+- **LLM tool execution span**: Shows LLM decision-making for tool selection
+- **Tool call spans**: Individual spans for each tool invoked with:
+  - Tool name and arguments
+  - Tool execution results
+  - Timing information
+- **Response generation**: Final answer after tool execution
+- **Multi-tool workflows**: See how multiple tools are called in sequence (Query 3 shows both `multiply_numbers` and `get_current_date`)
+
+**Real-World Use Cases:**
+- **Function calling**: Build agents that can interact with external systems
+- **Data analysis**: Tools for querying databases, running calculations
+- **API integration**: Tools for calling external APIs (weather, stock prices)
+- **Workflow automation**: Multi-step processes requiring different tools
+- **Debugging**: Understand which tools are selected and why
+
+**Key concepts learned:**
+- **`@tool` decorator**: Convert Python functions to LangChain tools
+- **`bind_tools()`**: Attach tool schemas to LLM for tool calling
+- **Tool schemas**: Automatic generation from function signatures
+- **Tool selection**: LLM decides which tools to use based on query
+- **Span hierarchy**: Organize tool calls within query spans
+
+**Tool Calling Flow:**
+```
+┌──────────────────────────────────────────────────────┐
+│              Tool Query Processing                   │
+│  ┌──────────────┐      ┌──────────────────┐         │
+│  │ User Query   │─────▶│ LLM with Tools   │         │
+│  └──────────────┘      │ (bind_tools)     │         │
+│                        └────────┬─────────┘         │
+│                                 │                    │
+│                                 ▼                    │
+│                        ┌──────────────────┐         │
+│                        │ Tool Selection   │         │
+│                        │ (LLM Decision)   │         │
+│                        └────────┬─────────┘         │
+│                                 │                    │
+│                    ┌────────────┴────────────┐      │
+│                    ▼                         ▼      │
+│           ┌──────────────┐          ┌────────────┐ │
+│           │ Tool 1:      │          │ Tool 2:    │ │
+│           │ calculate    │          │ get_time   │ │
+│           └──────┬───────┘          └──────┬─────┘ │
+│                  │                        │        │
+│                  └────────────┬───────────┘        │
+│                               ▼                    │
+│                  ┌──────────────────┐             │
+│                  │ Response         │             │
+│                  │ Generation       │             │
+│                  └──────────────────┘             │
+└──────────────────────────────────────────────────────┘
+```
 
 ---
 
