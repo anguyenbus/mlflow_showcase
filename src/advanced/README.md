@@ -226,7 +226,181 @@ This gives you **full visibility** into which documents were retrieved for each 
 
 ---
 
-### 3. LLM Judge Evaluation (`evaluate_llm_judge.py`)
+### 3. RAG Evaluation (`rag/evaluate_rag.py`)
+
+**Overview:** Demonstrates comprehensive evaluation of RAG systems using MLflow metrics, including retrieval quality, answer relevance, and chunking strategy comparison.
+
+**What it demonstrates:**
+- RAG evaluation metrics (retrieval precision, answer relevance)
+- Chunking strategy comparison (small, medium, large chunks)
+- A/B testing different RAG configurations
+- Metric logging and comparison in MLflow
+- Evaluation artifact logging (datasets, results)
+- Trace-based evaluation analysis
+
+**Evaluation Metrics:**
+- **Retrieval Metrics:**
+  - Average documents retrieved per query
+  - Retrieval precision (fraction of relevant documents)
+
+- **Answer Quality Metrics:**
+  - Relevance score (0-1, higher is better)
+  - Answer completeness (based on retrieved context)
+
+- **Performance Metrics:**
+  - Query latency
+  - Token usage
+  - Chunk count impact
+
+**Run the example:**
+```bash
+uv run python src/advanced/rag/evaluate_rag.py
+```
+
+**Expected output:**
+```
+╔════════════════════════════════════════════════════════╗
+║              RAG System Evaluation                      ║
+╚════════════════════════════════════════════════════════╝
+
+Setting up documents...
+Setting up RAG system...
+Loaded 1 documents, created 5 chunks
+✓ Created LangChain LLM for Zhipu AI model: glm-5
+
+Loading evaluation dataset...
+✓ Created evaluation dataset: 5 questions
+
+Evaluating retrieval quality...
+✓ Retrieved 3.00 documents on average
+
+Evaluating answer relevance...
+✓ Average relevance score: 0.31
+
+Comparing chunking strategies...
+
+Testing: small_chunks (size=200, overlap=25)
+Loaded 1 documents, created 11 chunks
+✓ Created LangChain LLM for Zhipu AI model: glm-5
+  Answer: Based on the provided context, there is no information...
+
+Testing: medium_chunks (size=500, overlap=50)
+Loaded 1 documents, created 5 chunks
+✓ Created LangChain LLM for Zhipu AI model: glm-5
+  Answer: Based on the provided context, there is no information...
+
+Testing: large_chunks (size=1000, overlap=100)
+Loaded 1 documents, created 2 chunks
+✓ Created LangChain LLM for Zhipu AI model: glm-5
+  Answer: Based on the provided context, the tax rate for income...
+
+RAG evaluation complete!
+
+View results in MLflow UI: http://localhost:5000
+
+Sample Evaluation Results:
+Q: What is the tax rate for income between $45,001 and $120,000?
+Relevance: 0.12
+Answer: Based on the provided context, there is no information...
+
+View run rag_evaluation at: http://localhost:5000/#/experiments/13/runs/xxx
+```
+
+**Result in MLflow UI:**
+
+**Metrics Dashboard:**
+
+![RAG Evaluation Metrics](./screenshots/rag_evaluation_metrics.png)
+*Screenshot showing evaluation metrics comparing different chunking strategies*
+
+**Traces View:**
+
+![RAG Evaluation Traces](./screenshots/rag_evaluation_traces.png)
+*Screenshot showing trace view of RAG evaluation runs*
+
+**Artifacts and Artifacts:**
+
+![RAG Evaluation Artifacts](./screenshots/rag_evaluation_artifacts.png)
+*Screenshot showing evaluation artifacts including datasets and results*
+
+**What you see in the screenshots:**
+
+1. **Metrics Dashboard:**
+   - Compare metrics across different chunking strategies
+   - See which configuration performs best
+   - Track retrieval quality and answer relevance
+   - Identify the optimal chunk size for your use case
+
+2. **Traces View:**
+   - Detailed trace of each evaluation query
+   - Span hierarchy showing retrieval and generation
+   - Performance metrics per query
+   - Detailed inputs/outputs for debugging
+
+3. **Artifacts:**
+   - Evaluation datasets (questions, expected answers)
+   - Detailed results CSV with all metrics
+   - Chunking strategy comparison results
+   - Retrieval analysis data
+
+**How to Navigate the Evaluation Results:**
+
+1. **Open the experiment:**
+   - Go to http://localhost:5000/#/experiments/13
+   - Find the `rag_evaluation` run
+
+2. **View metrics:**
+   - In the run detail page, scroll to "Metrics"
+   - Compare `retrieval_avg_docs`, `answer_relevance`
+   - See which chunking strategy scored best
+
+3. **Examine traces:**
+   - Scroll to "Traces" section
+   - Click on individual traces to see:
+     - Retrieved chunks per query
+     - Answer generation process
+     - Latency breakdown
+
+4. **Download artifacts:**
+   - Scroll to "Artifacts" section
+   - Download `evaluation_results.csv` for detailed analysis
+   - Access `evaluation_dataset.json` for the test data
+
+**Chunking Strategy Comparison:**
+
+| Strategy | Chunk Size | Overlap | Chunks Created | Pros | Cons |
+|----------|------------|---------|----------------|------|------|
+| **small** | 200 | 25 | 11 | Granular search, more precise matches | Higher latency, more chunks to process |
+| **medium** | 500 | 50 | 5 | Balanced retrieval and performance | May miss fine-grained details |
+| **large** | 1000 | 100 | 2 | Fast retrieval, broad context | Less precise matching, more noise |
+
+**Real-World Use Cases:**
+- **Production RAG systems**: Evaluate before deploying to production
+- **A/B testing**: Compare different retrieval strategies
+- **Performance optimization**: Find optimal chunking parameters
+- **Quality assurance**: Ensure RAG system meets quality thresholds
+- **Model comparison**: Test different LLMs with same RAG setup
+- **Regression testing**: Catch quality regressions in RAG systems
+
+**Key concepts learned:**
+- **RAG evaluation metrics**: Retrieval quality, answer relevance, latency
+- **Chunking strategies**: Impact on retrieval and generation quality
+- **A/B testing**: Compare configurations in MLflow
+- **Metric logging**: Track quantitative measures of RAG performance
+- **Artifact management**: Store evaluation data and results
+- **Production readiness**: Validate RAG systems before deployment
+
+**Production Evaluation Checklist:**
+- ✅ Define evaluation dataset with ground truth
+- ✅ Select relevant metrics (retrieval, relevance, latency)
+- ✅ Test multiple configurations (chunking, models, prompts)
+- ✅ Set quality thresholds for deployment
+- ✅ Monitor production metrics over time
+- ✅ Regular re-evaluation with updated datasets
+
+---
+
+### 4. LLM Judge Evaluation (`evaluate_llm_judge.py`)
 
 Coming soon...
 
@@ -477,18 +651,18 @@ uv run python src/advanced/tools/tool_tracing.py
 **Expected output:**
 ```
 Tool Calling Tracing Demo
-╔════════════════════════════════════════════════════════╗
+╔═════════════════════════════════════════════════════════╗
 ║       Tool Calling Tracing Demo                         ║
-╚════════════════════════════════════════════════════════╝
+╚═════════════════════════════════════════════════════════╝
 
-┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Tool            ┃ Description                           ┃
-┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Tool           ┃ Description                            ┃
+┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
 │ get_current_time│ Get current date/time with custom...  │
-│ get_current_date│ Get current date in YYYY-MM-DD format  │
-│ calculate       │ Evaluate mathematical expressions      │
-│ add_numbers     │ Add two numbers together               │
-│ multiply_numbers│ Multiply two numbers                   │
+│ get_current_date│ Get current date in YYYY-MM-DD format │
+│ calculate       │ Evaluate mathematical expressions     │
+│ add_numbers     │ Add two numbers together              │
+│ multiply_numbers│ Multiply two numbers                  │
 └────────────────┴────────────────────────────────────────┘
 
 Query 1: What is 15 * 23?
@@ -534,32 +708,220 @@ Response: 10 * 5 = 50 and today's date is 2026-03-23
 ```
 ┌──────────────────────────────────────────────────────┐
 │              Tool Query Processing                   │
-│  ┌──────────────┐      ┌──────────────────┐         │
-│  │ User Query   │─────▶│ LLM with Tools   │         │
-│  └──────────────┘      │ (bind_tools)     │         │
-│                        └────────┬─────────┘         │
+│  ┌──────────────┐      ┌──────────────────┐          │
+│  │ User Query   │─────▶│ LLM with Tools   │          │
+│  └──────────────┘      │ (bind_tools)     │          │
+│                        └────────┬─────────┘          │
 │                                 │                    │
 │                                 ▼                    │
-│                        ┌──────────────────┐         │
-│                        │ Tool Selection   │         │
-│                        │ (LLM Decision)   │         │
-│                        └────────┬─────────┘         │
+│                        ┌──────────────────┐          │
+│                        │ Tool Selection   │          │
+│                        │ (LLM Decision)   │          │
+│                        └────────┬─────────┘          │
 │                                 │                    │
-│                    ┌────────────┴────────────┐      │
-│                    ▼                         ▼      │
-│           ┌──────────────┐          ┌────────────┐ │
-│           │ Tool 1:      │          │ Tool 2:    │ │
-│           │ calculate    │          │ get_time   │ │
-│           └──────┬───────┘          └──────┬─────┘ │
-│                  │                        │        │
-│                  └────────────┬───────────┘        │
-│                               ▼                    │
-│                  ┌──────────────────┐             │
-│                  │ Response         │             │
-│                  │ Generation       │             │
-│                  └──────────────────┘             │
+│                    ┌────────────┴────────────┐       │
+│                    ▼                         ▼       │
+│           ┌──────────────┐          ┌────────────┐   │
+│           │ Tool 1:      │          │ Tool 2:    │   │
+│           │ calculate    │          │ get_time   │   │
+│           └──────┬───────┘          └──────┬─────┘   │
+│                  │                        │          │
+│                  └────────────┬───────────┘          │
+│                               ▼                      │
+│                  ┌──────────────────┐                │
+│                  │ Response         │                │
+│                  │ Generation       │                │
+│                  └──────────────────┘                │
 └──────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Deploying MLflow for GenAI on AWS
+
+This section covers how to deploy MLflow GenAI for production workloads on AWS, building on the examples you've learned in this project.
+
+### High-Level Architecture
+
+A typical self-hosted GenAI stack on AWS using MLflow + LangChain:
+
+```mermaid
+graph TB
+    subgraph "User Layer"
+        User[Users/API Clients]
+        ALB[Application Load Balancer]
+        APIGateway[API Gateway]
+    end
+
+    subgraph "Compute Layer (EKS)"
+        MLflow[MLflow Server<br/>UI + Tracking API]
+        LangChain[LangChain App<br/>GenAI API]
+        Workers[Background Workers]
+    end
+
+    subgraph "Data Layer"
+        RDS[(Amazon RDS<br/>PostgreSQL)]
+        S3[(Amazon S3<br/>Artifact Store)]
+        Redis[(ElastiCache<br/>Redis - Optional)]
+        VectorDB[(Vector DB<br/>OpenSearch/Qdrant)]
+    end
+
+    subgraph "Security Layer"
+        IAM[IAM Roles]
+        Cognito[Cognito/SSO]
+    end
+
+    User --> APIGateway
+    User --> ALB
+    ALB --> MLflow
+    ALB --> LangChain
+    APIGateway --> LangChain
+    LangChain --> RDS
+    LangChain --> S3
+    LangChain --> VectorDB
+    LangChain --> Redis
+    MLflow --> RDS
+    MLflow --> S3
+    LangChain --> IAM
+    MLflow --> IAM
+    IAM -.-> Cognito
+```
+
+**Core Components:**
+
+| Component | Purpose | AWS Service |
+|-----------|---------|-------------|
+| **Orchestration** | Runs MLflow server, LangChain apps, workers | Amazon EKS (or ECS Fargate) |
+| **Backend Store** | MLflow experiments, runs, traces, prompts | Amazon RDS PostgreSQL (Multi-AZ) |
+| **Artifact Store** | Logs, traces, datasets, model artifacts | Amazon S3 |
+| **Caching** | Tool/agent state, caching | Amazon ElastiCache Redis (Optional) |
+| **Ingress** | Public/private API entrypoint | API Gateway or ALB |
+| **Vector Store** | RAG retrieval and document storage | Amazon OpenSearch or Qdrant |
+| **AuthN/Z** | Authentication and authorization | IAM + Cognito/SSO |
+
+
+---
+
+### AWS Services Comparison
+
+| Need | Recommended AWS Service | Alternative |
+|------|------------------------|-------------|
+| **Container Orchestration** | EKS (Kubernetes) | ECS Fargate |
+| **Backend Store** | RDS PostgreSQL Multi-AZ | Aurora PostgreSQL |
+| **Artifact Storage** | S3 with versioning | EFS (not recommended) |
+| **Load Balancing** | Application Load Balancer | API Gateway |
+| **Caching** | ElastiCache Redis | MemoryDB for Redis |
+| **Vector Store** | Amazon OpenSearch | Qdrant (self-hosted on EKS) |
+| **Authentication** | Amazon Cognito | AWS IAM + SAML |
+| **CI/CD** | AWS CodePipeline | GitHub Actions + eksctl |
+| **IaC** | AWS CDK / Terraform | CloudFormation |
+
+---
+
+### Cost Optimization Tips
+
+**Development/Testing:**
+- Use `t3.medium` instances for EKS nodes
+- Single-AZ RDS instance (db.t3.micro)
+- S3 Intelligent-Tiering for artifacts
+- Spot instances for workers
+
+**Production:**
+- Multi-AZ RDS deployment for HA
+- Reserved Instances or Savings Plans for compute
+- S3 lifecycle policies to move old artifacts to Glacier
+- Auto-scaling for EKS nodes based on load
+
+---
+
+### Security Best Practices
+
+1. **Network Security:**
+   - Place EKS nodes in private subnets
+   - Use security groups to restrict traffic
+   - VPC endpoints for S3 and RDS (no internet gateway needed)
+
+2. **Authentication:**
+   - Use IAM roles for service accounts (IRSA)
+   - Integrate with Cognito or SSO for MLflow UI
+   - Enable encryption in transit (TLS)
+
+3. **Data Protection:**
+   - Enable RDS encryption at rest
+   - Use S3 bucket policies and KMS for artifact encryption
+   - Rotate secrets with AWS Secrets Manager
+
+4. **Monitoring:**
+   - CloudWatch Container Insights for EKS
+   - AWS Security Hub for compliance
+   - Enable MLflow access logging
+
+---
+
+### Migration Path: Local → AWS
+
+**Step 1: Export Local Data**
+```bash
+# Export local MLflow database
+pg_dump mlflow > mlflow_backup.sql
+
+# Sync artifacts to S3
+aws s3 sync mlflow/artifacts s3://your-mlflow-artifacts/
+```
+
+**Step 2: Import to AWS**
+```bash
+# Import to RDS
+psql -h rds-host.example.com -U mlflow -d mlflow < mlflow_backup.sql
+```
+
+**Step 3: Update Configuration**
+```bash
+# Update your application's MLflow tracking URI
+export MLFLOW_TRACKING_URI=https://mlflow.your-domain.com
+```
+
+---
+
+### Real-World Use Cases
+
+**1. Customer Support Bot:**
+- Multi-turn conversation tracing (as shown in examples)
+- RAG with knowledge base retrieval
+- Tool calling for order lookup, FAQ search
+- LLM judge evaluation for answer quality
+
+**2. Document Analysis Pipeline:**
+- RAG evaluation for retrieval accuracy
+- Chunking strategy comparison (small vs medium vs large chunks)
+- Baseline model comparison for document understanding
+- Automated evaluation with custom metrics
+
+**3. Code Assistant:**
+- Tool calling with execution environment
+- Trace search for debugging code generation
+- Prompt versioning with Git integration
+- Production monitoring for safety/relevance
+
+---
+
+### Key Concepts Learned
+
+- **Cloud-native MLflow**: Deploy MLflow on AWS with RDS + S3 backend
+- **Container orchestration**: Use EKS for scalable MLflow and LangChain deployments
+- **Observability at scale**: Trace, evaluate, and monitor production GenAI workloads
+- **Infrastructure as code**: Use Terraform/CDK for reproducible deployments
+- **Security best practices**: IAM roles, encryption, network isolation
+- **Cost optimization**: Right-size resources, use reserved instances, lifecycle policies
+
+---
+
+### Additional Resources
+
+- [MLflow Deployment Guide](https://mlflow.org/docs/latest/deployment/index.html)
+- [AWS EKS Documentation](https://docs.aws.amazon.com/eks/)
+- [LangChain Production Best Practices](https://python.langchain.com/docs/langsmith)
+- [OpenTelemetry Integration](https://mlflow.org/docs/latest/tracing/integration.html)
 
 ---
 
