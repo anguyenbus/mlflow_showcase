@@ -160,7 +160,11 @@ for span in trace.data.spans:
 
 **Run the example:**
 ```bash
+# Basic decorator tracing
 uv run python src/basics/tracing_decorators.py
+
+# Nested span tracing (shows parent-child relationships)
+uv run python src/basics/tracing_nested_example.py
 ```
 
 **Expected output:**
@@ -177,14 +181,57 @@ Now run `mlflow ui` and open MLflow UI to see traces!
 
 **Result in MLflow UI:**
 
-![Tracing Decorators](./screenshots/tracing_decorators.png)
+**Example 1: Basic Decorator Tracing**
+
+![Tracing Decorators - Basic](./screenshots/tracing_decorators_1.png)
+*Screenshot showing a single traced function with inputs, outputs, and span attributes*
+
+**Example 2: Nested Span Hierarchy**
+
+![Tracing Decorators - Nested](./screenshots/tracing_decorators_2_nested.png)
+*Screenshot showing parent-child span relationships where `parent_function` calls `child_function`*
+
+**What you see in the screenshots:**
+
+**Basic Tracing:**
+- Function name (`multiply_numbers`)
+- Input parameters (`{"a": 4, "b": 7}`)
+- Return value (`28`)
+- Execution time
+- Span attributes (operation type)
+
+**Nested Spans:**
+- Parent span (`parent_function`)
+- Child span (`child_function`) indented under parent
+- Each span shows its own inputs/outputs
+- Visual hierarchy showing the call flow
+
+**How the nested span is created:**
+```python
+@mlflow.trace
+def child_function(a: int, b: int) -> int:
+    return a + b
+
+@mlflow.trace
+def parent_function(x: int, y: int) -> int:
+    result = child_function(x, y)  # Creates nested span
+    return result
+```
+
+**Span hierarchy in MLflow UI:**
+```
+parent_function (root span)
+└── child_function (child span)
+```
 
 **Key concepts learned:**
 - **Spans**: Individual units of work representing function calls
 - **Traces**: Collections of spans representing a complete execution flow
 - **Decorator-based tracing**: Automatic instrumentation using `@mlflow.trace`
+- **Nested spans**: Parent-child span relationships when functions call other functions
 - **Span attributes**: Custom metadata attached to spans (operation types, etc.)
 - **Trace retrieval**: Programmatic access to trace data via `mlflow.get_trace()`
+- **Span hierarchy**: Visual tree structure showing call flow in MLflow UI
 
 ---
 
