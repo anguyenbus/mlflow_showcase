@@ -223,26 +223,3 @@ uv sync --all-extras --dev
 # Verify installation
 uv run pip list | grep mlflow
 ```
-
-## Architecture Decisions
-
-See [Architecture Decision Records](docs/adr/) for:
-- [Why MLflow for Observability?](docs/adr/001-mlflow-observability-choice.md)
-
-## Security
-
-- Never commit `.env` file or API keys
-- Use environment variables for secrets
-- See [Security Practices](docs/security/api-key-management.md)
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Contributing
-
-Contributions welcome! Please:
-1. Follow the coding standards in `/home/an/projects/tracing_project/agent-os/standards/`
-2. Add tests for new features
-3. Update documentation
-4. Use `uv` for dependency management
