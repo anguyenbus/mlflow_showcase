@@ -304,36 +304,111 @@ being explicitly programmed.
 
 ---
 
-### 4. LangChain Integration (`langchain_integration.py`)
+### 4. LangChain Integration (`langchain_tracing.py`)
 
-**Note:** This is a utility module providing helper functions for LangChain integration with Zhipu AI. It's used by other examples rather than run directly.
+**Overview:** Demonstrates LangChain integration with MLflow tracking, showing how to build chains with LCEL (LangChain Expression Language) and trace them automatically.
 
-**Provides:**
-- `create_zhipu_langchain_llm()` - Creates a LangChain ChatOpenAI instance for Zhipu AI
-- `create_streaming_llm()` - Creates a streaming-enabled LangChain LLM
+**What it demonstrates:**
+- Creating LangChain LLM instances for Zhipu AI
+- Building chains with LCEL (prompt | LLM | parser)
+- Automatic tracing of LangChain operations
+- Prompt template inputs and LLM call spans
+- Response parsing and output
 
 **Key LangChain + MLflow APIs:**
 
 ```python
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 import mlflow
 
 # Create LangChain LLM for Zhipu AI
-def create_zhipu_langchain_llm(model: str = "glm-5"):
-    """Create a LangChain ChatOpenAI instance configured for Zhipu AI."""
-    return ChatOpenAI(
-        model=model,
-        openai_api_base="https://open.bigmodel.cn/api/paas/v4",
-        openai_api_key=os.getenv("ZHIPU_API_KEY"),
-        temperature=0.7,
-    )
+llm = ChatOpenAI(
+    model="glm-5",
+    openai_api_base="https://open.bigmodel.cn/api/paas/v4",
+    openai_api_key=os.getenv("ZHIPU_API_KEY"),
+    temperature=0.7,
+)
 
-# Create LangChain chain with MLflow tracking
-llm = create_zhipu_langchain_llm()
+# Create a prompt template
 prompt = ChatPromptTemplate.from_template(
     "You are a helpful assistant. Answer: {question}"
 )
+
+# Build the chain using LCEL
+chain = prompt | llm | StrOutputParser()
+
+# Run with MLflow tracking
+with mlflow.start_run():
+    response = chain.invoke({"question": "What is MLflow?"})
+    print(response)
+```
+
+**Run the example:**
+```bash
+uv run python src/basics/langchain_tracing.py
+```
+
+**Expected output:**
+```
+✓ Created LangChain LLM for Zhipu AI model: glm-5
+✓ Created LangChain chain
+
+Running sample queries...
+
+Query 1: What is machine learning?
+Response: Machine learning is a branch of artificial intelligence that enables
+computer systems to learn from data...
+
+Query 2: What is deep learning?
+Response: Deep learning is a subset of machine learning that utilizes
+multi-layered neural networks...
+
+🏃 View run at: http://localhost:5000/#/experiments/15/runs/xxx
+```
+
+**Result in MLflow UI:**
+
+![LangChain Integration](../intermediate/screenshots/langchain_integration.png)
+*Screenshot showing LangChain chain trace with prompt, LLM call, and response parsing spans*
+
+**What you see in the screenshot:**
+- **Chain invocation** - The main LangChain chain execution
+- **Prompt template** - Input parameters to the prompt
+- **LLM call** - The actual LLM invocation with model name
+- **Response parsing** - Output parsing from StrOutputParser
+- **Timing breakdown** - Execution time for each component
+
+**LangChain Chain Architecture:**
+```
+┌─────────────────────────────────────┐
+│         LangChain Chain              │
+│  ┌──────────┐  ┌──────────┐  ┌─────┐│
+│  │  Prompt  │→ │   LLM    │→ │Parser││
+│  │ Template │  │  (GLM-5) │  │Output││
+│  └──────────┘  └──────────┘  └─────┘│
+└─────────────────────────────────────┘
+```
+
+**Utility Module (`langchain_integration.py`):**
+
+This module provides helper functions used by other examples:
+- `create_zhipu_langchain_llm()` - Creates a LangChain ChatOpenAI instance for Zhipu AI
+- `create_streaming_llm()` - Creates a streaming-enabled LangChain LLM
+
+**Real-World Use Cases:**
+- **Quick prototyping** - Build LLM chains in minutes
+- **Prompt engineering** - Test different prompt templates
+- **Chain composition** - Combine multiple components (prompt → LLM → parser)
+- **Observability** - Automatic tracing of every chain component
+
+**Key concepts learned:**
+- **LCEL (LangChain Expression Language)** - Composable chains with `|` operator
+- **Chain components** - Prompt templates, LLMs, output parsers
+- **Automatic tracing** - MLflow traces every chain component
+- **Span hierarchy** - See how data flows through the chain
+- **LangChain + MLflow** - Seamless integration for observability
 
 # Build chain with LCEL (LangChain Expression Language)
 chain = prompt | llm

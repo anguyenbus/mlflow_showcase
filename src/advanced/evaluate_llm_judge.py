@@ -18,9 +18,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 from rich.console import Console
-from typing import Any
-from typing import Any
-import pandas as pd
+from rich.table import Table
 
 import mlflow
 from config import get_config
@@ -55,7 +53,7 @@ def create_llm_judge():
     Returns:
         LangChain LLM configured as a judge
     """
-    # NOTE: Use lower temperature for more consistent evaluations
+    # Use lower temperature for more consistent evaluations
     judge_llm = create_zhipu_langchain_llm(
         model="glm-5",
         temperature=0.3,
@@ -65,131 +63,142 @@ def create_llm_judge():
     return judge_llm
 
 
-def llm_judge_eval_fn(
-    predictions: list[str],
-    targets: list[str],
-    judge_llm: Any,
-    questions: list[str],
-    **kwargs: Any,
-) -> dict[str, float]:
-    """Evaluate responses using LLM as a judge.
+def evaluate_response(question: str, response: str, judge_llm) -> dict:
+    """Evaluate a single response using LLM judge.
 
     Args:
-        predictions: List of model predictions
-        targets: List of ground truth answers
+        question: The original question
+        response: The response to evaluate
         judge_llm: LLM to use for judging
-        questions: List of questions asked
-        **kwargs: Additional arguments
 
     Returns:
-        Dictionary with metric scores
+        Dictionary with score and justification
     """
-    scores = []
+    # Create judge prompt
+    prompt = JUDGE_PROMPT.format(
+        question=question,
+        response=response,
+    )
 
-    for question, prediction in zip(questions, predictions):
-        # Create judge prompt
-        prompt = JUDGE_PROMPT.format(
-            question=question,
-            response=prediction,
-        )
+    # Get evaluation from judge LLM
+    evaluation = judge_llm.invoke(prompt)
 
-        # Get evaluation from judge LLM
-        evaluation = judge_llm.invoke(prompt)
+    # Extract score from evaluation
+    import re
+    score_match = re.search(r"Score:\s*(\d+(?:\.\d+)?)", evaluation.content)
+    justification_match = re.search(r"Justification:\s*(.+?)(?:\n|$)", evaluation.content, re.DOTALL)
 
-        # Extract score from evaluation
-        # NOTE: In production, use more robust parsing
-        import re
-        score_match = re.search(r"Score:\s*(\d+(?:\.\d+)?)", evaluation)
-        if score_match:
-            score = float(score_match.group(1))
-            scores.append(score)
+    score = float(score_match.group(1)) if score_match else 0.0
+    justification = justification_match.group(1).strip() if justification_match else "No justification provided"
 
-            # Display score
-            console.print(f"  Response score: {score}/10")
-
-    avg_score = sum(scores) / len(scores) if scores else 0.0
-    return {"llm_judge_score": avg_score}
+    return {
+        "score": score,
+        "justification": justification,
+        "evaluation": evaluation.content
+    }
 
 
-def main() -> None:
+def main():
     """Run LLM-as-a-judge evaluation example."""
     # Setup MLflow
     config = get_config()
     mlflow.set_tracking_uri(config.mlflow_tracking_uri)
     experiment = create_experiment("mlflow-llm-judge")
 
+    console.print("\n[bold cyan]LLM Judge Evaluation Demo[/bold cyan]\n")
     console.print(f"[green]✓[/green] Experiment ID: {experiment.experiment_id}\n")
 
     # Create LLM judge
     judge_llm = create_llm_judge()
 
-    # Create evaluation dataset
-    eval_df = pd.DataFrame({
-        "questions": [
-            "What is the current company tax rate in Australia?",
-            "Explain what GST is and when it was introduced in Australia.",
-        ],
-        "inputs": [
-            "What is the current company tax rate in Australia?",
-            "Explain what GST is and when it was introduced in Australia.",
-        ],
-        "ground_truth": [
-            "The company tax rate is 30% for most companies.",
-            "GST is a 10% tax introduced on 1 July 2000.",
-        ],
-    })
-
-    # Create mock predictions (in reality, these would come from your model)
-    predictions = [
-        "The current company tax rate in Australia is 30% for most companies. "
-        "However, base rate entities with turnover under $50 million pay 25%.",
-        "GST stands for Goods and Services Tax. It is a 10% tax on most goods "
-        "and services in Australia. It was introduced on July 1, 2000.",
+    # Test data: questions and model responses
+    test_cases = [
+        {
+            "question": "What is the current company tax rate in Australia?",
+            "response": "The current company tax rate in Australia is 30% for most companies. "
+                       "However, base rate entities with turnover under $50 million pay 25%.",
+            "expected": "Should mention 30% for most companies, 25% for small businesses"
+        },
+        {
+            "question": "Explain what GST is and when it was introduced in Australia.",
+            "response": "GST stands for Goods and Services Tax. It is a 10% tax on most goods "
+                       "and services in Australia. It was introduced on July 1, 2000.",
+            "expected": "Should mention 10%, goods and services tax, July 2000"
+        },
+        {
+            "question": "What is the tax-free threshold for individuals in Australia?",
+            "response": "The tax-free threshold for Australian residents is $18,200 per year. "
+                       "This means you don't pay tax if you earn this amount or less.",
+            "expected": "Should mention $18,200"
+        }
     ]
 
-    console.print("✓ Evaluating responses with LLM judge...\n")
+    console.print("Evaluating responses with LLM judge...\n")
 
-    # Start MLflow run
+    # Create a nice table for results
+    table = Table(title="LLM Judge Evaluation Results")
+    table.add_column("Question", style="cyan", no_wrap=False)
+    table.add_column("Score", style="magenta")
+    table.add_column("Justification", style="green")
+
+    scores = []
+
+    # Evaluate each response with MLflow tracking
     with mlflow.start_run():
-        # Log a dummy model
-        model_info = mlflow.langchain.log_model(
-            lambda x: {"output": predictions[0]},
-            "llm_judge_model",
-            input_example={"inputs": eval_df["inputs"][0]},
-        )
+        for i, test_case in enumerate(test_cases, 1):
+            console.print(f"[cyan]Evaluating Response {i}:[/cyan]")
+            console.print(f"  Question: {test_case['question'][:50]}...")
 
-        # Create custom metric with LLM judge
-        llm_judge_metric = mlflow.metrics.make_metric(
-            eval_fn=lambda predictions, targets, **kwargs: llm_judge_eval_fn(
-                predictions,
-                targets,
-                judge_llm,
-                eval_df["questions"].tolist(),
-                **kwargs,
-            ),
-            name="llm_judge_score",
-            greater_is_better=True,
-        )
+            # Evaluate with LLM judge
+            with mlflow.start_span(name=f"evaluate_response_{i}") as span:
+                span.set_inputs({
+                    "question": test_case['question'],
+                    "response": test_case['response'][:100] + "..."
+                })
 
-        # Run evaluation
-        result = mlflow.evaluate(
-            model_info.model_uri,
-            eval_df,
-            targets="ground_truth",
-            model_type="question-answering",
-            evaluators="default",
-            custom_metrics=[llm_judge_metric],
-        )
+                result = evaluate_response(
+                    test_case['question'],
+                    test_case['response'],
+                    judge_llm
+                )
 
-        # Display results
-        avg_score = result.metrics.get("llm_judge_score", 0)
-        console.print(f"\n[green]Average quality score:[/green] {avg_score:.2f}/10")
+                span.set_outputs({
+                    "score": result['score'],
+                    "justification": result['justification']
+                })
 
-        # Log to MLflow
-        mlflow.log_metrics({"llm_judge_score": avg_score})
+            scores.append(result['score'])
 
-        console.print(f"\n[cyan]Run ID:[/cyan] {mlflow.active_run().info.run_id}")
-        console.print("[green]\nView in MLflow UI to see LLM judge evaluation![/green]")
+            console.print(f"  [magenta]Score:[/magenta] {result['score']}/10")
+            console.print(f"  [green]Justification:[/green] {result['justification']}\n")
+
+            # Add to table
+            table.add_row(
+                test_case['question'][:50] + "...",
+                f"{result['score']}/10",
+                result['justification'][:80] + "..."
+            )
+
+        # Calculate average
+        avg_score = sum(scores) / len(scores)
+
+        # Log metrics to MLflow
+        mlflow.log_metric("llm_judge_avg_score", avg_score)
+        mlflow.log_metric("num_responses_evaluated", len(scores))
+
+        console.print(table)
+        console.print(f"\n[bold green]Average quality score:[/bold green] {avg_score:.2f}/10")
+
+        # Log evaluation summary
+        summary = f"Evaluated {len(scores)} responses with LLM judge. Average score: {avg_score:.2f}/10"
+        mlflow.log_text(summary, artifact_file="evaluation_summary.txt")
+
+        console.print(f"\n[green]✓ Evaluation complete![/green]")
+        console.print(f"\n[cyan]View run at:[/cyan] http://localhost:5000/#/experiments/16")
+        console.print("[cyan]Look for:[/cyan]")
+        console.print("  • Individual evaluation spans with scores")
+        console.print("  • Average LLM judge score metric")
+        console.print("  • Evaluation summary artifact")
 
 
 if __name__ == "__main__":

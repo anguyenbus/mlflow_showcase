@@ -77,9 +77,114 @@ glm-5:
 
 ---
 
-### 2. LLM Judge Evaluation (`evaluate_llm_judge.py`)
+### 2. LLM Judge Evaluation (`evaluate_llm_judge_simple.py`)
 
-Coming soon...
+**Overview:** Demonstrates using an LLM as a judge to evaluate response quality, providing automated assessment of AI-generated answers.
+
+**What it demonstrates:**
+- LLM-as-a-judge evaluation pattern
+- Automated quality scoring (1-10 scale)
+- Evaluation metrics logging
+- Span-level evaluation tracking
+- Extracting structured data from LLM responses
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from basics.langchain_integration import create_zhipu_langchain_llm
+
+# Create LLM judge (lower temperature for consistency)
+judge_llm = create_zhipu_langchain_llm(
+    model="glm-5",
+    temperature=0.3
+)
+
+# Evaluate responses with tracing
+with mlflow.start_run():
+    for i, test_case in enumerate(test_cases, 1):
+        with mlflow.start_span(name=f"judge_evaluation_{i}") as span:
+            span.set_inputs({"question": test_case['question']})
+
+            # Get evaluation from LLM judge
+            evaluation = judge_llm.invoke(judge_prompt)
+
+            # Extract score from response
+            score = extract_score(evaluation.content)
+            span.set_outputs({"score": score})
+
+        # Log metrics
+        mlflow.log_metric(f"response_{i}_score", score)
+```
+
+**Run the example:**
+```bash
+uv run python src/advanced/evaluate_llm_judge_simple.py
+```
+
+**Expected output:**
+```
+LLM Judge Evaluation Demo
+
+✓ Created LLM judge
+
+Evaluating Response 1:
+  Score: 9.0/10
+
+Evaluating Response 2:
+  Score: 8.5/10
+
+✓ Evaluation complete!
+
+View at: http://localhost:5000/#/experiments/16
+```
+
+**Result in MLflow UI:**
+
+**Example 1: Evaluating Simple Math Response**
+
+![LLM Judge Evaluation 1](./screenshots/llm_judge_evaluation_1.png)
+*Screenshot showing evaluation span with score 10/10 for correct math answer ("What is 2 + 2?")*
+
+**Example 2: Evaluating Geography Response**
+
+![LLM Judge Evaluation 2](./screenshots/llm_judge_evaluation_2.png)
+*Screenshot showing evaluation span with score 10/10 for correct geography answer ("What is the capital of France?")*
+
+**What you see in the screenshots:**
+- **Evaluation span name** - `judge_evaluation_1` or `judge_evaluation_2`
+- **Inputs** - The question being evaluated
+- **Outputs** - Score (10/10) and evaluation justification
+- **Span attributes** - Trace metadata
+- **Timing information** - How long the evaluation took
+- **Metrics table** - Individual response scores logged as metrics
+
+**Key Differences Between Screenshots:**
+- **Screenshot 1** - Math question evaluation with perfect score
+- **Screenshot 2** - Geography question evaluation with perfect score
+- Both show the LLM judge providing detailed justifications
+- Both demonstrate the span-level evaluation tracking
+
+**Real-World Use Cases:**
+- **Quality Assurance** - Automatically grade LLM responses
+- **A/B Testing** - Compare different prompts/models
+- **Human-in-the-loop** - Augment human evaluation with LLM judge
+- **Regression Testing** - Detect quality degradation
+- **Production Monitoring** - Track response quality over time
+
+**Key concepts learned:**
+- **LLM-as-a-judge** - Using one LLM to evaluate another's outputs
+- **Structured extraction** - Parsing scores from LLM responses
+- **Evaluation metrics** - Quantitative quality measures
+- **Consistent judging** - Low temperature for reliable scoring
+- **Span-level tracking** - Each evaluation as a separate trace
+
+**Production Considerations:**
+- Use multiple judges for reliability
+- Calibrate scores against human evaluation
+- Track judge agreement/inter-rater reliability
+- Use different prompts for different evaluation criteria
+- Cache evaluations to avoid re-judging same responses
 
 ---
 
@@ -87,7 +192,7 @@ Coming soon...
 
 The `rag/` subdirectory contains examples for Retrieval-Augmented Generation applications:
 
-### 2. RAG Tracing (`rag/rag_tracing.py`)
+### 3. RAG Tracing (`rag/rag_tracing.py`)
 
 **Overview:** Demonstrates end-to-end tracing of a RAG system with MLflow, showing how to observe document loading, chunking, vector store operations, and the complete retrieval-generation pipeline.
 
@@ -335,7 +440,7 @@ This gives you **full visibility** into which documents were retrieved for each 
 
 ---
 
-### 3. RAG Evaluation (`rag/evaluate_rag.py`)
+### 4. RAG Evaluation (`rag/evaluate_rag.py`)
 
 **Overview:** Demonstrates comprehensive evaluation of RAG systems using MLflow metrics, including retrieval quality, answer relevance, and chunking strategy comparison.
 
@@ -585,122 +690,6 @@ View run rag_evaluation at: http://localhost:5000/#/experiments/13/runs/xxx
 - ✅ Set quality thresholds for deployment
 - ✅ Monitor production metrics over time
 - ✅ Regular re-evaluation with updated datasets
-
----
-
-### 4. LLM Judge Evaluation (`evaluate_llm_judge.py`)
-
-Coming soon...
-
-### 4. RAG Evaluation (`rag/evaluate_rag.py`)
-
-**Overview:** Demonstrates evaluating RAG system quality with MLflow metrics, measuring retrieval quality, answer relevance, and comparing different chunking strategies.
-
-**What it demonstrates:**
-- Evaluation dataset creation with ground truth answers
-- Retrieval quality metrics (documents retrieved, relevance)
-- Answer relevance evaluation using keyword overlap
-- Chunking strategy comparison (small vs medium vs large chunks)
-- MLflow metrics logging for evaluation results
-- Artifact logging for detailed results
-
-**Run the example:**
-```bash
-uv run python src/advanced/rag/evaluate_rag.py
-```
-
-**NOTE:** This example takes 2-3 minutes to complete as it evaluates multiple questions with the LLM.
-
-**Expected output:**
-```
-RAG System Evaluation
-==================================================
-
-Setting up RAG system...
-✓ Created LangChain LLM for Zhipu AI model: glm-5
-
-Loading evaluation dataset...
-✓ Created evaluation dataset: 5 questions
-
-Evaluating retrieval quality...
-✓ Retrieved 3.00 documents on average
-
-Evaluating answer relevance...
-✓ Average relevance score: 0.45
-
-Chunking Strategy Comparison
-Testing: small_chunks (size=200, overlap=25)
-  Answer: Based on the provided context...
-
-Testing: medium_chunks (size=500, overlap=50)
-  Answer: According to the tax law documents...
-
-Testing: large_chunks (size=1000, overlap=100)
-  Answer: The documents indicate that...
-
-RAG evaluation complete!
-View results in MLflow UI: http://localhost:5000
-
-Average relevance score: 0.45
-Average documents retrieved: 3.00
-```
-
-**Result in MLflow UI:**
-
-![RAG Evaluation Metrics](./screenshots/rag_evaluation_metrics.png)
-*Screenshot showing evaluation metrics: avg_documents_retrieved (3.0) and avg_relevance_score (0.31)*
-
-![RAG Evaluation Traces](./screenshots/rag_evaluation_traces.png)
-*Screenshot showing trace view with retrieval_eval and answer_eval spans for each question*
-
-![RAG Evaluation Artifacts](./screenshots/rag_evaluation_artifacts.png)
-*Screenshot showing artifacts: evaluation results CSV and chunking strategy comparison files*
-
-**What the Metrics Mean:**
-
-- **avg_documents_retrieved: 3.0** - The system consistently retrieves 3 documents (as configured with `retrieval_k=3`)
-
-- **avg_relevance_score: 0.31** - This indicates the keyword overlap between generated answers and ground truth. In this Show Case example with deterministic embeddings, the relevance is lower because:
-  - Deterministic embeddings don't capture semantic meaning
-  - Simple keyword matching is used for evaluation
-  - Production systems would use semantic similarity or LLM-based evaluation
-
-**Chunking Strategy Insights:**
-
-From the run output and artifacts, you can compare answers across different chunk sizes:
-- **small_chunks (200 chars)**: 11 chunks, more precise but may miss context
-- **medium_chunks (500 chars)**: 5 chunks, balanced approach
-- **large_chunks (1000 chars)**: 2 chunks, **best performance** - found the correct tax rate answer!
-
-The evaluation revealed that **larger chunks performed better** for this specific use case, demonstrating how RAG evaluation helps optimize system configuration.
-
-**Real-World Use Cases:**
-- **RAG system optimization**: Find optimal chunk size and overlap
-- **Quality assurance**: Monitor RAG system performance over time
-- **A/B testing**: Compare different retrieval strategies or embedding models
-- **Regression testing**: Ensure RAG quality doesn't degrade with changes
-- **Production monitoring**: Track retrieval and generation metrics in production
-
-**Key concepts learned:**
-- **Evaluation datasets**: Creating ground truth for testing
-- **Retrieval metrics**: Measuring document retrieval quality
-- **Answer relevance**: Simple keyword overlap vs LLM-based evaluation
-- **Chunking strategies**: Impact of chunk size on RAG performance
-- **MLflow artifacts**: Saving detailed results for analysis
-
-**Show Case Simplifications:**
-- Uses keyword overlap for relevance (production: use LLM judge or semantic similarity)
-- Small evaluation dataset (5 questions vs 100+ in production)
-- Simple retrieval metrics (production: add precision@k, recall, MRR)
-- Basic chunking comparison (production: test more parameters)
-
-**Production considerations:**
-- Use LLM-as-a-judge for answer quality evaluation
-- Implement semantic similarity metrics with embeddings
-- Add faithfulness metrics (does answer cite retrieved context?)
-- Test with larger, diverse evaluation datasets
-- Include edge cases and adversarial examples
-- Track latency and cost metrics alongside quality
 
 ---
 
