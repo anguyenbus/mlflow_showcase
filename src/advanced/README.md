@@ -1237,6 +1237,237 @@ Response: 10 * 5 = 50 and today's date is 2026-03-23
 
 ---
 
+## Prompt Registry Examples
+
+The Prompt Registry examples demonstrate MLflow's Prompt Registry functionality for versioning, managing, and deploying prompts in GenAI applications.
+
+### 7. Prompt Registry (`prompt_registry_simple.py`)
+
+**Overview:** Demonstrates MLflow's Prompt Registry for versioning, managing, and deploying prompts with Git-inspired version control, A/B testing support, and seamless LangChain integration.
+
+**What it demonstrates:**
+- Creating text and chat prompts with templates
+- Versioning prompts with commit messages
+- Loading and formatting prompts with variables
+- Searching and filtering prompts
+- Using prompts with LangChain
+- Creating aliases for production deployments (champion/challenger)
+- Comparing prompt versions
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from langchain_core.prompts import ChatPromptTemplate
+
+# Create a text prompt with variables
+prompt_template = """You are a helpful customer support assistant for {{ company_name }}.
+
+Customer Question: {{ question }}
+
+Please provide a helpful and concise answer."""
+
+mlflow.genai.register_prompt(
+    name="customer-support-v1",
+    template=prompt_template,
+    commit_message="Initial version: Basic customer support prompt",
+    tags={
+        "domain": "support",
+        "language": "en",
+        "version": "v1",
+    }
+)
+
+# Create a new version (evolution)
+mlflow.genai.register_prompt(
+    name="customer-support-v1",
+    template=prompt_template + "\n\nThank you for choosing {{ company_name }}!",
+    commit_message="Added closing statement",
+    tags={"version": "v1.1"}
+)
+
+# Load and use a prompt
+prompt = mlflow.genai.load_prompt("customer-support-v1")
+formatted = prompt.format(
+    company_name="TechCorp",
+    question="How do I reset my password?"
+)
+
+# Use with LangChain
+langchain_prompt = ChatPromptTemplate.from_template(
+    prompt.to_single_brace_format()
+)
+
+# Search prompts
+prompts = mlflow.genai.search_prompts()
+
+# Create aliases for A/B testing
+client = mlflow.MlflowClient()
+client.set_prompt_alias(
+    name="customer-support-v1",
+    alias="champion",
+    version=2
+)
+```
+
+**Chat Prompts:**
+
+```python
+# Create a chat prompt for multi-turn conversations
+chat_template = [
+    {
+        "role": "system",
+        "content": "You are a helpful {{ style }} assistant for {{ company_name }}."
+    },
+    {
+        "role": "user",
+        "content": "I need help with: {{ question }}"
+    },
+    {
+        "role": "assistant",
+        "content": "I'd be happy to help you with that!"
+    }
+]
+
+mlflow.genai.register_prompt(
+    name="customer-support-chat",
+    template=chat_template,
+    commit_message="Initial chat prompt with multi-turn structure",
+    tags={"type": "chat", "domain": "support"}
+)
+```
+
+**Run the example:**
+```bash
+uv run python src/advanced/prompt_registry_simple.py
+```
+
+**Expected output:**
+```
+╭────────────────────────────────────────────────────────────╮
+│ MLflow Prompt Registry Example                             │
+│ Demonstrates prompt versioning, management, and deployment │
+╔────────────────────────────────────────────────────────────╩
+
+Creating Text Prompts
+✓ Created text prompt: 'customer-support-v1' (version 1)
+✓ Created text prompt: 'customer-support-v2' (version 1)
+✓ Created text prompt: 'customer-support-v1' (version 2)
+
+Creating Chat Prompts
+✓ Created chat prompt: 'customer-support-chat' (version 1)
+
+Loading and Formatting Prompts
+✓ Loaded prompt: customer-support-v1@2
+
+Formatted Prompt:
+┌──────────────────────────────────────────────────────────┐
+│ You are a helpful customer support assistant for         │
+│ TechCorp.                                                │
+│                                                          │
+│ Customer Question: How do I reset my password?           │
+│                                                          │
+│ Please provide a helpful and concise answer.             │
+│                                                          │
+│ Thank you for choosing TechCorp!                         │
+└──────────────────────────────────────────────────────────┘
+
+Searching Prompts
+✓ Found 3 prompts in registry
+
+Creating Prompt Aliases
+✓ Created alias 'champion' for customer-support-v1 version 2
+✓ Created alias 'challenger' for customer-support-v2 version 1
+```
+
+**Result in MLflow UI:**
+
+![Prompt Registry List](./screenshots/prompt_registry_1.png)
+*Screenshot showing all registered prompts with versions and metadata*
+
+![Compare Two Prompts](./screenshots/compre_two_prompts.png)
+*Screenshot showing version comparison with diff highlighting*
+
+**What the Screenshots Show:**
+
+1. **Prompts List (prompt_registry_1.png)**:
+   - All registered prompts in one view
+   - Version count for each prompt
+   - Prompt types (Text vs Chat)
+   - Latest commit messages
+
+2. **Version Comparison (compre_two_prompts.png)**:
+   - Side-by-side diff of prompt versions
+   - Changes highlighted (additions/deletions)
+   - Commit message history
+   - Version timestamps
+
+**Real-World Use Cases:**
+- **A/B testing prompts**: Test different prompt versions in production
+- **Prompt engineering workflows**: Version and iterate on prompts systematically
+- **Compliance and audit**: Track prompt evolution with commit history
+- **Team collaboration**: Share prompts across teams with version control
+- **Deployment safety**: Use aliases to promote prompts to production
+- **Rollback capabilities**: Quickly revert to previous prompt versions
+
+**Key concepts learned:**
+- **Prompt versioning**: Git-inspired commit-based versioning
+- **Template variables**: Dynamic content with `{{ variable }}` syntax
+- **Text vs Chat prompts**: Single string vs message array formats
+- **Aliases**: Mutable references (champion, challenger, staging, prod)
+- **Tags**: Organization and filtering (domain, language, version)
+- **LangChain integration**: `to_single_brace_format()` for framework compatibility
+- **Immutability**: Prompt versions cannot be modified once created
+- **Search and discovery**: Find prompts by name, tags, or metadata
+
+**Best Practices:**
+
+1. **Use descriptive commit messages**:
+   ```python
+   commit_message="Enhanced: Added product category context and response guidelines"
+   ```
+
+2. **Organize with tags**:
+   ```python
+   tags={
+       "domain": "support",
+       "language": "en",
+       "team": "customer-experience",
+       "environment": "production"
+   }
+   ```
+
+3. **Use aliases for deployments**:
+   ```python
+   # Production
+   client.set_prompt_alias("support-prompt", "production", version=5)
+   # Staging
+   client.set_prompt_alias("support-prompt", "staging", version=6)
+   ```
+
+4. **Version prompt templates**:
+   - Start simple, add complexity gradually
+   - Document changes in commit messages
+   - Test new versions before promoting to production
+
+5. **Integrate with LangChain**:
+   ```python
+   mlflow_prompt = mlflow.genai.load_prompt("my-prompt")
+   langchain_prompt = ChatPromptTemplate.from_template(
+       mlflow_prompt.to_single_brace_format()
+   )
+   ```
+
+**Production considerations:**
+- Set up approval workflows for prompt changes
+- Monitor prompt performance metrics in production
+- Implement automated testing for prompt versions
+- Use environment-specific aliases (dev/staging/prod)
+- Regular prompt audits and cleanup of old versions
+- Integration with CI/CD for automated deployment
+
+---
+
 ## Deploying MLflow for GenAI on AWS
 
 This section covers how to deploy MLflow GenAI for production workloads on AWS, building on the examples you've learned in this project.
