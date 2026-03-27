@@ -1385,7 +1385,7 @@ Creating Prompt Aliases
 ![Prompt Registry List](./screenshots/prompt_registry_1.png)
 *Screenshot showing all registered prompts with versions and metadata*
 
-![Compare Two Prompts](./screenshots/compre_two_prompts.png)
+![Compare Two Prompts](./screenshots/compare_two_prompts.png)
 *Screenshot showing version comparison with diff highlighting*
 
 **What the Screenshots Show:**
@@ -1396,7 +1396,7 @@ Creating Prompt Aliases
    - Prompt types (Text vs Chat)
    - Latest commit messages
 
-2. **Version Comparison (compre_two_prompts.png)**:
+2. **Version Comparison (compare_two_prompts.png)**:
    - Side-by-side diff of prompt versions
    - Changes highlighted (additions/deletions)
    - Commit message history
