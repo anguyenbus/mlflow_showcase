@@ -1468,6 +1468,240 @@ Creating Prompt Aliases
 
 ---
 
+## Tracing Examples
+
+The Tracing examples demonstrate MLflow Tracing for GenAI applications based on the official MLflow Tracing Quickstart guide, showing automatic tracing, custom decorators, and tool calling with span types.
+
+### 8. Tracing Quickstart (`tracing_quickstart.py`)
+
+**Overview:** Demonstrates MLflow Tracing for GenAI applications with automatic instrumentation, custom decorators, span hierarchies, timeline visualization, and feedback attachment.
+
+**What it demonstrates:**
+- Automatic tracing with `mlflow.openai.autolog()`
+- Custom tracing with `@mlflow.trace` decorator
+- Tool calling with `SpanType.TOOL` and `SpanType.AGENT`
+- Span hierarchy visualization in MLflow UI
+- Timeline breakdown of execution
+- Multi-turn conversation tracing
+- Feedback attachment on traces
+
+**Key MLflow APIs:**
+
+```python
+import mlflow
+from mlflow.entities.span import SpanType
+from langchain_openai import ChatOpenAI
+
+# Enable automatic tracing for OpenAI-compatible APIs
+mlflow.openai.autolog()
+
+# Create LLM client
+llm = ChatOpenAI(
+    model="glm-5",
+    openai_api_base="https://open.bigmodel.cn/api/paas/v4",
+    openai_api_key=os.getenv("ZHIPU_API_KEY"),
+)
+
+# Simple LLM call (automatically traced)
+response = llm.invoke("What is MLflow Tracing?")
+# Trace automatically captures: inputs, outputs, latency, tokens
+```
+
+**Custom Tracing with Decorators:**
+
+```python
+import requests
+from mlflow.entities.span import SpanType
+
+# Define a tool with custom tracing
+@mlflow.trace(span_type=SpanType.TOOL, name="get_weather")
+def get_weather(latitude: float, longitude: float) -> float:
+    """Get current temperature for provided coordinates."""
+    response = requests.get(
+        f"https://api.open-meteo.com/v1/forecast"
+        f"?latitude={latitude}&longitude={longitude}"
+        f"&current=temperature_2m"
+    )
+    data = response.json()
+    return data["current"]["temperature_2m"]
+
+# Define an agent with custom tracing
+@mlflow.trace(span_type=SpanType.AGENT, name="tool_agent")
+def run_tool_agent(question: str):
+    """Run a simple tool calling agent."""
+    # First LLM call
+    response = llm.invoke(question)
+
+    # Call tool if needed
+    if "weather" in question.lower():
+        temp = get_weather(latitude=47.6062, longitude=-122.3321)
+        # Second LLM call with tool result
+        final_response = llm.invoke(f"Temperature: {temp}°C")
+        return final_response.content
+
+    return response.content
+```
+
+**Span Types:**
+
+- **`SpanType.LLM`**: Automatic span for LLM calls
+- **`SpanType.TOOL`**: Custom function/tool execution
+- **`SpanType.AGENT`**: Agent or orchestration logic
+- **`SpanType.CHAIN`**: Chain or workflow steps
+
+**Run the example:**
+```bash
+uv run python src/advanced/tracing_quickstart.py
+```
+
+**Expected output:**
+```
+╭────────────────────────────────────────────────────────────╮
+│ MLflow Tracing Quickstart Examples                          │
+│ Based on official MLflow Tracing Quickstart guide           │
+╰────────────────────────────────────────────────────────────╯
+
+✓ Experiment 'Tracing Quickstart' (ID: 20)
+
+Example 1: Single LLM Call
+✓ Enabled automatic tracing for OpenAI-compatible APIs
+
+LLM Response:
+MLflow Tracing is a feature that provides end-to-end visibility
+into the execution flow of GenAI applications...
+
+✓ LLM call traced automatically
+
+Example 2: Tool Calling Agent
+Question: What's the weather like in Seattle?
+Assistant: I don't have access to real-time data...
+  Fetching weather for lat=47.6062, lon=-122.3321
+  Temperature: 10.3°C
+
+Final Answer:
+That is approximately **50.5°F**. That sounds like a cool,
+crisp day—typical jacket weather for the Pacific Northwest.
+
+✓ Tool calling agent traced
+  - See span hierarchy: AGENT → LLM → TOOL
+  - Click timeline view to see execution breakdown
+
+Example 3: Multi-Turn Conversation
+Turn 1: User planning trip to Seattle
+Turn 2: User asks about weather
+✓ Multi-turn conversation traced
+```
+
+**Result in MLflow UI:**
+
+![Tracing Quickstart List](./screenshots/tracing_quickstart_list.png)
+*Screenshot showing the runs list with trace information*
+
+![Tracing Quickstart Details](./screenshots/tracing_quickstart_details.png)
+*Screenshot showing trace detail with span hierarchy and timeline*
+
+**What the Screenshots Show:**
+
+1. **Runs List (tracing_quickstart_list.png)**:
+   - All 3 example runs visible
+   - Run names: `single_llm_call`, `tool_calling_agent`, `multi_turn_conversation`
+   - Execution duration and status for each run
+   - Easy access to trace details
+
+2. **Trace Detail (tracing_quickstart_details.png)**:
+   - Span hierarchy showing parent-child relationships
+   - AGENT span containing LLM and TOOL spans
+   - Timeline visualization of execution
+   - Inputs, outputs, and attributes for each span
+
+**Real-World Use Cases:**
+- **Debugging GenAI apps**: Visualize execution flow to find issues
+- **Performance optimization**: Identify bottlenecks in LLM chains
+- **Cost monitoring**: Track token usage and API call latency
+- **Quality assurance**: Monitor agent behavior and tool usage
+- **Compliance**: Audit LLM interactions and decisions
+- **A/B testing**: Compare different prompt/model versions
+
+**Key concepts learned:**
+- **Automatic tracing**: `mlflow.openai.autolog()` captures all LLM calls
+- **Custom decorators**: `@mlflow.trace()` for functions and tools
+- **Span hierarchy**: Parent-child relationships (AGENT → LLM → TOOL)
+- **Span types**: LLM, TOOL, AGENT, CHAIN for different components
+- **Timeline view**: Visualize execution time breakdown
+- **Trace data**: Inputs, outputs, latency, tokens, metadata
+- **Feedback**: Attach quality scores and rationale to traces
+- **Observability**: End-to-end visibility into GenAI applications
+
+**Span Hierarchy Example:**
+
+```
+tool_agent (AGENT)
+├── ChatOpenAI (LLM) - First call
+│   └── Input: "What's the weather like in Seattle?"
+│   └── Output: "I don't have access to real-time data..."
+│
+└── get_weather (TOOL)
+    ├── Input: latitude=47.6062, longitude=-122.3321
+    ├── API Call: Open-Meteo API
+    └── Output: 10.3°C
+
+└── ChatOpenAI (LLM) - Second call with tool result
+    └── Input: "Temperature: 10.3°C"
+    └── Output: "That is approximately 50.5°F..."
+```
+
+**Best Practices:**
+
+1. **Enable autologging early**:
+   ```python
+   # At the start of your application
+   mlflow.openai.autolog()
+   ```
+
+2. **Use descriptive span names**:
+   ```python
+   @mlflow.trace(name="fetch_weather_api")  # Good
+   @mlflow.trace(name="helper")  # Bad - too generic
+   ```
+
+3. **Choose appropriate span types**:
+   - LLM calls → `SpanType.LLM` (automatic with autolog)
+   - External APIs → `SpanType.TOOL`
+   - Orchestration → `SpanType.AGENT`
+   - Workflow steps → `SpanType.CHAIN`
+
+4. **Add metadata to spans**:
+   ```python
+   @mlflow.trace(span_type=SpanType.TOOL)
+   def fetch_data(user_id: str):
+       with mlflow.start_span(name="database_query") as span:
+           span.set_inputs({"user_id": user_id})
+           span.set_tag("query_type", "user_profile")
+           # ... do work ...
+   ```
+
+5. **Monitor traces in production**:
+   - Set up alerts for high latency or error rates
+   - Track token usage for cost optimization
+   - Analyze traces to improve prompt quality
+
+**Production considerations:**
+- **Sampling**: Don't trace every request in high-traffic scenarios
+- **PII redaction**: Remove sensitive data before tracing
+- **Storage**: Configure trace retention policies
+- **Performance**: Minimize tracing overhead
+- **Privacy**: Comply with data protection regulations
+- **Cost**: Monitor token usage and API costs
+
+**Integration with Other Features:**
+
+- **Evaluation**: Use traces for LLM-as-a-judge evaluation
+- **Prompt Registry**: Link traces to prompt versions
+- **Experiments**: Group traces by experiment for analysis
+- **Feedback**: Attach human feedback to traces for improvement
+
+---
+
 ## Deploying MLflow for GenAI on AWS
 
 This section covers how to deploy MLflow GenAI for production workloads on AWS, building on the examples you've learned in this project.
