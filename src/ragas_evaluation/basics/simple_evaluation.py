@@ -91,33 +91,79 @@ def main() -> None:
         config = get_ragas_config()
         console.print(f"[green]✓[/green] MLflow tracking URI: {config.mlflow_tracking_uri}")
 
-        # Step 2: Load evaluation dataset
+        # Step 2: Set up environment for RAGAS to use Zhipu AI
+        # RAGAS uses OpenAI-compatible API, so we set OPENAI_API_KEY and OPENAI_BASE_URL
+        import os
+        os.environ["OPENAI_API_KEY"] = config.zhipu_api_key
+        os.environ["OPENAI_BASE_URL"] = "https://open.bigmodel.cn/api/paas/v4/"
+        console.print("[green]✓[/green] Configured RAGAS to use Zhipu AI backend")
+
+        # Step 3: Load evaluation dataset
         console.print("\n[bold cyan]Step 2:[/bold cyan] Loading evaluation dataset...")
         dataset = load_evaluation_dataset()
 
-        # Step 3: Configure Zhipu AI backend
-        console.print("\n[bold cyan]Step 3:[/bold cyan] Configuring Zhipu AI backend...")
-        llm, embeddings = configure_zhipu_backend()
+        # Step 4: Create RAGas evaluation with default metrics
+        console.print("\n[bold cyan]Step 3:[/bold cyan] Creating RAGas evaluation...")
+        # Use updated imports from ragas.metrics.collections
+        from ragas.metrics.collections import Faithfulness, AnswerRelevancy, ContextPrecision
+        from ragas.llms import llm_factory
+        from ragas.embeddings import embedding_factory
+        from openai import OpenAI as OpenAIClient
 
-        # Step 4: Create RAGas evaluation
-        console.print("\n[bold cyan]Step 4:[/bold cyan] Creating RAGas evaluation...")
-        eval_config = create_ragas_evaluation(llm=llm, embeddings=embeddings)
+        # Create Zhipu AI client for metrics
+        client = OpenAIClient(
+            api_key=config.zhipu_api_key,
+            base_url="https://open.bigmodel.cn/api/paas/v4/"
+        )
+
+        # Create LLM with glm-5 model for RAGAS metrics
+        ragas_llm = llm_factory(model="glm-5", client=client)
+
+        # Create embeddings with Zhipu AI embedding model
+        ragas_embeddings = embedding_factory(
+            model="embedding-3",
+            client=client,
+            interface="modern"  # Use modern interface for embeddings
+        )
+
+        # Create metrics with the LLM and embeddings
+        metrics = [
+            Faithfulness(llm=ragas_llm),
+            AnswerRelevancy(llm=ragas_llm, embeddings=ragas_embeddings),
+            ContextPrecision(llm=ragas_llm)
+        ]
 
         # Step 5: Run evaluation
-        console.print("\n[bold cyan]Step 5:[/bold cyan] Running RAGas evaluation...")
+        console.print("\n[bold cyan]Step 4:[/bold cyan] Running RAGas evaluation...")
 
         # Import ragas evaluate function
-        # Convert dataset to pandas DataFrame for ragas
+        # Convert dataset to pandas DataFrame, then to ragas Dataset
         import pandas as pd
-
         from ragas import evaluate as ragas_evaluate
 
         df = pd.DataFrame(dataset)
 
-        # Run evaluation
+        # Rename columns to match RAGAS expected format
+        # RAGAS expects: user_input, response, retrieved_contexts, reference
+        df_renamed = df.rename(columns={
+            "question": "user_input",
+            "contexts": "retrieved_contexts",
+            "response": "response",
+            "reference_answer": "reference"
+        })
+
+        # Convert DataFrame to HuggingFace Dataset
+        from datasets import Dataset as HFDataset
+        hf_dataset = HFDataset.from_pandas(df_renamed)
+
+        # Run evaluation with run_config
+        from ragas.run_config import RunConfig
+        run_config = RunConfig(max_retries=3, max_wait=60, timeout=60)
+
         results = ragas_evaluate(
-            df=df,
-            metrics=eval_config["metrics"],
+            dataset=hf_dataset,
+            metrics=metrics,
+            run_config=run_config,
         )
 
         console.print("[green]✓[/green] Evaluation complete!")

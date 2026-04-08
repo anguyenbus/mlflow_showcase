@@ -185,10 +185,20 @@ def main() -> None:
         console.print("\n[bold cyan]Step 6:[/bold cyan] Running RAGas evaluation independently...")
 
         import pandas as pd
+        from datasets import Dataset as HFDataset
 
         df = pd.DataFrame(dataset)
+        # Rename columns for RAGAS
+        df_renamed = df.rename(columns={
+            "question": "user_input",
+            "contexts": "retrieved_contexts",
+            "response": "response",
+            "reference_answer": "reference"
+        })
+        hf_dataset = HFDataset.from_pandas(df_renamed)
+
         results = ragas_evaluate(
-            df=df,
+            dataset=hf_dataset,
             metrics=eval_config["metrics"],
         )
 
