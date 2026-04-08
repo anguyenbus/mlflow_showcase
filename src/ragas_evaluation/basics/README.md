@@ -2,6 +2,10 @@
 
 This directory contains fundamental examples demonstrating RAGas (RAG Assessment) package capabilities for evaluating Retrieval-Augmented Generation (RAG) systems using Zhipu AI backend integration.
 
+## 📚 Complete Guide
+
+For comprehensive tutorials with screenshots, see: **[RAGAS_COMPLETE_GUIDE.md](../../examples/advanced/RAGAS_COMPLETE_GUIDE.md)**
+
 ## Overview
 
 RAGas is a framework that helps you evaluate your RAG pipelines using a variety of metrics that measure:
@@ -20,122 +24,194 @@ Before running these examples, ensure you have:
    ZHIPU_API_KEY=your_zhipu_api_key_here
    ```
 
-2. **Install dependencies** (if needed):
+2. **Install dependencies**:
    ```bash
    uv sync --all-extras --dev
    ```
 
-3. **Prepare evaluation dataset** at `data/ragas_evaluation/evaluation_dataset.json`:
-   ```json
-   [
-     {
-       "question": "Your question here",
-       "contexts": ["Context passage 1", "Context passage 2"],
-       "response": "Generated response to evaluate",
-       "reference_answer": "Ground truth answer (optional)"
-     }
-   ]
-   ```
+---
+
+## Quick Start: Minimal Working Example
+
+```python
+# minimal_ragas_evaluation.py
+import os
+import pandas as pd
+from datasets import Dataset as HFDataset
+from ragas import evaluate
+from ragas.metrics._faithfulness import faithfulness
+from ragas.metrics._context_precision import context_precision
+from ragas.llms.base import llm_factory
+from openai import OpenAI as OpenAIClient
+from ragas.run_config import RunConfig
+
+# 1. Configure Zhipu AI backend
+api_key = os.getenv("ZHIPU_API_KEY")
+os.environ["OPENAI_API_KEY"] = api_key
+os.environ["OPENAI_BASE_URL"] = "https://open.bigmodel.cn/api/paas/v4/"
+
+# 2. Prepare your evaluation data
+data = [{
+    "user_input": "What is the GST rate in Australia?",
+    "retrieved_contexts": ["GST is a broad-based tax of 10% on most goods in Australia."],
+    "response": "The GST rate in Australia is 10%.",
+    "reference": "The GST rate is 10%."  # optional
+}]
+hf_dataset = HFDataset.from_pandas(pd.DataFrame(data))
+
+# 3. Configure RAGAS with Zhipu AI
+client = OpenAIClient(api_key=api_key, base_url="https://open.bigmodel.cn/api/paas/v4/")
+ragas_llm = llm_factory(model="glm-5", client=client, max_tokens=4096)
+faithfulness.llm = ragas_llm
+context_precision.llm = ragas_llm
+
+# 4. Run evaluation
+results = evaluate(
+    dataset=hf_dataset,
+    metrics=[faithfulness, context_precision],
+    run_config=RunConfig(max_retries=3, max_wait=60, timeout=60),
+)
+
+# 5. View results
+print(results.to_pandas())
+```
+
+**Expected output:**
+```
+   user_input                                        retrieved_contexts  ...  faithfulness  context_precision
+0  What is the GST rate in Australia?  [GST is a broad-based tax of 10% ...]  ...         1.000               1.0
+
+[1 rows x 5 columns]
+```
 
 ---
 
 ## Examples
 
-### 1. Simple Evaluation (`simple_evaluation.py`)
+### 1. Simple Evaluation (`simple_evaluation_new.py`)
 
-**Overview:** Demonstrates the complete RAGas evaluation workflow from loading configuration to displaying results.
-
-**What it demonstrates:**
-- Loading RAGas configuration
-- Loading evaluation dataset
-- Configuring Zhipu AI backend with low temperature for consistent evaluation
-- Creating RAGas evaluation with standard metrics
-- Running evaluation on dataset
-- Displaying results with rich console formatting
+Complete RAGAS evaluation workflow with Zhipu AI backend integration.
 
 **Run the example:**
 ```bash
-uv run python src/ragas_evaluation/basics/simple_evaluation.py
+export $(grep -v '^#' .env | xargs) && uv run python src/ragas_evaluation/basics/simple_evaluation_new.py
+```
+
+**Step-by-Step Code Breakdown:**
+
+#### Step 1: Load Configuration and Setup Environment
+```python
+from ragas_evaluation.shared.config import get_ragas_config
+import os
+
+config = get_ragas_config()
+
+# Configure RAGAS to use Zhipu AI (OpenAI-compatible API)
+os.environ["OPENAI_API_KEY"] = config.zhipu_api_key
+os.environ["OPENAI_BASE_URL"] = "https://open.bigmodel.cn/api/paas/v4/"
+```
+
+#### Step 2: Prepare Your Dataset
+```python
+from ragas_evaluation.shared.data_loader import load_evaluation_dataset
+import pandas as pd
+from datasets import Dataset as HFDataset
+
+# Load your evaluation data
+dataset = load_evaluation_dataset()
+
+# RAGAS expects specific column names - rename accordingly
+df = pd.DataFrame(dataset)
+df_renamed = df.rename(columns={
+    "question": "user_input",           # Required: user's question
+    "contexts": "retrieved_contexts",   # Required: list of retrieved passages
+    "response": "response",              # Required: your RAG system's answer
+    "reference_answer": "reference"      # Optional: ground truth answer
+})
+
+# Convert to HuggingFace Dataset format
+hf_dataset = HFDataset.from_pandas(df_renamed)
+```
+
+#### Step 3: Configure Metrics with LLM
+```python
+from ragas.metrics._faithfulness import faithfulness
+from ragas.metrics._context_precision import context_precision
+from ragas.llms.base import llm_factory
+from openai import OpenAI as OpenAIClient
+from ragas.run_config import RunConfig
+
+# Create Zhipu AI client
+client = OpenAIClient(
+    api_key=config.zhipu_api_key,
+    base_url="https://open.bigmodel.cn/api/paas/v4/"
+)
+
+# Create RAGAS LLM wrapper with increased max_tokens
+ragas_llm = llm_factory(model="glm-5", client=client, max_tokens=4096)
+
+# Inject LLM into metrics
+faithfulness.llm = ragas_llm
+context_precision.llm = ragas_llm
+```
+
+#### Step 4: Run Evaluation
+```python
+from ragas import evaluate
+
+run_config = RunConfig(max_retries=3, max_wait=60, timeout=60)
+results = evaluate(
+    dataset=hf_dataset,
+    metrics=[faithfulness, context_precision],
+    run_config=run_config,
+)
+
+# Access results
+results_df = results.to_pandas()
+print(results_df[["faithfulness", "context_precision"]].mean())
 ```
 
 **Expected output:**
 ```
 Step 1: Loading configuration...
-✓ MLflow tracking URI: sqlite:///mlflow.db
+MLflow tracking URI: http://localhost:5000
+Configured RAGAS to use Zhipu AI backend
 
 Step 2: Loading evaluation dataset...
-Loading evaluation dataset from: /path/to/evaluation_dataset.json
-✓ Loaded 6 evaluation examples
+Loaded 7 evaluation examples
 
-Step 3: Configuring Zhipu AI backend...
-✓ Configured Zhipu AI backend for RAGas evaluation: glm-5
-  Temperature: 0.2 (low for consistent evaluation)
-  Embeddings: embedding-3
+Step 3: Preparing data for RAGAS...
+Data prepared for RAGAS evaluation
 
-Step 4: Creating RAGas evaluation...
-✓ Created RAGas evaluation with metrics:
+Step 4: Creating RAGAS metrics...
+Created RAGAS evaluation with metrics:
   - faithfulness
-  - answer_relevancy
   - context_precision
-  - context_recall
-  - answer_correctness
 
-Step 5: Running RAGas evaluation...
-✓ Evaluation complete!
+Step 5: Running RAGAS evaluation...
+Evaluating: 100%|██████████| 14/14 [06:40<00:00, 28.61s/it]
+Evaluation complete!
 
-Evaluation Results:
-┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
-┃ Metric                ┃ Score    ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━┩
-│ faithfulness          │   0.8500 │
-│ answer_relevancy      │   0.9200 │
-│ context_precision     │   0.7800 │
-│ context_recall        │   0.8300 │
-│ answer_correctness    │   0.7900 │
-└───────────────────────┴──────────┘
-
-Metric Interpretations:
-[cyan]Faithfulness:[/cyan] Measures the factual consistency of the generated answer
-against the retrieved context.
-
-[yellow]Interpretation:[/yellow]
-- Score 0.0-1.0, higher is better
-- High score: Answer is factually consistent with context
-- Low score: Answer contains hallucinations or contradicts context
-
-... (additional metric interpretations)
+      Evaluation Results
+┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┓
+┃ Metric            ┃ Score  ┃
+┡━━━━━━━━━━━━━━━━━━━╇━━━━━━━━┩
+│ faithfulness      │ 0.9286 │
+│ context_precision │ 1.0000 │
+└───────────────────┴────────┘
 
 Evaluation Summary
-• Dataset size: 6 examples
-• Metrics evaluated: 5
-• Average score: 0.8340
+• Dataset size: 7 examples
+• Metrics evaluated: 2
+• Average score: 0.9643
 • Backend: Zhipu AI (glm-5)
 ```
-
-**Real-World Use Cases:**
-- **Quality Assurance**: Regular evaluation of RAG system outputs
-- **A/B testing**: Comparing different retrieval strategies or prompt templates
-- **Performance monitoring**: Tracking RAG system quality over time
-- **Debugging**: Identifying specific weaknesses in retrieval or generation
-- **Benchmarking**: Establishing baseline metrics for system improvements
-
-**Key concepts learned:**
-- **RAGas metrics**: Understanding what each metric measures
-- **Backend configuration**: Setting up LLM for evaluation (low temperature)
-- **Evaluation workflow**: End-to-end evaluation process
-- **Result interpretation**: Understanding and acting on metric scores
 
 ---
 
 ### 2. Metric Demonstration (`metric_demonstration.py`)
 
-**Overview:** Provides individual demonstrations of each RAGas metric with detailed explanations and example scenarios.
-
-**What it demonstrates:**
-- Individual metric explanations
-- Score interpretation guidelines
-- Example scenarios for each metric
-- Practical understanding of what metrics measure
+Individual demonstrations of each RAGAS metric with explanations.
 
 **Run the example:**
 ```bash
@@ -146,32 +222,35 @@ uv run python src/ragas_evaluation/basics/metric_demonstration.py
 ```
 RAGas Metrics Demonstration
 
-╭─────────────────────────────────────────────────────────────────╮
-│ Demonstrating Faithfulness Metric                              │
-│ Measures factual consistency of answer against retrieved context│
-╰─────────────────────────────────────────────────────────────────╯
+Faithfulness
+ Measures the factual consistency of the generated answer against the retrieved context.
+ Score range: 0.0-1.0 (higher is better)
 
-[cyan]Faithfulness:[/cyan] Measures the factual consistency of the generated answer
-against the retrieved context.
+Example Scenario:
+  Question: What is the GST rate in Australia?
+  Context: 'GST is a broad-based tax of 10% on most goods in Australia.'
+  Response (High Faithfulness): 'The GST rate in Australia is 10%.'
+  Response (Low Faithfulness): 'The GST rate in Australia is 15%.'
 
-[yellow]Interpretation:[/yellow]
-- Score 0.0-1.0, higher is better
-- High score: Answer is factually consistent with context
-- Low score: Answer contains hallucinations or contradicts context
+Answer Relevancy
+ Measures how well the generated answer addresses the given question.
+ Score range: 0.0-1.0 (higher is better)
 
-[yellow]Example Scenario:[/yellow]
-Question: What is the GST rate in Australia?
-Context: 'GST is a broad-based tax of 10% on most goods, services and other items in Australia.'
-Response (High Faithfulness): 'The GST rate in Australia is 10%.'
-Response (Low Faithfulness): 'The GST rate in Australia is 15%.'
+Context Precision
+ Measures how relevant the retrieved contexts are to the given question.
+ Score range: 0.0-1.0 (higher is better)
 
-================================================================================
+Context Recall
+ Measures the ability of the retriever to retrieve all relevant information.
+ Score range: 0.0-1.0 (higher is better)
+ Requires: Ground truth reference answers
 
-... (additional metric demonstrations)
+Answer Correctness
+ Measures the accuracy of the generated answer compared to the ground truth.
+ Score range: 0.0-1.0 (higher is better)
+ Requires: Ground truth reference answers
 
-╭─────────────────────────────────────────────────────────────────╮
-│ All Metrics Demonstrated                                        │
-╰─────────────────────────────────────────────────────────────────╮
+All Metrics Demonstrated:
 • Faithfulness: Factual consistency with context
 • Answer Relevancy: How well answer addresses question
 • Context Precision: Quality of retrieved contexts
@@ -179,351 +258,192 @@ Response (Low Faithfulness): 'The GST rate in Australia is 15%.'
 • Answer Correctness: Accuracy compared to ground truth (requires ground truth)
 ```
 
-**Real-World Use Cases:**
-- **Training material**: Educating team members on RAGas metrics
-- **Onboarding**: Helping new developers understand evaluation concepts
-- **Documentation reference**: Quick lookup for metric meanings
-- **Stakeholder communication**: Explaining evaluation metrics to non-technical audiences
+**Available metrics:**
 
-**Key concepts learned:**
-- **Metric purposes**: Understanding what each metric evaluates
-- **Score interpretation**: Knowing what good vs bad scores mean
-- **Practical examples**: Seeing metrics in realistic scenarios
-- **Ground truth requirements**: Understanding which metrics need reference answers
+| Metric | Purpose | Score Range | Ground Truth Required |
+|--------|---------|-------------|---------------------|
+| **Faithfulness** | Factual consistency with context | 0.0-1.0 (higher is better) | No |
+| **Answer Relevancy** | How well answer addresses question | 0.0-1.0 (higher is better) | No |
+| **Context Precision** | Quality of retrieved contexts | 0.0-1.0 (higher is better) | Yes |
+| **Context Recall** | Completeness of retrieved contexts | 0.0-1.0 (higher is better) | Yes |
+| **Answer Correctness** | Accuracy compared to ground truth | 0.0-1.0 (higher is better) | Yes |
 
 ---
 
-## Metric Interpretation Guide
+## Dataset Format
 
-### Faithfulness (Factual Consistency)
+RAGAS requires evaluation data in the following format:
 
-**What it measures:** Whether the generated answer is factually consistent with the retrieved context.
+```python
+# Required columns
+{
+    "user_input": "What is the GST rate in Australia?",
+    "retrieved_contexts": [
+        "GST is a broad-based tax of 10% on most goods in Australia."
+    ],
+    "response": "The GST rate in Australia is 10%.",
+}
 
-**Score range:** 0.0-1.0, higher is better
-
-**Interpretation:**
-- **High score (0.8-1.0)**: Answer is well-grounded in context, minimal hallucinations
-- **Medium score (0.5-0.8)**: Some factual inconsistencies or minor hallucinations
-- **Low score (0.0-0.5)**: Significant hallucinations or contradictions with context
-
-**Common issues:**
-- Low scores may indicate LLM is adding information not in context
-- May need better context retrieval or prompt engineering
-- Consider reducing temperature for generation
-
-**Improvement strategies:**
-- Improve retrieval quality to get more relevant context
-- Add explicit instructions to use only provided context
-- Use faithfulness as a signal for fine-tuning prompts
-
----
-
-### Answer Relevancy (Question Addressing)
-
-**What it measures:** How well the answer addresses the original question.
-
-**Score range:** 0.0-1.0, higher is better
-
-**Interpretation:**
-- **High score (0.8-1.0)**: Answer directly and completely addresses the question
-- **Medium score (0.5-0.8)**: Answer partially addresses question or is incomplete
-- **Low score (0.0-0.5)**: Answer is irrelevant or misses the question's intent
-
-**Common issues:**
-- Low scores may indicate poor understanding of user intent
-- May need better prompt engineering or context
-- Could be due to incomplete retrieval
-
-**Improvement strategies:**
-- Improve question understanding in prompts
-- Ensure retrieval covers all aspects of the question
-- Add instructions to be comprehensive and direct
-
----
-
-### Context Precision (Retrieval Quality)
-
-**What it measures:** Quality and relevance of retrieved context passages.
-
-**Score range:** 0.0-1.0, higher is better
-
-**Interpretation:**
-- **High score (0.8-1.0)**: Retrieved contexts are highly relevant and well-ranked
-- **Medium score (0.5-0.8)**: Some irrelevant context in results
-- **Low score (0.0-0.5)**: Many irrelevant contexts or poor ranking
-
-**Common issues:**
-- Low scores indicate poor retrieval quality
-- May need better embedding models or chunking strategies
-- Could be due to irrelevant documents in knowledge base
-
-**Improvement strategies:**
-- Improve document chunking and preprocessing
-- Use better embedding models (e.g., larger models)
-- Implement hybrid search (dense + sparse)
-- Add re-ranking of retrieved documents
-
----
-
-### Context Recall (Completeness)
-
-**What it measures:** Whether all relevant information was retrieved from the knowledge base.
-
-**Score range:** 0.0-1.0, higher is better
-
-**Interpretation:**
-- **High score (0.8-1.0)**: All relevant context was retrieved
-- **Medium score (0.5-0.8)**: Some relevant context was missed
-- **Low score (0.0-0.5)**: Significant information missing from retrieval
-
-**Common issues:**
-- Low scores indicate retrieval system is missing important information
-- May need to increase number of retrieved documents
-- Could be due to poor indexing or chunking
-
-**Improvement strategies:**
-- Increase top-k retrieval count
-- Improve document indexing and chunking
-- Use query expansion techniques
-- Implement multiple retrieval strategies
-
-**Note:** Requires ground truth reference answers.
-
----
-
-### Answer Correctness (Accuracy)
-
-**What it measures:** Accuracy of the generated answer compared to ground truth.
-
-**Score range:** 0.0-1.0, higher is better
-
-**Interpretation:**
-- **High score (0.8-1.0)**: Answer matches ground truth closely
-- **Medium score (0.5-0.8)**: Answer partially correct with some errors
-- **Low score (0.0-0.5)**: Answer differs significantly from ground truth
-
-**Common issues:**
-- Low scores may indicate poor generation or retrieval
-- Could be due to ambiguous ground truth
-- May need better prompts or context
-
-**Improvement strategies:**
-- Improve retrieval quality and completeness
-- Refine generation prompts
-- Use few-shot examples in prompts
-- Consider fine-tuning the model
-
-**Note:** Requires ground truth reference answers.
-
----
-
-## Troubleshooting
-
-### Issue: Missing API Key
-
-**Error:**
-```
-ERROR: ZHIPU_API_KEY environment variable is not set
+# Optional column (for metrics requiring ground truth)
+{
+    "user_input": "...",
+    "retrieved_contexts": [...],
+    "response": "...",
+    "reference": "The GST rate is 10%."  # Ground truth answer
+}
 ```
 
-**Solution:**
-1. Get your API key from https://open.bigmodel.cn/
-2. Copy `.env.example` to `.env`
-3. Add your API key: `ZHIPU_API_KEY=your_key_here`
-4. Run: `source .env` or reload your IDE
+**Field descriptions:**
+- `user_input`: The user query to evaluate (previously named `question`)
+- `retrieved_contexts`: List of retrieved document passages (previously named `contexts`)
+- `response`: Your RAG system's generated answer
+- `reference`: Ground truth answer (optional, needed for some metrics)
 
----
+**Creating a dataset from scratch:**
+```python
+import pandas as pd
+from datasets import Dataset as HFDataset
 
-### Issue: Dataset Not Found
+evaluation_data = [
+    {
+        "user_input": "What is the GST rate in Australia?",
+        "retrieved_contexts": ["GST is a broad-based tax of 10% on most goods, services and other items in Australia."],
+        "response": "The GST rate in Australia is 10%.",
+        "reference": "The GST rate is 10%."
+    },
+    {
+        "user_input": "When was GST introduced in Australia?",
+        "retrieved_contexts": ["GST was introduced in Australia on 1 July 2000."],
+        "response": "GST was introduced in Australia on July 1, 2000.",
+        "reference": "GST was introduced on 1 July 2000."
+    }
+]
 
-**Error:**
-```
-ERROR: Evaluation dataset not found at: /path/to/evaluation_dataset.json
-```
-
-**Solution:**
-1. Create the data directory: `mkdir -p data/ragas_evaluation`
-2. Create `evaluation_dataset.json` with your test data
-3. See documentation for dataset structure examples
-4. Ensure JSON is valid and properly formatted
-
----
-
-### Issue: Invalid Dataset Structure
-
-**Error:**
-```
-ERROR: Invalid dataset structure: Entry 0 is missing required fields: question
-```
-
-**Solution:**
-1. Check that each entry has required fields: `question`, `contexts`, `response`
-2. Ensure `contexts` is a list (even if single item)
-3. Validate JSON format
-4. See dataset structure examples in documentation
-
----
-
-### Issue: Rate Limiting
-
-**Error:**
-```
-ERROR: Rate limit exceeded for API calls
+hf_dataset = HFDataset.from_pandas(pd.DataFrame(evaluation_data))
 ```
 
-**Solution:**
-1. Reduce dataset size for testing
-2. Add delays between API calls
-3. Use smaller models for faster evaluation
-4. Consider batching evaluations
+---
+
+## Quick Reference
+
+### Common Evaluation Patterns
+
+**Pattern 1: Metrics without ground truth**
+```python
+from ragas.metrics._faithfulness import faithfulness
+from ragas.metrics._context_precision import context_precision
+
+metrics_no_gt = [faithfulness, context_precision]
+```
+
+**Pattern 2: Metrics with ground truth**
+```python
+from ragas.metrics._context_recall import context_recall
+from ragas.metrics._answer_correctness import answer_correctness
+
+metrics_with_gt = [
+    faithfulness,
+    context_precision,
+    context_recall,
+    answer_correctness
+]
+```
+
+**Pattern 3: Extracting results**
+```python
+# Get results as pandas DataFrame
+results_df = results.to_pandas()
+
+# Calculate average scores
+avg_faithfulness = results_df["faithfulness"].mean()
+avg_context_precision = results_df["context_precision"].mean()
+
+# Get individual sample scores
+for idx, row in results_df.iterrows():
+    print(f"Sample {idx}: Faithfulness={row['faithfulness']:.3f}")
+```
+
+**Expected output:**
+```
+Sample 0: Faithfulness=1.000
+Sample 1: Faithfulness=0.850
+Sample 2: Faithfulness=0.920
+...
+Average faithfulness: 0.9286
+Average context_precision: 1.0000
+```
+
+**Pattern 4: Custom run configuration**
+```python
+from ragas.run_config import RunConfig
+
+# For slower/more reliable evaluation
+run_config = RunConfig(
+    max_retries=5,      # More retries for unstable connections
+    max_wait=90,        # Longer wait between retries
+    timeout=120         # Longer timeout for complex evaluations
+)
+
+# For faster evaluation (development)
+run_config = RunConfig(
+    max_retries=1,
+    max_wait=30,
+    timeout=30
+)
+```
 
 ---
 
-### Issue: Low Metric Scores
+## Key Configuration
 
-**Observation:** All metrics show very low scores (< 0.5)
+### Zhipu AI Backend Configuration
+```python
+import os
 
-**Possible causes:**
-1. Poor quality retrieved context
-2. Inadequate prompt engineering
-3. Temperature too high for generation
-4. Mismatch between questions and context
+# Required environment variables
+os.environ["OPENAI_API_KEY"] = config.zhipu_api_key
+os.environ["OPENAI_BASE_URL"] = "https://open.bigmodel.cn/api/paas/v4/"
 
-**Improvement strategies:**
-1. Review and improve retrieval quality
-2. Refine prompts for better generation
-3. Use lower temperature (0.1-0.3) for evaluation
-4. Ensure questions match available context
+# Available models
+# - glm-5: Most capable, recommended for evaluation
+# - glm-4: Faster, good for simple metrics
+```
 
----
+### LLM Factory Options
+```python
+from ragas.llms.base import llm_factory
+from openai import OpenAI as OpenAIClient
 
-## Real-World Use Cases
+client = OpenAIClient(
+    api_key=config.zhipu_api_key,
+    base_url="https://open.bigmodel.cn/api/paas/v4/"
+)
 
-### 1. Production Quality Monitoring
+# Standard configuration
+ragas_llm = llm_factory(
+    model="glm-5",
+    client=client,
+    max_tokens=4096  # Important: Set high enough for evaluation responses
+)
 
-**Scenario:** Running a RAG system in production for customer support.
-
-**Implementation:**
-- Run `simple_evaluation.py` daily on sample of production queries
-- Track metric trends over time in MLflow
-- Set up alerts for significant metric drops
-- Use results to identify degradation
-
-**Benefits:**
-- Early detection of quality issues
-- Data-driven decisions for improvements
-- Accountability for system changes
-
----
-
-### 2. Retrieval Strategy Comparison
-
-**Scenario:** Evaluating different retrieval approaches (dense vs hybrid search).
-
-**Implementation:**
-- Run evaluation with different retrieval configurations
-- Compare metrics across approaches
-- Use results to select best strategy
-- Document trade-offs
-
-**Benefits:**
-- Data-driven retrieval optimization
-- Understanding of performance trade-offs
-- Evidence for architectural decisions
-
----
-
-### 3. Prompt Engineering Iteration
-
-**Scenario:** Improving generation prompts for better answers.
-
-**Implementation:**
-- Create evaluation dataset with representative queries
-- Test different prompt variations
-- Compare metrics across prompts
-- Select best performing prompt
-
-**Benefits:**
-- Systematic prompt improvement
-- Quantitative comparison of prompts
-- Faster iteration cycles
-
----
-
-### 4. Model Selection
-
-**Scenario:** Choosing between different LLMs for generation.
-
-**Implementation:**
-- Run evaluation with different models
-- Compare quality metrics and latency
-- Consider cost-benefit trade-offs
-- Make informed model selection
-
-**Benefits:**
-- Objective model comparison
-- Understanding of quality-latency trade-offs
-- Cost optimization
-
----
-
-### 5. Regression Testing
-
-**Scenario:** Ensuring system changes don't degrade quality.
-
-**Implementation:**
-- Establish baseline metrics with `simple_evaluation.py`
-- Run evaluation after each significant change
-- Compare new metrics to baseline
-- Reject changes that significantly degrade metrics
-
-**Benefits:**
-- Prevent quality regression
-- Confidence in deployments
-- Systematic quality assurance
-
----
-
-## Key Concepts Learned
-
-### RAGas Evaluation Framework
-
-1. **Metrics-Driven Evaluation**: Use quantitative metrics to assess RAG quality
-2. **Multi-Dimensional Assessment**: Evaluate retrieval, generation, and correctness
-3. **Ground Truth Flexibility**: Mix metrics with and without reference answers
-4. **LLM-Based Evaluation**: Use LLMs as judges for automated assessment
-
-### Backend Configuration
-
-1. **Low Temperature for Evaluation**: Use 0.1-0.3 for consistent scoring
-2. **Embedding Models**: Required for semantic similarity metrics
-3. **API Integration**: Configure Zhipu AI with OpenAI-compatible endpoint
-4. **Error Handling**: Validate environment and handle API failures
-
-### Result Interpretation
-
-1. **Score Ranges**: Understand 0.0-1.0 scale for all metrics
-2. **Metric-Specific Insights**: Each metric measures different aspects
-3. **Actionable Feedback**: Use scores to identify specific improvements
-4. **Trend Analysis**: Track metrics over time for monitoring
-
-### Production Considerations
-
-1. **Quality Monitoring**: Regular evaluation for production systems
-2. **Threshold Setting**: Define acceptable metric ranges
-3. **Alerting**: Set up alerts for metric degradation
-4. **Continuous Improvement**: Use evaluation for iterative optimization
+# With temperature (for reproducible results)
+ragas_llm = llm_factory(
+    model="glm-5",
+    client=client,
+    max_tokens=4096,
+    temperature=0.1  # Low temperature for consistent evaluation
+)
+```
 
 ---
 
 ## Next Steps
 
-After completing these basic examples, explore:
+After mastering these basics:
 
-1. **MLflow Integration**: See `with_mlflows/` for tracking experiments over time
-2. **Advanced Metrics**: Explore custom metrics and evaluation strategies
-3. **Production Pipelines**: Integrate evaluation into CI/CD
-4. **Monitoring**: Set up continuous quality monitoring
+1. **MLflow Integration**: See `../with_mlflows/` for experiment tracking
+2. **Advanced Patterns**: See `../examples/advanced/` for production-level patterns
+3. **Complete Guide**: See [RAGAS_COMPLETE_GUIDE.md](../../examples/advanced/RAGAS_COMPLETE_GUIDE.md) for comprehensive tutorials
 
 ---
 
@@ -532,4 +452,4 @@ After completing these basic examples, explore:
 - **RAGas Documentation**: https://docs.ragas.io/
 - **Zhipu AI**: https://open.bigmodel.cn/
 - **MLflow Documentation**: https://mlflow.org/docs/
-- **Project README**: `/home/an/projects/tracing_project/README.md`
+- **Complete Guide**: [RAGAS_COMPLETE_GUIDE.md](../../examples/advanced/RAGAS_COMPLETE_GUIDE.md)
