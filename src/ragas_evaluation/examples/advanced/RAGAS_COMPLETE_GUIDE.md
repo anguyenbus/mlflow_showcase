@@ -596,6 +596,7 @@ MLflow Run Information:
 
 View results in MLflow UI: http://localhost:5000/#/runs/abc123def456
 
+```
 ╭─────────────────────────────────────────────────────────────────╮
 ---
 
@@ -632,6 +633,7 @@ mlflow.set_tags({
 - Team collaboration
 - Compliance tracking
 
+```
 ---
 ┃ Field                 ┃ Value                 ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
@@ -673,6 +675,7 @@ View results in MLflow UI: http://localhost:5000/#/runs/xyz789abc012
 │ Use manual logging when you need customization.                 │
 │ Use auto-logging for quick, standard evaluation logging.        │
 ╰─────────────────────────────────────────────────────────────────╯
+```
 
 **MLflow Screenshot:**
 - Experiment: `ragas-simple-manual-logging` (ID: 23)
@@ -680,8 +683,6 @@ View results in MLflow UI: http://localhost:5000/#/runs/xyz789abc012
 - Capture: Parameters tab showing model=glm-5, backend=zhipu; Metrics tab with faithfulness and context_precision
 
 ![MLflow Manual Logging](screenshots/mlflow_manual_logging.png)
-
-```
 
 **Key MLflow APIs:**
 
@@ -1089,6 +1090,7 @@ Testing strategy: large_chunks (size=1000, overlap=100)
 │                                                                 │
 │ Capture: Side-by-side metrics comparison across strategies      │
 ╰─────────────────────────────────────────────────────────────────╯
+```
 
 **MLflow Screenshots:**
 - Experiment: `ragas_chunking_comparison` (ID: 24)
@@ -1100,7 +1102,6 @@ Testing strategy: large_chunks (size=1000, overlap=100)
 
 ![MLflow Chunking Large Chunk Details](screenshots/mlflow_chunking_comparison_large_chunk_size.png)
 *Large chunk (1000 chars) strategy details showing metrics*
-```
 
 **Key MLflow APIs:**
 
@@ -1192,13 +1193,13 @@ Cost-Benefit Analysis:
 │ URL: http://localhost:5000/#/experiments/21                      │
 │ Runs: glm-5, glm-4, model_comparison                            │
 ╰─────────────────────────────────────────────────────────────────╯
+```
 
 ![GLM-5 Model Metrics](screenshots/mlflow_model_comparison_charts_glm5.png)
 *GLM-5 model showing faithfulness and other metrics*
 
 ![GLM-4 Model Metrics](screenshots/mlflow_model_comparison_charts_glm4.png)
 *GLM-4 model showing comparable metrics with faster latency*
-```
 
 **Key MLflow APIs:**
 
@@ -1295,6 +1296,7 @@ Financial Domain: Regulatory Compliance
 │                                                                 │
 │ Capture: Domain-specific custom metrics in MLflow               │
 ╰─────────────────────────────────────────────────────────────────╯
+```
 
 **MLflow Custom Metrics:**
 - Experiment: `ragas_custom_metrics` (ID: 26)
@@ -1304,7 +1306,6 @@ Financial Domain: Regulatory Compliance
 
 ![MLflow Custom Metrics View](screenshots/mlflow_custom_metrics_view.png)
 *Custom metrics demonstration with domain-specific evaluation*
-```
 
 **Key MLflow APIs:**
 
@@ -1389,6 +1390,7 @@ Validating Dataset Quality
 │ Parent: data_generation_demonstration                            │
 │ Nested: synthetic_dataset_generation, golden_dataset_generation  │
 ╰─────────────────────────────────────────────────────────────────╯
+```
 
 ![Synthetic Dataset Run](screenshots/mlflow_dataset_syntheticdataset.png)
 *Synthetic dataset generation run with parameters and metrics*
@@ -1401,7 +1403,6 @@ Validating Dataset Quality
 
 ![Golden Dataset Artifacts](screenshots/mlflow_dataset_golddataset_artifacts.png)
 *Artifacts tab showing generated golden dataset file*
-```
 
 **Key MLflow APIs:**
 
