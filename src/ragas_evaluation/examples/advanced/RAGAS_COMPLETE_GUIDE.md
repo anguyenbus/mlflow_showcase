@@ -542,7 +542,7 @@ Step 6: Logging to MLflow...
 
 **MLflow UI Screenshot:**
 
-![MLflow Manual Logging](mlflow_manual_logging.png)
+![MLflow Manual Logging](screenshots/mlflow_manual_logging.png)
 
 **Screenshot Instructions:**
 1. Open http://localhost:5000/#/experiments/23
