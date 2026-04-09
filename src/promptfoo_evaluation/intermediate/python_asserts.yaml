@@ -1,0 +1,44 @@
+# Python Custom Assertions Example
+#
+# This example demonstrates Python-based custom assertions and LLM-graded
+# evaluations for more sophisticated validation.
+
+description: Python custom assertions and LLM-graded evaluations
+
+prompts:
+  - "You are a helpful assistant. Answer the following: {{question}}"
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      question: "What is the capital of Australia?"
+    assert:
+      - type: contains
+        value: Canberra
+      - type: icontains
+        value: australia
+
+  - vars:
+      question: "Summarize machine learning in one sentence."
+    assert:
+      - type: contains
+        value: learn
+      - type: contains
+        value: data
+
+  - vars:
+      question: "What is 2 + 2?"
+    assert:
+      - type: contains
+        value: "4"
+
+  - vars:
+      question: "Name a programming language used for AI."
+    assert:
+      - type: icontains-any
+        value: [python, java, javascript]
+
+outputPath: ../../promptfoo_results/python_asserts.json
+

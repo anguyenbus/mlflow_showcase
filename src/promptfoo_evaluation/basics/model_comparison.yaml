@@ -1,0 +1,66 @@
+# Model Comparison Example
+#
+# This example compares different Zhipu AI GLM models using identical prompts.
+# This helps evaluate which model provides the best balance of cost, latency,
+# and quality for your use case.
+
+description: Compare Zhipu AI GLM models (GLM-4.6, GLM-4.7, GLM-5)
+
+prompts:
+  - "Explain {{topic}} in 2-3 sentences. Include key concepts and examples."
+
+providers:
+  - openai:chat:glm-4.6
+  - openai:chat:glm-4.7
+  - openai:chat:glm-5
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      topic: machine learning
+    assert:
+      - type: contains
+        value: learn
+      - type: icontains
+        value: data
+      - type: similar
+        value: "Machine learning enables computers to learn from data"
+
+  - vars:
+      topic: tax deductions
+    assert:
+      - type: contains
+        value: deduct
+      - type: icontains
+        value: expense
+
+  - vars:
+      topic: neural networks
+    assert:
+      - type: contains
+        value: network
+      - type: contains
+        value: neuron
+
+  - vars:
+      topic: blockchain technology
+    assert:
+      - type: contains
+        value: chain
+      - type: contains
+        value: decentral
+
+  - vars:
+      topic: climate change
+    assert:
+      - type: contains
+        value: climate
+      - type: icontains
+        value: carbon
+
+# Metrics tracked automatically:
+# - Cost per model (totalCost)
+# - Latency (latencyMs)
+# - Token usage (totalTokens)
+# - Pass rate
+outputPath: ../promptfoo_results/model_comparison.json

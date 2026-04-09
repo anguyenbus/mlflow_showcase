@@ -1,0 +1,53 @@
+# Prompt A/B Testing Example
+#
+# This example demonstrates A/B testing by comparing different prompt variants
+# against the same set of inputs. This helps identify which prompt phrasing
+# produces better results.
+
+description: A/B testing of prompt variants for the same task
+
+prompts:
+  - "Explain {{topic}} in simple terms for a beginner."
+  - "Describe {{topic}} as if teaching a 10-year-old."
+  - "What is {{topic}}? Provide a clear, simple explanation."
+  - "{{topic}} explained simply:"
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      topic: machine learning
+    assert:
+      - type: contains
+        value: learn
+      - type: icontains
+        value: data
+
+  - vars:
+      topic: climate change
+    assert:
+      - type: contains
+        value: climate
+      - type: contains
+        value: warm
+
+  - vars:
+      topic: artificial intelligence
+    assert:
+      - type: icontains
+        value: AI
+      - type: icontains
+        value: intelligent
+
+  - vars:
+      topic: quantum computing
+    assert:
+      - type: contains
+        value: quantum
+      - type: contains
+        value: comput
+
+# Compare different prompts for effectiveness
+# The output will show which prompt variant performs best
+outputPath: ../promptfoo_results/prompt_comparison.json

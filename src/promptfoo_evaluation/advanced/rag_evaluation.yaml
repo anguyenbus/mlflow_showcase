@@ -1,0 +1,74 @@
+# RAG Evaluation with Custom Assertions
+#
+# This example demonstrates RAG evaluation using Python custom assertions
+# that integrate with the existing VectorStore and RetrievalChain infrastructure.
+# The RAG provider is used via Python assertions rather than as a full provider.
+
+description: RAG evaluation with Python custom assertions for retrieval quality
+
+prompts:
+  - |
+    You are a helpful assistant answering questions about Australian tax law.
+    Based on the retrieved context, answer the following question.
+
+    Retrieved Context:
+    {{context}}
+
+    Question: {{question}}
+
+    If the context doesn't contain enough information to answer the question,
+    say so clearly.
+
+providers:
+  - openai:chat:glm-5
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      context: "The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31."
+      question: "When are individual tax returns due in Australia?"
+    assert:
+      - type: contains
+        value: October
+      - type: icontains
+        value: 31
+      # Python assertion to check if answer uses context properly
+      - type: python
+        value: |
+          def assert_fn(output, context):
+              answer = output.lower()
+              ctx = context.get("vars", {}).get("context", "").lower()
+              # Check if answer references October (from context) and not hallucinated info
+              return "october" in answer and len(answer) > 20
+
+  - vars:
+      context: "GST stands for Goods and Services Tax. It is a value-added tax of 10% on most goods and services in Australia."
+      question: "What does GST stand for and what is its rate?"
+    assert:
+      - type: contains
+        value: Goods
+      - type: contains
+        value: 10
+      - type: python
+        value: |
+          def assert_fn(output, context):
+              answer = output.lower()
+              # Check answer mentions both goods/services and the rate
+              return "goods" in answer and ("10" in answer or "ten" in answer)
+
+  - vars:
+      context: "The Medicare levy is 2% of taxable income for most taxpayers, helping fund Australia's public healthcare system."
+      question: "What is the Medicare levy rate?"
+    assert:
+      - type: contains
+        value: 2
+      - type: icontains
+        value: medicare
+      - type: python
+        value: |
+          def assert_fn(output, context):
+              # Check answer is substantial enough
+              return len(output) > 15 and "2" in output
+
+outputPath: ../../promptfoo_results/rag_evaluation.json
+

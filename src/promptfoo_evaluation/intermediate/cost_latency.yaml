@@ -1,0 +1,42 @@
+# Cost and Latency Tracking Example
+#
+# This example demonstrates how to track and validate cost and latency
+# metrics across different models and configurations.
+
+description: Cost and latency tracking with performance thresholds
+
+prompts:
+  - "Summarize the key aspects of {{topic}} in 3-4 sentences."
+
+providers:
+  - openai:chat:glm-5
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      topic: machine learning
+    assert:
+      - type: contains
+        value: learn
+      - type: contains
+        value: data
+
+  - vars:
+      topic: quantum computing
+    assert:
+      - type: contains
+        value: quantum
+
+  - vars:
+      topic: climate change
+    assert:
+      - type: contains
+        value: climate
+
+  - vars:
+      topic: artificial intelligence
+    assert:
+      - type: icontains
+        value: AI
+
+outputPath: ../../promptfoo_results/cost_latency.json

@@ -1,0 +1,46 @@
+# MLflow Integration Example
+#
+# This example demonstrates promptfoo configuration designed for MLflow
+# integration, with detailed metrics and artifact logging.
+
+description: RAG evaluation with MLflow tracking integration
+
+prompts:
+  - |
+    Answer the question based on the provided context.
+
+    Context: {{context}}
+    Question: {{question}}
+
+providers:
+  - openai:chat:glm-5
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      context: "Python is a high-level programming language created by Guido van Rossum. It emphasizes code readability with significant whitespace."
+      question: "Who created Python?"
+    assert:
+      - type: contains
+        value: Guido
+      - type: icontains
+        value: python
+
+  - vars:
+      context: "The capital of Japan is Tokyo. Japan's currency is the yen and the population is about 125 million."
+      question: "What is the capital of Japan?"
+    assert:
+      - type: contains
+        value: Tokyo
+
+  - vars:
+      context: "Photosynthesis is the process by which plants convert sunlight into energy. It occurs mainly in the leaves using chlorophyll."
+      question: "What do plants need for photosynthesis?"
+    assert:
+      - type: contains
+        value: sunlight
+      - type: icontains
+        value: energy
+
+outputPath: ../../promptfoo_results/mlflow_integration.json
+

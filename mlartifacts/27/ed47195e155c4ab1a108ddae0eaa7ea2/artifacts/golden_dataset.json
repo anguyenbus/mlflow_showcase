@@ -1,0 +1,35 @@
+[
+  {
+    "question": "What information is contained in this document about GST is a broad-based tax of 10...?",
+    "contexts": [
+      "GST is a broad-based tax of 10% on most goods and services in Australia."
+    ],
+    "response": "GST is a broad-based tax of 10% on most goods and services in Australia....",
+    "reference_answer": "GST is a broad-based tax of 10% on most goods and services in Australia.",
+    "metadata": {
+      "source": "doc_0.pdf"
+    }
+  },
+  {
+    "question": "What information is contained in this document about Income tax rates for 2024-25 r...?",
+    "contexts": [
+      "Income tax rates for 2024-25 range from 0% to 45% depending on income level."
+    ],
+    "response": "Income tax rates for 2024-25 range from 0% to 45% depending on income level....",
+    "reference_answer": "Income tax rates for 2024-25 range from 0% to 45% depending on income level.",
+    "metadata": {
+      "source": "doc_1.pdf"
+    }
+  },
+  {
+    "question": "What information is contained in this document about Work-related expenses can be c...?",
+    "contexts": [
+      "Work-related expenses can be claimed as tax deductions if directly related to earning income."
+    ],
+    "response": "Work-related expenses can be claimed as tax deductions if directly related to earning income....",
+    "reference_answer": "Work-related expenses can be claimed as tax deductions if directly related to earning income.",
+    "metadata": {
+      "source": "doc_2.pdf"
+    }
+  }
+]

@@ -1,0 +1,50 @@
+# Simple Prompt Testing with Zhipu AI
+#
+# This example demonstrates basic prompt testing with string assertions
+# using Zhipu AI GLM models via the OpenAI-compatible API.
+
+description: Simple prompt testing with Zhipu AI GLM models
+
+prompts:
+  - "What is {{topic}}? Explain in one sentence."
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      topic: machine learning
+    assert:
+      - type: contains
+        value: learning
+      - type: contains
+        value: data
+      - type: icontains
+        value: ALGORITHMS  # Case insensitive match
+
+  - vars:
+      topic: Australian tax law
+    assert:
+      - type: contains
+        value: tax
+      - type: regex
+        value: "(income|deduction|assessment|GST)"
+
+  - vars:
+      topic: photosynthesis
+    assert:
+      - type: contains
+        value: plant
+      - type: contains
+        value: sunlight
+
+  - vars:
+      topic: blockchain
+    assert:
+      - type: contains
+        value: chain
+      - type: contains
+        value: block
+
+# Optional: Output configuration
+outputPath: ../promptfoo_results/simple_test.json

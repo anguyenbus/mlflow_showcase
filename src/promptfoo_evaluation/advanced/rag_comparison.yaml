@@ -1,0 +1,51 @@
+# RAG Configuration Comparison
+#
+# This example compares different RAG configurations including
+# chunk sizes and retrieval strategies.
+
+description: Compare different RAG configurations and strategies
+
+prompts:
+  - |
+    Answer the question using only the provided context.
+
+    Context:
+    {{context}}
+
+    Question: {{question}}
+
+    Answer:
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      context: "Company XYZ allows $500 per expense report without manager approval. Expenses above $500 require director approval."
+      question: "What is the maximum expense without approval?"
+    assert:
+      - type: contains
+        value: 500
+      - type: icontains
+        value: dollar
+
+  - vars:
+      context: "Employee leave entitlement: Full-time employees get 20 days annual leave and 10 days sick leave per year."
+      question: "How many annual leave days do full-time employees get?"
+    assert:
+      - type: contains
+        value: 20
+      - type: icontains
+        value: day
+
+  - vars:
+      context: "The office is open Monday to Friday, 9 AM to 5 PM. Closed on weekends and public holidays."
+      question: "Is the office open on weekends?"
+    assert:
+      - type: contains
+        value: weekend
+      - type: contains
+        value: closed
+
+outputPath: ../../promptfoo_results/rag_comparison.json
+

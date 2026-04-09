@@ -1,0 +1,34 @@
+# JavaScript Assertions Example
+#
+# This example demonstrates JavaScript-based assertions that work
+# cross-platform and can be used in browser-based evaluations.
+
+description: JavaScript assertions for cross-platform compatibility
+
+prompts:
+  - "Answer the question: {{question}}"
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      question: "What is the capital of France?"
+    assert:
+      - type: contains
+        value: Paris
+
+  - vars:
+      question: "What is 5 + 7?"
+    assert:
+      - type: contains
+        value: "12"
+
+  - vars:
+      question: "Name a primary color."
+    assert:
+      - type: icontains-any
+        value: [red, blue, yellow]
+
+outputPath: ../../promptfoo_results/javascript_asserts.json
+

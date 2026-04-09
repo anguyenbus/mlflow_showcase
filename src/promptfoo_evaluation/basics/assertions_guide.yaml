@@ -1,0 +1,114 @@
+# Assertion Types Guide
+#
+# This example demonstrates all basic promptfoo assertion types.
+# Assertions validate that LLM outputs meet your requirements.
+
+description: Comprehensive guide to basic assertion types
+
+prompts:
+  - "Answer: {{question}}"
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  # contains: Exact substring match (case-sensitive)
+  - vars:
+      question: "What is the capital of Australia?"
+    assert:
+      - type: contains
+        value: Canberra
+
+  # icontains: Case-insensitive substring match
+  - vars:
+      question: "Name a programming language."
+    assert:
+      - type: icontains
+        value: PYTHON  # Will match "python", "Python", "PYTHON"
+
+  # icontains-all: All values must be present (case-insensitive)
+  - vars:
+      question: "What are the primary colors?"
+    assert:
+      - type: icontains-all
+        value: [red, green, blue]
+
+  # icontains-any: At least one value must be present (case-insensitive)
+  - vars:
+      question: "Is this a fruit or vegetable?"
+    assert:
+      - type: icontains-any
+        value: [fruit, vegetable]
+
+  # regex: Regular expression pattern match
+  - vars:
+      question: "What is your email address?"
+    assert:
+      - type: regex
+        value: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+
+  # similar: Semantic similarity (requires embedding, falls back to string similarity)
+  - vars:
+      question: "Summarize: The quick brown fox jumps over the lazy dog."
+    assert:
+      - type: similar
+        value: "A fox jumped over a dog"
+        threshold: 0.5
+
+  # starts-with: Output must start with specified value
+  - vars:
+      question: "What is the answer to life, the universe, and everything?"
+    assert:
+      - type: starts-with
+        value: "42"
+
+  # not-contains: Output must NOT contain the value
+  - vars:
+      question: "What is 2 + 2 (just give the number)?"
+    assert:
+      - type: contains
+        value: "4"
+      - type: not-contains
+        value: "three"
+
+  # is-json: Output must be valid JSON
+  - vars:
+      question: 'Respond with JSON: {"name": "test"}'
+    assert:
+      - type: is-json
+
+  # contains-all: All substrings must be present (case-sensitive)
+  - vars:
+      question: "List the words: apple, banana, cherry"
+    assert:
+      - type: contains-all
+        value: [apple, banana, cherry]
+
+  # contains-any: At least one substring must be present (case-sensitive)
+  - vars:
+      question: "Do you prefer cats or dogs?"
+    assert:
+      - type: contains-any
+        value: [cat, dog]
+
+  # contains-html: Output must contain HTML tags
+  - vars:
+      question: "Create an HTML link"
+    assert:
+      - type: contains-html
+
+  # javascript: Output must be valid JavaScript (provide code to validate)
+  - vars:
+      question: "Write a simple JavaScript function that returns 42"
+    assert:
+      - type: javascript
+        value: "function () { return 42; }"
+
+  # icontains: Case-insensitive match (multiple)
+  - vars:
+      question: "What programming language is known for AI?"
+    assert:
+      - type: icontains-any
+        value: [python, javascript, java]
+
+outputPath: ../promptfoo_results/assertions_guide.json

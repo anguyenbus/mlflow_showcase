@@ -1,0 +1,52 @@
+# RAG Basics - Static Context Testing
+#
+# This example demonstrates RAG evaluation using static context with
+# assertions for context recall, relevance, and faithfulness.
+
+description: RAG evaluation with static context and quality assertions
+
+prompts:
+  - |
+    You are a helpful assistant answering questions about Australian tax law.
+    Use only the provided context to answer the question.
+
+    Context:
+    {{context}}
+
+    Question: {{question}}
+
+    Answer:
+
+providers:
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      context: "In Australia, the financial year runs from July 1 to June 30. Individual tax rates for 2024-25 are: 0-18,200 (nil), 18,201-45,000 (19%), 45,001-120,000 (30%), 120,001-180,000 (37%)."
+      question: "When does the Australian financial year start and end?"
+    assert:
+      - type: contains
+        value: July
+      - type: contains
+        value: June
+
+  - vars:
+      context: "The GST (Goods and Services Tax) rate in Australia is 10%. GST is applied to most goods and services, with some exceptions like fresh food, education, and healthcare."
+      question: "What is the GST rate in Australia?"
+    assert:
+      - type: contains
+        value: "10"
+      - type: icontains
+        value: GST
+
+  - vars:
+      context: "Australian tax residents can claim the tax-free threshold, which is $18,200 for the 2024-25 financial year. This means you don't pay tax on the first $18,200 of income."
+      question: "What is the tax-free threshold in Australia?"
+    assert:
+      - type: contains
+        value: 18200
+      - type: icontains
+        value: dollar
+
+outputPath: ../../promptfoo_results/rag_basics.json
+
