@@ -1,0 +1,125 @@
+{
+  "evalId": "eval-z6F-2026-04-12T04:19:55",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T04:19:55.521Z",
+    "prompts": [
+      {
+        "id": "413ff960ae278681b32e86502ff749286745f56940b91466416e00482d2c571a",
+        "raw": "You are a helpful assistant. Answer the following question accurately.\nIf you don't know the answer or if the question asks for speculative information,\nsay \"I don't know\" or explain that you cannot provide a definitive answer.\n\nQuestion: {{question}}\n",
+        "label": "You are a helpful assistant. Answer the following question accurately.\nIf you don't know the answer or if the question asks for speculative information,\nsay \"I don't know\" or explain that you cannot provide a definitive answer.\n\nQuestion: {{question}}\n",
+        "provider": "openai:glm-5",
+        "metrics": {
+          "score": 0,
+          "testPassCount": 0,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 0,
+          "assertFailCount": 0,
+          "totalLatencyMs": 0,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "total": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [],
+    "stats": {
+      "successes": 0,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 0,
+        "total": 0,
+        "numRequests": 0,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 3
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "Hallucination detection and prevention evaluation",
+    "prompts": [
+      "You are a helpful assistant. Answer the following question accurately.\nIf you don't know the answer or if the question asks for speculative information,\nsay \"I don't know\" or explain that you cannot provide a definitive answer.\n\nQuestion: {{question}}\n"
+    ],
+    "providers": [
+      "openai:chat:glm-5"
+    ],
+    "tests": [],
+    "scenarios": [],
+    "env": {},
+    "defaultTest": {
+      "assert": [
+        {
+          "type": "factuality",
+          "threshold": 0.7
+        },
+        {
+          "type": "llm-rubric",
+          "value": "The answer should be factual and not contain speculation or hallucinations. For questions about unknown or future events, the response should acknowledge uncertainty."
+        }
+      ],
+      "vars": {},
+      "options": {},
+      "metadata": {}
+    },
+    "outputPath": [
+      "../../promptfoo_results/prevent_hallucination.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T04:19:55.582Z",
+    "evaluationCreatedAt": "2026-04-12T04:19:55.521Z"
+  }
+}

@@ -1,0 +1,1563 @@
+{
+  "evalId": "eval-bZB-2026-04-12T08:57:44",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T08:57:44.951Z",
+    "prompts": [
+      {
+        "id": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+        "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+        "provider": "GLM-5",
+        "metrics": {
+          "score": 9,
+          "testPassCount": 8,
+          "testFailCount": 2,
+          "testErrorCount": 0,
+          "assertPassCount": 8,
+          "assertFailCount": 2,
+          "totalLatencyMs": 115054,
+          "tokenUsage": {
+            "prompt": 877,
+            "completion": 4470,
+            "cached": 0,
+            "total": 5347,
+            "numRequests": 10,
+            "completionDetails": {
+              "reasoning": 4252,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {
+            "RAG_Quality": 9,
+            "context_relevance": 9,
+            "context_faithfulness": 9,
+            "answer_relevance": 9
+          },
+          "namedScoresCount": {
+            "RAG_Quality": 10,
+            "context_relevance": 10,
+            "context_faithfulness": 10,
+            "answer_relevance": 10
+          },
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "19df2461-bc11-423b-87c7-f2370742e75e",
+        "latencyMs": 10603,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nThe Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210.\n\nQuery: When are individual tax returns due in Australia?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: If information is missing, say so clearly. Do not make up information.\n    *   Context: \"The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210.\"\n    *   Query: \"When are individual tax returns due in Australia?\"\n\n2.  **Analyze the Context:**\n    *   Sentence 1: Defines ATO. (Irrelevant to the specific query).\n    *   Sentence 2: \"Individual tax returns are due by October 31 each year.\" (Directly answers the query).\n    *   Sentence 3: Mentions penalties. (Irrelevant to the specific query).\n\n3.  **Formulate the Answer:**\n    *   The context explicitly states: \"Individual tax returns are due by October 31 each year.\"\n    *   The query asks: \"When are individual tax returns due in Australia?\"\n    *   The answer is found directly in the text.\n\n4.  **Draft the Response:**\n    *   Based on the context, individual tax returns are due by October 31 each year.\n\n5.  **Final Review:**\n    *   Does the context support this? Yes.\n    *   Did I use outside info? No.\n    *   Is it clear? Yes.\n\n6.  **Final Output Generation.**\n\nBased on the provided context, individual tax returns are due by October 31 each year.",
+          "tokenUsage": {
+            "total": 442,
+            "prompt": 102,
+            "completion": 340,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 320
+            }
+          },
+          "cached": false,
+          "latencyMs": 10603,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 08:57:55 GMT",
+                "set-cookie": "acw_tc=3ccdc17417759842670976792e8ecc8797dd4a37f4d78fa7199c5f4160ca01;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121657476d71800294774de8"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Good context - question is directly answerable from context",
+          "vars": {
+            "context": "The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210.",
+            "query": "When are individual tax returns due in Australia?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "context": "The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210.",
+          "query": "When are individual tax returns due in Australia?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 08:57:55 GMT",
+              "set-cookie": "acw_tc=3ccdc17417759842670976792e8ecc8797dd4a37f4d78fa7199c5f4160ca01;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121657476d71800294774de8"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "e68ca508-11c0-4e41-8277-e86df56639da",
+        "latencyMs": 12251,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nTaxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.\n\nQuery: How is taxable income calculated in Australia?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   **Role:** Helpful assistant.\n    *   **Task:** Answer a question based *only* on the provided context.\n    *   **Constraint:** Do not make up information. If the context is insufficient, state that clearly.\n    *   **Context:** \"Taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.\"\n    *   **Query:** \"How is taxable income calculated in Australia?\"\n\n2.  **Analyze the Context:**\n    *   The context explicitly states the formula: \"Taxable income in Australia is calculated as assessable income minus allowable deductions.\"\n    *   It also defines what assessable income includes (salary, wages, business income, investment income, and capital gains).\n\n3.  **Formulate the Answer:**\n    *   The question asks for the calculation method.\n    *   The context provides the exact calculation method: assessable income minus allowable deductions.\n    *   I should quote or paraphrase this directly from the text.\n\n4.  **Drafting the response:**\n    *   *Draft 1:* Taxable income is calculated by subtracting allowable deductions from assessable income.\n    *   *Draft 2 (Adding detail from context):* According to the context, taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.\n\n5.  **Review against constraints:**\n    *   Did I use only the provided context? Yes.\n    *   Did I answer the question? Yes.\n    *   Did I make up information? No.\n\n6.  **Final Polish:** The answer should be concise and directly address the query using the provided text.\n\n    *   *Final Answer:* Taxable income in Australia is calculated as assessable income minus allowable deductions.\n\nBased on the provided context, taxable income in Australia is calculated as assessable income minus allowable deductions.",
+          "tokenUsage": {
+            "total": 522,
+            "prompt": 98,
+            "completion": 424,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 402
+            }
+          },
+          "cached": false,
+          "latencyMs": 12251,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 08:58:20 GMT",
+                "set-cookie": "acw_tc=276082aa17759842907855749ef378d29852d93d1650ddc5e19fde5d2d3ccc;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121658101fb7c9dffbcd476d"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Complete context - all information present",
+          "vars": {
+            "context": "Taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.",
+            "query": "How is taxable income calculated in Australia?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "context": "Taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.",
+          "query": "How is taxable income calculated in Australia?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 08:58:20 GMT",
+              "set-cookie": "acw_tc=276082aa17759842907855749ef378d29852d93d1650ddc5e19fde5d2d3ccc;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121658101fb7c9dffbcd476d"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "561e615f-5e82-4415-8e87-faf4e8c61c59",
+        "latencyMs": 13869,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nThe Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare.\n\nQuery: What is the Medicare levy rate?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: If information is missing, say so clearly. Do not make up information.\n    *   Context: \"The Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare.\"\n    *   Query: \"What is the Medicare levy rate?\"\n\n2.  **Analyze the Context:**\n    *   Sentence 1: \"The Medicare levy is 2% of taxable income for most taxpayers.\"\n    *   Sentence 2: \"It helps fund Australia's public healthcare system called Medicare.\"\n\n3.  **Analyze the Query:**\n    *   The user wants to know the \"Medicare levy rate\".\n\n4.  **Match Query to Context:**\n    *   Sentence 1 explicitly states the rate: \"2% of taxable income\".\n\n5.  **Formulate the Answer:**\n    *   Draft 1: The Medicare levy is 2% of taxable income.\n    *   Draft 2 (incorporating the \"most taxpayers\" nuance from the text): The Medicare levy is 2% of taxable income for most taxpayers.\n\n6.  **Final Check against Constraints:**\n    *   Did I use outside info? No.\n    *   Did I answer the question? Yes.\n    *   Is the answer accurate based *only* on the text? Yes.\n\n7.  **Final Output Generation:**\n    *   \"The Medicare levy is 2% of taxable income for most taxpayers.\"\n\nBased on the provided context, the Medicare levy is 2% of taxable income for most taxpayers.",
+          "tokenUsage": {
+            "total": 449,
+            "prompt": 89,
+            "completion": 360,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 338
+            }
+          },
+          "cached": false,
+          "latencyMs": 13869,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 08:58:48 GMT",
+                "set-cookie": "acw_tc=2760777e17759843158693941e26e6e07b63ba853ed80da4af20ef088db9c8;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "2026041216583505b97a05b92a49cb"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Specific factual information in context",
+          "vars": {
+            "context": "The Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare.",
+            "query": "What is the Medicare levy rate?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "context": "The Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare.",
+          "query": "What is the Medicare levy rate?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 08:58:48 GMT",
+              "set-cookie": "acw_tc=2760777e17759843158693941e26e6e07b63ba853ed80da4af20ef088db9c8;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "2026041216583505b97a05b92a49cb"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "2a040f0f-d567-4989-8225-28a67611dce9",
+        "latencyMs": 7797,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nAustralian tax returns can be lodged online via myTax or through a registered tax agent.\n\nQuery: What are the lodgment methods for Australian tax returns?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   **Role:** Helpful assistant.\n    *   **Task:** Answer the question based *only* on the provided context.\n    *   **Constraint:** Do not make up information. If the context is insufficient, state that clearly.\n    *   **Context:** \"Australian tax returns can be lodged online via myTax or through a registered tax agent.\"\n    *   **Query:** \"What are the lodgment methods for Australian tax returns?\"\n\n2.  **Analyze the Context:**\n    *   The context explicitly lists two methods for lodging Australian tax returns:\n        1.  Online via myTax.\n        2.  Through a registered tax agent.\n\n3.  **Formulate the Answer:**\n    *   The question asks for the methods.\n    *   The context provides exactly two methods.\n    *   I need to extract these and present them clearly.\n\n4.  **Drafting the Response:**\n    *   *Draft 1:* You can lodge them online via myTax or through a registered tax agent.\n    *   *Draft 2 (more formal):* According to the context, Australian tax returns can be lodged online via myTax or through a registered tax agent.\n\n5.  **Final Review against Constraints:**\n    *   Did I use outside info? No.\n    *   Did I answer the question? Yes.\n    *   Is it accurate to the context? Yes.\n\n6.  **Final Output Generation:** (Matches Draft 2 closely).\n\nBased on the provided context, Australian tax returns can be lodged:\n*   Online via myTax\n*   Through a registered tax agent",
+          "tokenUsage": {
+            "total": 430,
+            "prompt": 85,
+            "completion": 345,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 316
+            }
+          },
+          "cached": false,
+          "latencyMs": 7797,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 08:59:08 GMT",
+                "set-cookie": "acw_tc=2760821517759843425455182e03a8d1fd1827d553c3be4ddaacf34bb60c14;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412165902d19b32ffee5b4ffe"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Multiple valid answers possible",
+          "vars": {
+            "context": "Australian tax returns can be lodged online via myTax or through a registered tax agent.",
+            "query": "What are the lodgment methods for Australian tax returns?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "vars": {
+          "context": "Australian tax returns can be lodged online via myTax or through a registered tax agent.",
+          "query": "What are the lodgment methods for Australian tax returns?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 08:59:08 GMT",
+              "set-cookie": "acw_tc=2760821517759843425455182e03a8d1fd1827d553c3be4ddaacf34bb60c14;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412165902d19b32ffee5b4ffe"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "6acfae07-a779-48c3-a8e4-09e2c20d93e0",
+        "latencyMs": 13084,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nThe tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.\n\nQuery: What is the tax-free threshold for residents?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: If info is missing, say so clearly. Do not make up info.\n    *   Context: \"The tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.\"\n    *   Query: \"What is the tax-free threshold for residents?\"\n\n2.  **Analyze the Context:**\n    *   The context explicitly states: \"The tax-free threshold for Australian residents is $18,200...\"\n    *   It also specifies the time frame: \"...in the 2023-24 financial year.\"\n\n3.  **Evaluate the Query against Context:**\n    *   The query asks for the tax-free threshold for residents.\n    *   The context provides exactly this number: $18,200.\n    *   The context qualifies it as \"Australian residents\" and \"2023-24 financial year\".\n\n4.  **Draft the Answer:**\n    *   *Draft 1:* The tax-free threshold is $18,200.\n    *   *Draft 2 (More precise based on context):* According to the context, the tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.\n\n5.  **Refine based on constraints:**\n    *   The prompt asks to answer based *only* on the context.\n    *   The context says \"Australian residents\". The query just says \"residents\". It is safe to assume the query refers to the residents mentioned in the context.\n    *   The answer should be direct.\n\n6.  **Final Polish:**\n    *   \"According to the context, the tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.\"\n\n7.  **Final Check:** Does the context contain enough info? Yes. Did I make anything up? No.\n\n    *   *Result:* The tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.\n\nBased on the provided context, the tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.",
+          "tokenUsage": {
+            "total": 556,
+            "prompt": 88,
+            "completion": 468,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 438
+            }
+          },
+          "cached": false,
+          "latencyMs": 13084,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 08:59:37 GMT",
+                "set-cookie": "acw_tc=276082b217759843662137944e354f050335859e23a87a66a3e434c3438c0e;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412165926301a0e8d1cbb4509"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Numerical data verification",
+          "vars": {
+            "context": "The tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.",
+            "query": "What is the tax-free threshold for residents?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 4,
+        "vars": {
+          "context": "The tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.",
+          "query": "What is the tax-free threshold for residents?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 08:59:37 GMT",
+              "set-cookie": "acw_tc=276082b217759843662137944e354f050335859e23a87a66a3e434c3438c0e;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412165926301a0e8d1cbb4509"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "b921139f-a495-4d18-9b77-212532d09538",
+        "latencyMs": 9047,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nCompany tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.\n\nQuery: What is the company tax rate?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: If information is missing, say so clearly. Do not make up information.\n    *   Context: \"Company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.\"\n    *   Query: \"What is the company tax rate?\"\n\n2.  **Analyze the Context:**\n    *   The context provides two specific rates based on entity type:\n        *   Base rate entities: 30%\n        *   Small businesses (qualifying): 25%\n\n3.  **Analyze the Query:**\n    *   The query asks for \"the company tax rate\" generally.\n\n4.  **Synthesize the Answer:**\n    *   Since the context distinguishes between different types of companies (base rate vs. small business), I cannot give a single number as the answer without qualifying it based on the provided text.\n    *   I must report both rates mentioned in the context to be accurate to the source material.\n\n5.  **Drafting the Response:**\n    *   *Draft 1:* The company tax rate is 30% for base rate entities, but small businesses may qualify for a 25% rate.\n    *   *Draft 2 (Checking constraints):* Does this use only the context? Yes. Does it answer the question? Yes.\n\n6.  **Final Polish:**\n    *   \"According to the context, the company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.\"\n\n7.  **Final Output Generation:** (Matches Draft 1/2 closely).\n\nBased on the provided context, the company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.",
+          "tokenUsage": {
+            "total": 486,
+            "prompt": 88,
+            "completion": 398,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 365
+            }
+          },
+          "cached": false,
+          "latencyMs": 9047,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 08:59:59 GMT",
+                "set-cookie": "acw_tc=2760828e17759843917484670e73f5108ec830967b53692c48b2db08220a1b;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121659513b6726a9d8df4c44"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Multiple tax rates mentioned",
+          "vars": {
+            "context": "Company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.",
+            "query": "What is the company tax rate?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 5,
+        "vars": {
+          "context": "Company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.",
+          "query": "What is the company tax rate?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 08:59:59 GMT",
+              "set-cookie": "acw_tc=2760828e17759843917484670e73f5108ec830967b53692c48b2db08220a1b;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121659513b6726a9d8df4c44"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "0c63903c-8ae2-449c-86cc-9c3a82bf2b6b",
+        "latencyMs": 7267,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nGST (Goods and Services Tax) is a 10% value-added tax on most goods and services in Australia.\n\nQuery: What is the GST rate?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: If info is missing, say so clearly. Do not make up info.\n    *   Context: \"GST (Goods and Services Tax) is a 10% value-added tax on most goods and services in Australia.\"\n    *   Query: \"What is the GST rate?\"\n\n2.  **Analyze the Context:**\n    *   The context explicitly states: \"GST... is a 10% value-added tax...\"\n\n3.  **Formulate the Answer:**\n    *   The question asks for the rate.\n    *   The context provides the rate: 10%.\n    *   Draft answer: The GST rate is 10%.\n\n4.  **Verify Constraints:**\n    *   Did I use outside info? No.\n    *   Did I answer the question? Yes.\n    *   Is the info in the context? Yes.\n\n5.  **Final Output Generation:**\n    *   \"Based on the context provided, the GST rate is 10%.\" or simply \"The GST rate is 10%.\"\n\n    Let's stick to a direct answer derived strictly from the text.\n\n    *   Context sentence: \"GST (Goods and Services Tax) is a 10% value-added tax...\"\n    *   Answer: The GST rate is 10%.\n\nBased on the provided context, the GST rate is 10%.",
+          "tokenUsage": {
+            "total": 398,
+            "prompt": 86,
+            "completion": 312,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 297
+            }
+          },
+          "cached": false,
+          "latencyMs": 7267,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 09:00:21 GMT",
+                "set-cookie": "acw_tc=276077f017759844165022847ebcc2717771991980fe53f020b2794f3582b4;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412170016663dcf620cba4bb8"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Percentage extraction",
+          "vars": {
+            "context": "GST (Goods and Services Tax) is a 10% value-added tax on most goods and services in Australia.",
+            "query": "What is the GST rate?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 6,
+        "vars": {
+          "context": "GST (Goods and Services Tax) is a 10% value-added tax on most goods and services in Australia.",
+          "query": "What is the GST rate?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 09:00:21 GMT",
+              "set-cookie": "acw_tc=276077f017759844165022847ebcc2717771991980fe53f020b2794f3582b4;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412170016663dcf620cba4bb8"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "RAG_Quality": 1,
+            "context_relevance": 1,
+            "context_faithfulness": 1,
+            "answer_relevance": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": true,
+              "score": 1,
+              "reason": "RAG Quality: CR=1.00, CF=1.00, AR=1.00",
+              "named_scores": {
+                "context_relevance": 1,
+                "context_faithfulness": 1,
+                "answer_relevance": 1
+              },
+              "pass": true,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "5cf90480-1f5a-4c45-82cc-3177e88a35a2",
+        "latencyMs": 8219,
+        "namedScores": {
+          "RAG_Quality": 1,
+          "context_relevance": 1,
+          "context_faithfulness": 1,
+          "answer_relevance": 1
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nThe financial year in Australia runs from July 1 to June 30.\n\nQuery: When does the Australian financial year start and end?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: If information is missing, say so clearly. Do not make up information.\n    *   Context: \"The financial year in Australia runs from July 1 to June 30.\"\n    *   Query: \"When does the Australian financial year start and end?\"\n\n2.  **Analyze the Context:**\n    *   The context explicitly states: \"The financial year in Australia runs from July 1 to June 30.\"\n\n3.  **Map Context to Query:**\n    *   Query asks for the start date. Context says \"July 1\".\n    *   Query asks for the end date. Context says \"June 30\".\n\n4.  **Draft the Answer:**\n    *   Based on the context, the Australian financial year starts on July 1 and ends on June 30.\n\n5.  **Review against Constraints:**\n    *   Did I use outside info? No.\n    *   Did I answer the specific question? Yes.\n    *   Is the information present? Yes.\n\n6.  **Final Output Generation:**\n    *   \"According to the context, the Australian financial year starts on July 1 and ends on June 30.\" (Or a simpler variation).\n\n    *   *Self-Correction/Refinement:* The prompt asks to use *only* the information in the context. The context is very short.\n    *   Draft: The financial year in Australia runs from July 1 to June 30.\n\n7.  **Final Polish:**\n    Based on the provided context, the Australian financial year starts on July 1 and ends on June 30.\n\nBased on the provided context, the Australian financial year starts on July 1 and ends on June 30.",
+          "tokenUsage": {
+            "total": 470,
+            "prompt": 82,
+            "completion": 388,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 364
+            }
+          },
+          "cached": false,
+          "latencyMs": 8219,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 09:00:40 GMT",
+                "set-cookie": "acw_tc=2760776217759844338145869e8638d97c1f510146aad7194f879c511ad980;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121700338bb324c1574a46a6"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "Date range verification",
+          "vars": {
+            "context": "The financial year in Australia runs from July 1 to June 30.",
+            "query": "When does the Australian financial year start and end?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 7,
+        "vars": {
+          "context": "The financial year in Australia runs from July 1 to June 30.",
+          "query": "When does the Australian financial year start and end?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 09:00:40 GMT",
+              "set-cookie": "acw_tc=2760776217759844338145869e8638d97c1f510146aad7194f879c511ad980;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121700338bb324c1574a46a6"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "error": "RAG Quality: CR=0.50, CF=0.50, AR=0.50",
+        "gradingResult": {
+          "pass": false,
+          "score": 0.5,
+          "reason": "RAG Quality: CR=0.50, CF=0.50, AR=0.50",
+          "namedScores": {
+            "RAG_Quality": 0.5,
+            "context_relevance": 0.5,
+            "context_faithfulness": 0.5,
+            "answer_relevance": 0.5
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": false,
+              "score": 0.5,
+              "reason": "RAG Quality: CR=0.50, CF=0.50, AR=0.50",
+              "named_scores": {
+                "context_relevance": 0.5,
+                "context_faithfulness": 0.5,
+                "answer_relevance": 0.5
+              },
+              "pass": false,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "0723f7f4-cfe6-44ad-92de-fc4fe509ee99",
+        "latencyMs": 21054,
+        "namedScores": {
+          "RAG_Quality": 0.5,
+          "context_relevance": 0.5,
+          "context_faithfulness": 0.5,
+          "answer_relevance": 0.5
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nIndividual taxpayers with income over $45,000 may be required to pay HELP debt repayments.\n\nQuery: What is the HELP debt repayment threshold?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Constraint: Do not make up information.\n    *   Constraint: If info is missing, say so clearly.\n    *   Context: \"Individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.\"\n    *   Query: \"What is the HELP debt repayment threshold?\"\n\n2.  **Analyze the Context:**\n    *   The context states: \"Individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.\"\n    *   It mentions a specific income figure ($45,000) associated with the requirement to pay.\n\n3.  **Analyze the Query:**\n    *   The query asks for the \"HELP debt repayment threshold\".\n\n4.  **Evaluate the Match:**\n    *   Does the context explicitly state \"The HELP debt repayment threshold is $45,000\"? No.\n    *   Does it imply it? It says people with income *over* $45,000 *may* be required to pay.\n    *   Is $45,000 the threshold? In real-world knowledge, thresholds change, and \"over $45,000\" suggests the threshold is $45,000. However, the prompt asks to use *only* the provided context.\n    *   The context says \"income over $45,000\". It does not explicitly define the term \"threshold\".\n    *   However, usually, when a question asks for a threshold and the text says \"income over X\", X is the threshold.\n    *   Let's look closer at the phrasing. \"Individual taxpayers with income over $45,000 may be required to pay...\"\n    *   If I answer \"$45,000\", am I making an assumption? Or am I extracting the relevant number?\n    *   Strict adherence to \"Use only the information in the context\":\n        *   The context mentions an income level of $45,000.\n        *   It does not explicitly label this number as the \"threshold\".\n        *   However, answering \"The context does not contain enough information\" might be too pedantic if the user just wants the number mentioned.\n        *   Let's look at the instruction: \"If the context doesn't contain enough information to answer the question, say so clearly.\"\n    *   Is the information sufficient? The text says \"income over $45,000\". The question asks for the \"threshold\". A threshold is the point at which something changes or begins. $45,000 is the point mentioned.\n    *   Let's try to frame the answer based *strictly* on the text provided.\n    *   Draft Answer: \"The context states that individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.\" This is safe.\n    *   Does this answer the specific question \"What is the threshold?\" It implies it, but doesn't define the term.\n    *   Let's consider the \"Do not make up information\" rule. If I say \"The threshold is $45,000\", I am interpreting \"income over $45,000\" as the definition of the threshold. This is a reasonable linguistic interpretation, not \"making up\" facts.\n    *   However, the text uses the word \"may\". \"May be required\". This adds uncertainty.\n    *   Let's look at the strictness of similar tasks. Usually, if the text says \"You must be 18 to enter,\" and the question is \"What is the age limit?\", the answer is \"18\".\n    *   Here, the text says \"income over $45,000\".\n    *   Let's provide the information available without asserting it is definitively \"the threshold\" if the text doesn't use that word, but acknowledge the number provided.\n\n    *   *Self-Correction/Refinement:* The prompt asks to answer the question. If I say \"The context mentions $45,000,\" I am helpful. If I say \"The context doesn't say,\" I might be technically correct (it doesn't use the word 'threshold') but unhelpful.\n    *   Let's look at the phrasing again. \"Individual taxpayers with income over $45,000 may be required...\"\n    *   Is $45,000 the threshold? Or is the threshold $45,001? Or is the threshold actually $45,000 but the repayment starts when you go over?\n    *   Actually, the safest and most accurate response based *only* on the text is to quote the relevant condition.\n    *   \"Based on the context, individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.\"\n    *   Does this answer \"What is the threshold?\" It gives the number associated with the repayment requirement.\n\n    *   Let's try to be direct. The question asks for a specific value (the threshold\n\n",
+          "tokenUsage": {
+            "total": 1108,
+            "prompt": 84,
+            "completion": 1024,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 1024
+            }
+          },
+          "cached": false,
+          "latencyMs": 21054,
+          "finishReason": "length",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 09:01:14 GMT",
+                "set-cookie": "acw_tc=3ccdc16f17759844553425563e59c2e22ce418edae796bb6da7d50fad415eb;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121700559279ef84e5a54c3b"
+              }
+            }
+          }
+        },
+        "score": 0.5,
+        "success": false,
+        "testCase": {
+          "description": "Threshold amount verification",
+          "vars": {
+            "context": "Individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.",
+            "query": "What is the HELP debt repayment threshold?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 8,
+        "vars": {
+          "context": "Individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.",
+          "query": "What is the HELP debt repayment threshold?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 09:01:14 GMT",
+              "set-cookie": "acw_tc=3ccdc16f17759844553425563e59c2e22ce418edae796bb6da7d50fad415eb;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121700559279ef84e5a54c3b"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 1
+      },
+      {
+        "cost": 0,
+        "error": "RAG Quality: CR=0.50, CF=0.50, AR=0.50",
+        "gradingResult": {
+          "pass": false,
+          "score": 0.5,
+          "reason": "RAG Quality: CR=0.50, CF=0.50, AR=0.50",
+          "namedScores": {
+            "RAG_Quality": 0.5,
+            "context_relevance": 0.5,
+            "context_faithfulness": 0.5,
+            "answer_relevance": 0.5
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass_": false,
+              "score": 0.5,
+              "reason": "RAG Quality: CR=0.50, CF=0.50, AR=0.50",
+              "named_scores": {
+                "context_relevance": 0.5,
+                "context_faithfulness": 0.5,
+                "answer_relevance": 0.5
+              },
+              "pass": false,
+              "assertion": {
+                "type": "python",
+                "value": "file://rag_assertion.py",
+                "metric": "RAG_Quality"
+              }
+            }
+          ]
+        },
+        "id": "c9861511-579c-4c10-a64b-a546ed568c95",
+        "latencyMs": 11863,
+        "namedScores": {
+          "RAG_Quality": 0.5,
+          "context_relevance": 0.5,
+          "context_faithfulness": 0.5,
+          "answer_relevance": 0.5
+        },
+        "prompt": {
+          "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\nInsufficient context provided about tax rates.\n\nQuery: What are the tax brackets for 2024?\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+          "config": {}
+        },
+        "promptId": "3a5cc7ec1dfd144d38cfdef84a197eda8d12a745dcc972be5e909af73d39fdd7",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:chat:glm-5",
+          "label": "GLM-5"
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   Role: Helpful assistant.\n    *   Constraint: Use *only* the provided context.\n    *   Context provided: \"Insufficient context provided about tax rates.\"\n    *   Query: \"What are the tax brackets for 2024?\"\n    *   Instruction: If context is insufficient, say so clearly. Do not make up information.\n\n2.  **Analyze the Context:**\n    *   The context explicitly states: \"Insufficient context provided about tax rates.\"\n    *   It contains no numbers, percentages, or specific details regarding tax brackets for any year, let alone 2024.\n\n3.  **Evaluate the Query against Context:**\n    *   The user wants specific tax brackets for 2024.\n    *   The context does not have this information. In fact, the context is a meta-statement saying there isn't enough context.\n\n4.  **Formulate the Answer:**\n    *   Since the context is insufficient, I must follow the specific instruction: \"say so clearly. Do not make up information.\"\n    *   Draft answer: The provided context does not contain enough information to answer the question about tax brackets for 2024.\n\n5.  **Final Polish:**\n    *   Ensure the tone is helpful but strict regarding the constraint.\n    *   The context literally says \"Insufficient context provided about tax rates,\" so I can reference that or just state the lack of info.\n\n    *   *Self-Correction during drafting:* I shouldn't just repeat the context text \"Insufficient context provided about tax rates\" as an answer to the user's question, although it is the context. I should frame it as a response to the user based on that context.\n\n    *   *Final Output:* The provided context does not contain enough information to answer your question regarding the tax brackets for 2024.\n\nThe provided context does not contain enough information to answer your question regarding the tax brackets for 2024.",
+          "tokenUsage": {
+            "total": 486,
+            "prompt": 75,
+            "completion": 411,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 388
+            }
+          },
+          "cached": false,
+          "latencyMs": 11863,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 09:01:58 GMT",
+                "set-cookie": "acw_tc=2760825517759845077754580e228452c8c7da7dc0e3d9d5a1d84ea0470d13;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121701474ddc9842f4864346"
+              }
+            }
+          }
+        },
+        "score": 0.5,
+        "success": false,
+        "testCase": {
+          "description": "Insufficient context - should acknowledge limitation",
+          "vars": {
+            "context": "Insufficient context provided about tax rates.",
+            "query": "What are the tax brackets for 2024?"
+          },
+          "assert": [
+            {
+              "type": "python",
+              "value": "file://rag_assertion.py",
+              "metric": "RAG_Quality"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 9,
+        "vars": {
+          "context": "Insufficient context provided about tax rates.",
+          "query": "What are the tax brackets for 2024?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 09:01:58 GMT",
+              "set-cookie": "acw_tc=2760825517759845077754580e228452c8c7da7dc0e3d9d5a1d84ea0470d13;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121701474ddc9842f4864346"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 1
+      }
+    ],
+    "stats": {
+      "successes": 8,
+      "failures": 2,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 877,
+        "completion": 4470,
+        "cached": 0,
+        "total": 5347,
+        "numRequests": 10,
+        "completionDetails": {
+          "reasoning": 4252,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 284849
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "RAG pipeline evaluation with LLM-based scoring",
+    "prompts": [
+      "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuery: {{query}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n"
+    ],
+    "providers": [
+      {
+        "id": "openai:chat:glm-5",
+        "label": "GLM-5",
+        "config": {
+          "temperature": 0,
+          "baseURL": "https://open.bigmodel.cn/api/paas/v4/"
+        }
+      }
+    ],
+    "tests": [
+      {
+        "description": "Good context - question is directly answerable from context",
+        "vars": {
+          "context": "The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210.",
+          "query": "When are individual tax returns due in Australia?"
+        }
+      },
+      {
+        "description": "Complete context - all information present",
+        "vars": {
+          "context": "Taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.",
+          "query": "How is taxable income calculated in Australia?"
+        }
+      },
+      {
+        "description": "Specific factual information in context",
+        "vars": {
+          "context": "The Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare.",
+          "query": "What is the Medicare levy rate?"
+        }
+      },
+      {
+        "description": "Multiple valid answers possible",
+        "vars": {
+          "context": "Australian tax returns can be lodged online via myTax or through a registered tax agent.",
+          "query": "What are the lodgment methods for Australian tax returns?"
+        }
+      },
+      {
+        "description": "Numerical data verification",
+        "vars": {
+          "context": "The tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year.",
+          "query": "What is the tax-free threshold for residents?"
+        }
+      },
+      {
+        "description": "Multiple tax rates mentioned",
+        "vars": {
+          "context": "Company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate.",
+          "query": "What is the company tax rate?"
+        }
+      },
+      {
+        "description": "Percentage extraction",
+        "vars": {
+          "context": "GST (Goods and Services Tax) is a 10% value-added tax on most goods and services in Australia.",
+          "query": "What is the GST rate?"
+        }
+      },
+      {
+        "description": "Date range verification",
+        "vars": {
+          "context": "The financial year in Australia runs from July 1 to June 30.",
+          "query": "When does the Australian financial year start and end?"
+        }
+      },
+      {
+        "description": "Threshold amount verification",
+        "vars": {
+          "context": "Individual taxpayers with income over $45,000 may be required to pay HELP debt repayments.",
+          "query": "What is the HELP debt repayment threshold?"
+        }
+      },
+      {
+        "description": "Insufficient context - should acknowledge limitation",
+        "vars": {
+          "context": "Insufficient context provided about tax rates.",
+          "query": "What are the tax brackets for 2024?"
+        }
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "defaultTest": {
+      "assert": [
+        {
+          "type": "python",
+          "value": "file://rag_assertion.py",
+          "metric": "RAG_Quality"
+        }
+      ],
+      "vars": {},
+      "options": {},
+      "metadata": {}
+    },
+    "outputPath": [
+      "/home/an/projects/tracing_project/promptfoo_results/rag_pipeline.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T09:02:29.847Z",
+    "evaluationCreatedAt": "2026-04-12T08:57:44.951Z"
+  }
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Sample question 1 about: GST is a broad-based tax of 10% on most goods and ...",
+    "contexts": [
+      "GST is a broad-based tax of 10% on most goods and services in Australia."
+    ],
+    "response": "Based on the context, GST is a broad-based tax of 10% on most goods and services in Australia....",
+    "reference_answer": "GST is a broad-based tax of 10% on most goods and services in Australia."
+  },
+  {
+    "question": "Sample question 2 about: GST is a broad-based tax of 10% on most goods and ...",
+    "contexts": [
+      "GST is a broad-based tax of 10% on most goods and services in Australia."
+    ],
+    "response": "Based on the context, GST is a broad-based tax of 10% on most goods and services in Australia....",
+    "reference_answer": "GST is a broad-based tax of 10% on most goods and services in Australia."
+  },
+  {
+    "question": "Sample question 3 about: Work-related expenses can be claimed as tax deduct...",
+    "contexts": [
+      "Work-related expenses can be claimed as tax deductions if directly related to earning income."
+    ],
+    "response": "Based on the context, Work-related expenses can be claimed as tax deductions if directly related to earning income....",
+    "reference_answer": "Work-related expenses can be claimed as tax deductions if directly related to earning income."
+  },
+  {
+    "question": "Sample question 4 about: Income tax rates for 2024-25 range from 0% to 45% ...",
+    "contexts": [
+      "Income tax rates for 2024-25 range from 0% to 45% depending on income level."
+    ],
+    "response": "Based on the context, Income tax rates for 2024-25 range from 0% to 45% depending on income level....",
+    "reference_answer": "Income tax rates for 2024-25 range from 0% to 45% depending on income level."
+  },
+  {
+    "question": "Sample question 5 about: Income tax rates for 2024-25 range from 0% to 45% ...",
+    "contexts": [
+      "Income tax rates for 2024-25 range from 0% to 45% depending on income level."
+    ],
+    "response": "Based on the context, Income tax rates for 2024-25 range from 0% to 45% depending on income level....",
+    "reference_answer": "Income tax rates for 2024-25 range from 0% to 45% depending on income level."
+  }
+]

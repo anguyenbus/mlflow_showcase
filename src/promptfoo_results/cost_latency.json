@@ -1,0 +1,344 @@
+{
+  "evalId": "eval-HMH-2026-04-12T01:19:51",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T01:19:51.803Z",
+    "prompts": [
+      {
+        "id": "b2380cb5a0e966a13229e96cd634e39ffd9d40a505941a478662ea399d3abfdc",
+        "raw": "Summarize the key aspects of {{topic}} in 3-4 sentences.",
+        "label": "Summarize the key aspects of {{topic}} in 3-4 sentences.",
+        "provider": "openai:glm-5",
+        "metrics": {
+          "score": 0,
+          "testPassCount": 0,
+          "testFailCount": 0,
+          "testErrorCount": 4,
+          "assertPassCount": 0,
+          "assertFailCount": 0,
+          "totalLatencyMs": 0,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "total": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "f17db774-2782-4669-9a99-bad221e5a34d",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Summarize the key aspects of machine learning in 3-4 sentences.",
+          "label": "Summarize the key aspects of {{topic}} in 3-4 sentences.",
+          "config": {}
+        },
+        "promptId": "b2380cb5a0e966a13229e96cd634e39ffd9d40a505941a478662ea399d3abfdc",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "topic": "machine learning"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "learn"
+            },
+            {
+              "type": "contains",
+              "value": "data"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "topic": "machine learning"
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      },
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "d7719c63-51ec-449a-96ea-8579e903a4d3",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Summarize the key aspects of quantum computing in 3-4 sentences.",
+          "label": "Summarize the key aspects of {{topic}} in 3-4 sentences.",
+          "config": {}
+        },
+        "promptId": "b2380cb5a0e966a13229e96cd634e39ffd9d40a505941a478662ea399d3abfdc",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "topic": "quantum computing"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "quantum"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "topic": "quantum computing"
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      },
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "4f72405c-4bd8-4a2d-be54-3e179bc2de84",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Summarize the key aspects of climate change in 3-4 sentences.",
+          "label": "Summarize the key aspects of {{topic}} in 3-4 sentences.",
+          "config": {}
+        },
+        "promptId": "b2380cb5a0e966a13229e96cd634e39ffd9d40a505941a478662ea399d3abfdc",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "topic": "climate change"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "climate"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "topic": "climate change"
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      },
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "2382d105-a044-4cdb-b04b-72147181684b",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Summarize the key aspects of artificial intelligence in 3-4 sentences.",
+          "label": "Summarize the key aspects of {{topic}} in 3-4 sentences.",
+          "config": {}
+        },
+        "promptId": "b2380cb5a0e966a13229e96cd634e39ffd9d40a505941a478662ea399d3abfdc",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "topic": "artificial intelligence"
+          },
+          "assert": [
+            {
+              "type": "icontains",
+              "value": "AI"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "vars": {
+          "topic": "artificial intelligence"
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      }
+    ],
+    "stats": {
+      "successes": 0,
+      "failures": 0,
+      "errors": 4,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 0,
+        "total": 0,
+        "numRequests": 0,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 30
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "Cost and latency tracking with performance thresholds",
+    "prompts": [
+      "Summarize the key aspects of {{topic}} in 3-4 sentences."
+    ],
+    "providers": [
+      "openai:chat:glm-5"
+    ],
+    "tests": [
+      {
+        "vars": {
+          "topic": "machine learning"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "learn"
+          },
+          {
+            "type": "contains",
+            "value": "data"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "topic": "quantum computing"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "quantum"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "topic": "climate change"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "climate"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "topic": "artificial intelligence"
+        },
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "AI"
+          }
+        ]
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "outputPath": [
+      "../../promptfoo_results/cost_latency.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T01:19:51.913Z",
+    "evaluationCreatedAt": "2026-04-12T01:19:51.803Z"
+  }
+}

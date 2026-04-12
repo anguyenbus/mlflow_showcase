@@ -1,0 +1,116 @@
+# Temperature Optimization Sweep
+#
+# This evaluation tests the effect of temperature on LLM outputs across different
+# task types. Temperature controls randomness: lower values are more deterministic,
+# higher values are more creative and varied.
+#
+# Run with:
+#   OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c temperature_sweep.yaml
+# Or use the Python runner:
+#   python temperature_test.py
+
+description: Temperature sweep to find optimal temperature for different tasks
+
+prompts:
+  - "{{task_description}}: {{prompt}}"
+
+providers:
+  - id: openai:chat:glm-5
+    label: GLM-5 @ 0.0
+    config:
+      temperature: 0.0
+      baseURL: https://open.bigmodel.cn/api/paas/v4/
+  - id: openai:chat:glm-5
+    label: GLM-5 @ 0.3
+    config:
+      temperature: 0.3
+      baseURL: https://open.bigmodel.cn/api/paas/v4/
+  - id: openai:chat:glm-5
+    label: GLM-5 @ 0.7
+    config:
+      temperature: 0.7
+      baseURL: https://open.bigmodel.cn/api/paas/v4/
+  - id: openai:chat:glm-5
+    label: GLM-5 @ 1.0
+    config:
+      temperature: 1.0
+      baseURL: https://open.bigmodel.cn/api/paas/v4/
+
+tests:
+  - vars:
+      task_description: "Summarize this text"
+      prompt: "AI is transforming industries by automating tasks and providing insights from data."
+      expected_answer: "AI transforms industries"
+    assert:
+      - type: similar
+        value: "AI transforms industries"
+        threshold: 0.4
+    description: "Factual summarization - lower temperature preferred"
+
+  - vars:
+      task_description: "Write a story about"
+      prompt: "A robot learning to paint"
+      expected_answer: "robot"
+    assert:
+      - type: contains
+        value: robot
+    description: "Creative writing - higher temperature preferred"
+
+  - vars:
+      task_description: "Calculate"
+      prompt: "What is 2 + 2?"
+      expected_answer: "4"
+    assert:
+      - type: contains
+        value: "4"
+    description: "Math - consistency critical"
+
+  - vars:
+      task_description: "Explain"
+      prompt: "What is photosynthesis?"
+      expected_answer: "process"
+    assert:
+      - type: contains
+        value: process
+    description: "Educational - clarity important"
+
+  - vars:
+      task_description: "Write code for"
+      prompt: "A function that adds two numbers"
+      expected_answer: "def add"
+    assert:
+      - type: contains
+        value: "def"
+    description: "Code generation - consistency important"
+
+  - vars:
+      task_description: "Translate to Spanish"
+      prompt: "Hello"
+      expected_answer: "Hola"
+    assert:
+      - type: contains
+        value: Hola
+    description: "Translation - consistency important"
+
+  - vars:
+      task_description: "Brainstorm ideas for"
+      prompt: "Marketing a new coffee shop"
+      expected_answer: "coffee"
+    assert:
+      - type: contains
+        value: coffee
+    description: "Brainstorming - creativity valued"
+
+  - vars:
+      task_description: "List the capitals of"
+      prompt: "France, Germany, and Italy"
+      expected_answer: "Paris"
+    assert:
+      - type: contains
+        value: Paris
+    description: "Factual - accuracy critical"
+
+outputPath: /home/an/projects/tracing_project/promptfoo_results/temperature_sweep.json
+
+# Enable sharing of results for comparison
+sharing: true

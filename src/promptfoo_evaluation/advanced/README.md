@@ -1,6 +1,6 @@
 # Promptfoo Advanced Examples
 
-This directory contains advanced promptfoo examples demonstrating RAG evaluation, MLflow integration, and production-ready testing patterns.
+This directory contains advanced promptfoo examples demonstrating comprehensive evaluation techniques including RAG evaluation, hallucination prevention, temperature optimization, and factuality scoring. All examples include MLflow integration for experiment tracking.
 
 ## Prerequisites
 
@@ -11,10 +11,12 @@ Before running these examples, ensure you have:
    ZHIPU_API_KEY=your_zhipu_api_key_here
    ```
 
+   Get your API key from: https://open.bigmodel.cn/
+
 2. **Install promptfoo**:
    ```bash
    npm install -g promptfoo
-   # or use npx
+   # or use npx (no installation required)
    ```
 
 3. **Install Python dependencies**:
@@ -22,7 +24,7 @@ Before running these examples, ensure you have:
    uv sync --all-extras --dev
    ```
 
-4. **Start MLflow UI** (for MLflow integration examples):
+4. **Start MLflow UI** (optional, for experiment tracking):
    ```bash
    uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
    ```
@@ -31,460 +33,329 @@ Before running these examples, ensure you have:
 
 ---
 
-## Examples
+## Quick Start
 
-### 1. RAG Basics (`rag_basics.yaml`)
+### Run All Advanced Evaluations
 
-**Overview:** RAG evaluation with static context and quality assertions.
-
-**What it demonstrates:**
-- Static context-based RAG testing
-- Context recall, relevance, and faithfulness assertions
-- Tax law domain evaluation
-- Answer quality measurement
-
-**Run the example:**
 ```bash
-npx promptfoo eval -c rag_basics.yaml
-npx promptfoo view
+# Navigate to the advanced directory
+cd src/promptfoo_evaluation/advanced
+
+# Run all evaluations using the convenience script
+python run_all_advanced.py
+
+# Or run individual topics (see below)
 ```
-
-**Key Assertion Types:**
-
-| Assertion | Description | Use Case |
-|-----------|-------------|----------|
-| `context-recall` | Measures context usage | Did the model use retrieved info? |
-| `context-faithfulness` | Checks grounding in context | Did it hallucinate? |
-| `answer-relevance` | Scores answer relevance | Is the answer on-topic? |
-
-**Example Configuration:**
-
-```yaml
-tests:
-  - vars:
-      question: "What is taxable income?"
-      context: "Taxable income = assessable income - deductions"
-    assert:
-      - type: context-recall
-        threshold: 0.7
-      - type: context-faithfulness
-        threshold: 0.6
-      - type: answer-relevance
-        threshold: 0.7
-```
-
-**Real-World Use Cases:**
-- **RAG System Testing**: Validate retrieval-augmented generation quality
-- **Context Evaluation**: Measure how well models use retrieved context
-- **Hallucination Detection**: Identify unsupported claims
-- **Answer Quality**: Ensure responses meet quality standards
 
 ---
 
-### 2. RAG Evaluation (`rag_evaluation.yaml`)
+## Topics
 
-**Overview:** RAG evaluation with custom Python provider integration.
+### 1. RAG Pipeline Evaluation (`rag_pipeline/`)
 
-**What it demonstrates:**
-- Custom provider pattern for RAG assertions
-- Integration with VectorStore infrastructure
-- Dynamic retrieval simulation
-- Domain-specific assertion functions
+**Overview:** End-to-end testing of Retrieval-Augmented Generation systems with context quality assertions.
 
-**Run the example:**
-```bash
-npx promptfoo eval -c rag_evaluation.yaml
-```
-
-**Custom Provider Integration:**
-
-```yaml
-providers:
-  - id: rag_provider
-    config:
-      type: python
-      path: ../../shared/providers/rag_provider.py
-      function: get_assertion_output
-```
-
-The custom provider (`shared/providers/rag_provider.py`) provides:
-
-```python
-def get_assertion_output(prompt: str, context: dict) -> dict:
-    """Evaluate RAG assertions."""
-    output = context.get("output", "")
-
-    # Domain-specific validation
-    if "tax" in prompt.lower():
-        return contains_tax_keywords(output)
-
-    return {"pass": True, "score": 1.0}
-```
-
-**Architecture:**
-
-```
-┌─────────────────┐
-│  Promptfoo      │
-│  Evaluation     │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  Custom RAG Provider        │
-│  - VectorStore integration   │
-│  - RetrievalChain usage      │
-│  - Domain assertions         │
-└─────────────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│  RAG Infrastructure          │
-│  - VectorStore              │
-│  - RetrievalChain           │
-│  - Tax law documents         │
-└─────────────────────────────┘
-```
-
-**Real-World Use Cases:**
-- **Dynamic RAG Testing**: Test with real retrieval systems
-- **Custom Assertions**: Domain-specific validation logic
-- **Production RAG**: Validate before deployment
-- **A/B Testing**: Compare retrieval strategies
-
----
-
-### 3. RAG Comparison (`rag_comparison.yaml`)
-
-**Overview:** Compare different RAG configurations.
-
-**What it demonstrates:**
-- Chunk size comparisons
-- Top-k retrieval variations
-- Strategy comparison
-- Performance trade-offs
+**What it tests:**
+- Context relevance - Is retrieved context relevant to the question?
+- Context faithfulness - Does the answer stay grounded in context?
+- Context recall - How much of the context is actually used?
+- Answer relevance - Is the response on-topic?
 
 **Run the example:**
 ```bash
-npx promptfoo eval -c rag_comparison.yaml
-```
-
-**Configuration Comparison:**
-
-| Config | Chunk Size | Top-K | Expected Result |
-|--------|-----------|-------|-----------------|
-| small_chunks_top2 | 256 | 2 | Focused, may miss details |
-| large_chunks_top2 | 1024 | 2 | More context per chunk |
-| small_chunks_top4 | 256 | 4 | Better coverage |
-| small_chunks_top5 | 256 | 5 | Maximum coverage, more noise |
-| medium_chunks_top3 | 512 | 3 | Balanced approach |
-
-**Expected Insights:**
-
-```yaml
-# Small chunks + higher top-k
-- Better coverage
-- More noise
-- Higher latency
-
-# Large chunks + lower top-k
-- More focused
-- May miss details
-- Lower latency
-
-# Medium chunks + mid top-k
-- Balanced coverage
-- Optimal for most use cases
-```
-
-**Real-World Use Cases:**
-- **Configuration Tuning**: Find optimal chunk size and top-k
-- **Performance Optimization**: Balance quality vs. speed
-- **Production Decisions**: Evidence-based configuration choices
-- **A/B Testing**: Compare retrieval strategies
-
----
-
-### 4. MLflow Integration (`mlflow_integration.py`)
-
-**Overview:** End-to-end MLflow integration for experiment tracking.
-
-**What it demonstrates:**
-- Running promptfoo from Python
-- Parsing results and logging to MLflow
-- Experiment management
-- Artifact and metrics logging
-
-**Run the example:**
-```bash
-# First, start MLflow UI
-uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
-
-# Then run the integration script
-uv run python mlflow_integration.py
+cd rag_pipeline
+python rag_pipeline_test.py
+# or
+OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c rag_pipeline.yaml
 ```
 
 **Key Features:**
+- 10 test scenarios covering good/insufficient/irrelevant context
+- Numerical data verification (tax rates, dates)
+- Multiple facts extraction
+- MLflow experiment: `promptfoo-advanced-rag`
 
-```python
-# Run promptfoo evaluation
-results = run_promptfoo_for_mlflow(config_path, output_path)
-
-# Log to MLflow
-run_id = log_rag_evaluation_to_mlflow(config_name, results)
-```
-
-**MLflow Experiment: `promptfoo-rag`**
-
-Logged metrics:
-- `pass_rate`: Percentage of passing tests
-- `average_score`: Mean score across all tests
-- `total_tokens`: Total tokens used
-- `total_cost`: Total API cost
-- `avg_latency_ms`: Average response latency
-
-Logged artifacts:
-- `results.json`: Full promptfoo results
-- `summary.txt`: Human-readable summary
-
-**MLflow UI View:**
-
-```
-Experiments
-└── promptfoo-rag
-    ├── rag_basics
-    │   ├── Metrics: pass_rate, avg_score, cost
-    │   └── Artifacts: results.json, summary.txt
-    ├── rag_evaluation
-    │   ├── Metrics: pass_rate, avg_score, cost
-    │   └── Artifacts: results.json, summary.txt
-    └── rag_comparison
-        ├── Metrics: pass_rate, avg_score, cost
-        └── Artifacts: results.json, summary.txt
-```
-
-**Real-World Use Cases:**
-- **Experiment Tracking**: Track evaluation runs over time
-- **Regression Testing**: Compare current vs. historical results
-- **Performance Monitoring**: Track metrics across runs
-- **Model Comparison**: Compare different GLM models
-- **Cost Management**: Monitor API costs over time
+**[Full Documentation & Guide](rag_pipeline/README.md)**
 
 ---
 
-## RAG Evaluation Architecture
+### 2. Hallucination Prevention (`prevent_hallucination/`)
 
-### Components
+**Overview:** Detect and reduce hallucinations by testing LLM behavior on questions where it might be tempted to invent information.
 
+**What it tests:**
+- Future predictions - Model refuses to speculate about the future
+- Non-existent entities - Model acknowledges when things don't exist
+- Anachronisms - Model detects temporal impossibilities
+- Obscure citations - Model doesn't fabricate study results
+
+**Run the example:**
+```bash
+cd prevent_hallucination
+python prevent_hallucination_test.py
+# or
+OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c prevent_hallucination.yaml
 ```
-┌──────────────────────────────────────────────────────┐
-│                   Promptfoo CLI                       │
-│  ┌────────────────────────────────────────────────┐ │
-│  │  Test Configuration (YAML)                     │ │
-│  │  - Prompts                                      │ │
-│  │  - Providers                                    │ │
-│  │  - Tests (with context)                         │ │
-│  │  - Assertions                                   │ │
-│  └────────────────────────────────────────────────┘ │
-└──────────────────────┬───────────────────────────────┘
-                       │
-                       ▼
-┌──────────────────────────────────────────────────────┐
-│              Custom RAG Provider                      │
-│  - get_assertion_output(prompt, context)            │
-│  - Domain-specific assertions                        │
-│  - Integration with VectorStore/RetrievalChain       │
-└──────────────────────┬───────────────────────────────┘
-                       │
-                       ▼
-┌──────────────────────────────────────────────────────┐
-│            RAG Infrastructure (Existing)              │
-│  ┌────────────────────────────────────────────────┐ │
-│  │  VectorStore                                   │ │
-│  │  - Document storage                            │ │
-│  │  - Similarity search                           │ │
-│  │  - Top-k retrieval                             │ │
-│  └────────────────────────────────────────────────┘ │
-│  ┌────────────────────────────────────────────────┐ │
-│  │  RetrievalChain                                │ │
-│  │  - LCEL chain composition                      │ │
-│  │  - Prompt formatting                           │ │
-│  │  - Response generation                         │ │
-│  └────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────┘
-                       │
-                       ▼
-┌──────────────────────────────────────────────────────┐
-│                  Test Data                            │
-│  data/rag/australian_tax_law.txt                     │
-└──────────────────────────────────────────────────────┘
-```
+
+**Key Features:**
+- 10 hallucination-prone test scenarios
+- Refusal rate tracking (higher is better for unanswerable questions)
+- Factuality and attribution scoring
+- MLflow experiment: `promptfoo-advanced-hallucination`
+
+**[Full Documentation & Guide](prevent_hallucination/README.md)**
 
 ---
 
-## RAG Assertion Best Practices
+### 3. Temperature Optimization (`choosing_right_temperature/`)
 
-### 1. Context Recall
+**Overview:** Find optimal temperature settings for different task types by sweeping across temperature values.
 
-Measure how much retrieved context is used:
+**What it tests:**
+- Temperature 0.0 - Most deterministic, consistent
+- Temperature 0.3 - Low creativity, high reliability
+- Temperature 0.7 - Balanced between consistency and creativity
+- Temperature 1.0 - Most creative, highest variance
 
-```yaml
-assert:
-  - type: context-recall
-    threshold: 0.7  # 70% of context should be utilized
+**Run the example:**
+```bash
+cd choosing_right_temperature
+python temperature_test.py
+# or
+OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c temperature_sweep.yaml
 ```
 
-### 2. Context Faithfulness
+**Key Features:**
+- 8 different task types (creative, factual, code, summary, etc.)
+- Variance analysis across temperature values
+- Task-specific temperature recommendations
+- MLflow experiment: `promptfoo-advanced-temperature`
 
-Ensure answers don't hallucinate:
-
-```yaml
-assert:
-  - type: context-faithfulness
-    threshold: 0.8  # 80% faithful to context
-```
-
-### 3. Answer Relevance
-
-Score relevance to the question:
-
-```yaml
-assert:
-  - type: answer-relevance
-    threshold: 0.6  # Moderately relevant
-```
-
-### 4. Combined Assertions
-
-Use multiple assertions for comprehensive evaluation:
-
-```yaml
-assert:
-  - type: context-recall
-    threshold: 0.7
-  - type: context-faithfulness
-    threshold: 0.8
-  - type: answer-relevance
-    threshold: 0.6
-  - type: python
-    value: python_asserts
-    function: validate_context_faithfulness
-```
+**[Full Documentation & Guide](choosing_right_temperature/README.md)**
 
 ---
 
-## MLflow Integration Patterns
+### 4. Factuality Evaluation (`evaluating_factuality/`)
 
-### Pattern 1: Simple Logging
+**Overview:** Score responses for factual accuracy against known ground truth across different information types.
 
-Log results to a single experiment:
+**What it tests:**
+- Dates - Historical events, time periods
+- Numbers - Scientific constants, quantities
+- Entities - Capital cities, people, places
+- Relationships - Authorship, discoveries
 
-```python
-from promptfoo_evaluation.shared.mlflow_handler import log_promptfoo_run_to_mlflow
-
-run_id = log_promptfoo_run_to_mlflow(
-    results="eval_results.json",
-    experiment_name="promptfoo-rag",
-    run_name="basics_test"
-)
+**Run the example:**
+```bash
+cd evaluating_factuality
+python factuality_test.py
+# or
+OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c factuality.yaml
 ```
 
-### Pattern 2: Custom Metrics
+**Key Features:**
+- 12 test cases with known correct answers
+- Category-specific factuality breakdown
+- Numerical precision verification
+- MLflow experiment: `promptfoo-advanced-factuality`
 
-Add custom metrics during logging:
-
-```python
-manager = MLflowExperimentManager("promptfoo-rag")
-with manager.run_experiment() as run:
-    # Log standard metrics
-    manager.log_metrics(parser.get_metrics())
-
-    # Log custom metrics
-    manager.log_metrics({
-        "context_utilization": 0.85,
-        "hallucination_score": 0.05,
-    })
-```
-
-### Pattern 3: Artifact Logging
-
-Log additional artifacts for analysis:
-
-```python
-# Log comparison table
-manager.log_artifact("comparison_table.csv")
-
-# Log detailed results
-manager.log_text(detailed_analysis, "analysis.txt")
-
-# Log configuration
-manager.log_artifact("config.yaml")
-```
+**[Full Documentation & Guide](evaluating_factuality/README.md)**
 
 ---
 
-## Production Considerations
+## Comparison Table
 
-### Deployment Checklist
+| Topic | Test Cases | Key Metrics | Best For | MLflow Experiment |
+|-------|-----------|-------------|----------|-------------------|
+| **RAG Pipeline** | 10 | Context relevance, faithfulness, recall | RAG systems | `promptfoo-advanced-rag` |
+| **Hallucination** | 10 | Refusal rate, hallucination rate | Accuracy-critical apps | `promptfoo-advanced-hallucination` |
+| **Temperature** | 8 | Variance, pass rate by temp | Parameter tuning | `promptfoo-advanced-temperature` |
+| **Factuality** | 12 | Overall factuality, extraction accuracy | Factual QA systems | `promptfoo-advanced-factuality` |
 
-- [ ] **CI/CD Integration**: Automate evaluations in CI/CD pipeline
-- [ ] **Regression Tests**: Run promptfoo tests on every change
-- [ ] **Performance Baselines**: Establish and track baseline metrics
-- [ ] **Alert Thresholds**: Set up alerts for metric degradation
-- [ ] **Cost Monitoring**: Track and budget API costs
-- [ ] **Artifact Storage**: Configure MLflow artifact storage for production
+---
 
-### Monitoring Metrics
+## MLflow Integration
 
-Key metrics to monitor in production:
+All advanced topics log to MLflow with consistent experiment naming: `promptfoo-advanced-{topic}`
 
-| Metric | Description | Alert Threshold |
-|--------|-------------|-----------------|
-| Pass Rate | Percentage of passing tests | < 90% |
-| Avg Score | Mean test score | < 0.8 |
-| Latency | Average response time | > 2000ms |
-| Cost | Total API cost per run | > $X |
-| Hallucination | Hallucination rate | > 5% |
+### Logged Metrics
 
-### Continuous Evaluation
+Each experiment logs:
 
-Schedule regular evaluations:
+**Base Metrics:**
+- `pass_rate` - Percentage of tests passing all assertions
+- `average_score` - Mean score across all tests
+- `total_tokens` - Total tokens used
+- `total_cost` - API cost in USD
+- `avg_latency_ms` - Average response time
+
+**Topic-Specific Metrics:**
+- RAG: `context_relevance_avg`, `context_faithfulness_avg`, `context_recall_avg`
+- Hallucination: `refusal_rate`, `hallucination_rate`, `factuality_score`
+- Temperature: `temp_0.0_pass_rate`, `temp_0.3_pass_rate`, etc.
+- Factuality: `dates_accuracy`, `numbers_accuracy`, `entities_accuracy`
+
+### Viewing MLflow Results
 
 ```bash
-# Cron job for daily evaluation
-0 2 * * * cd /app && uv run python mlflow_integration.py
+# Start MLflow UI
+uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
+
+# Open browser to http://localhost:5000
+
+# Navigate to Experiments > promptfoo-advanced-*
 ```
+
+---
+
+## Common Patterns
+
+### Pattern 1: Python Runner with MLflow
+
+All advanced topics use the same pattern for MLflow integration:
+
+```python
+from promptfoo_evaluation.shared.mlflow_handler import (
+    MLflowExperimentManager,
+    PromptfooResultParser,
+)
+
+# Run promptfoo evaluation
+results = run_promptfoo_eval(config_path)
+
+# Parse results
+parser = PromptfooResultParser(results)
+
+# Calculate topic-specific metrics
+topic_metrics = calculate_topic_metrics(results)
+
+# Log to MLflow
+manager = MLflowExperimentManager("promptfoo-advanced-topic")
+with manager.run_experiment(run_name="topic-eval") as run:
+    manager.log_metrics(parser.get_metrics())
+    manager.log_metrics(topic_metrics)
+    manager.log_artifact(results_path)
+```
+
+### Pattern 2: Custom Assertions
+
+Each topic uses custom Python assertions for domain-specific validation:
+
+```python
+def assert_fn(output, context):
+    """Domain-specific validation logic."""
+    # Your validation logic here
+    return {
+        "pass": boolean_result,
+        "score": 0.0_to_1.0,
+        "reason": "Explanation of result"
+    }
+```
+
+### Pattern 3: Rich Console Output
+
+All runners use `rich` for formatted console output:
+
+```python
+from rich.console import Console
+from rich.table import Table
+
+console = Console()
+table = Table(title="Results")
+table.add_column("Metric", style="cyan")
+table.add_column("Score", style="green")
+console.print(table)
+```
+
+---
+
+## Choosing the Right Evaluation
+
+| Use Case | Recommended Evaluation | Reason |
+|----------|----------------------|--------|
+| **Building a RAG system** | RAG Pipeline | Tests retrieval quality and context usage |
+| **Medical/legal advice** | Hallucination Prevention | High cost of hallucinations |
+| **Creative applications** | Temperature Optimization | Find right creativity level |
+| **Knowledge bases** | Factuality Evaluation | Ensure accuracy of information |
+| **General QA** | All topics | Comprehensive evaluation |
+| **Production deployment** | All topics | Establish baseline metrics |
+
+---
+
+## Progressive Learning Path
+
+```
+Basics (../basics/)
+    ↓
+Intermediate (../intermediate/)
+    ↓
+Advanced Topics (this directory)
+    ├── RAG Pipeline
+    ├── Hallucination Prevention
+    ├── Temperature Optimization
+    └── Factuality Evaluation
+```
+
+**Recommended order:**
+1. Start with RAG Pipeline if you're building a RAG system
+2. Then Hallucination Prevention for accuracy-critical applications
+3. Temperature Optimization for parameter tuning
+4. Factuality Evaluation for factual QA systems
 
 ---
 
 ## Troubleshooting
 
-### Issue: Context not being used
+### Issue: All tests failing
 
-**Symptoms**: Low context-recall scores
+**Possible causes:**
+1. ZHIPU_API_KEY not set correctly
+2. Network connectivity issues
+3. Model name incorrect
 
-**Solutions:**
-1. Check prompt explicitly references context
-2. Verify context format matches expectations
-3. Adjust top-k for better retrieval
+**Solution:**
+```bash
+# Check API key
+echo $ZHIPU_API_KEY
 
-### Issue: High hallucination rate
+# Test connection
+curl -X POST https://open.bigmodel.cn/api/paas/v4/chat/completions \
+  -H "Authorization: Bearer $ZHIPU_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"glm-5-flash","messages":[{"role":"user","content":"test"}]}'
+```
 
-**Symptoms**: Low context-faithfulness scores
+### Issue: MLflow not logging
 
-**Solutions:**
-1. Improve context quality
-2. Add explicit grounding instructions
-3. Use faithfulness assertions
+**Possible causes:**
+1. MLflow not installed
+2. Tracking URI not set
+3. File permission issues
 
-### Issue: MLflow artifacts not logging
+**Solution:**
+```bash
+# Check MLflow installation
+uv run mlflow --version
 
-**Symptoms**: Missing artifacts in MLflow UI
+# Set tracking URI explicitly
+export MLFLOW_TRACKING_URI=sqlite:///mlflow.db
 
-**Solutions:**
-1. Check file paths are absolute
-2. Verify MLflow tracking URI is set
-3. Check write permissions
+# Check file permissions
+ls -la mlflow.db
+```
+
+### Issue: Test data not found
+
+**Possible causes:**
+1. Running from wrong directory
+2. Relative path issues
+
+**Solution:**
+```bash
+# Always run from the topic directory
+cd src/promptfoo_evaluation/advanced/rag_pipeline
+python rag_pipeline_test.py
+```
 
 ---
 
@@ -492,17 +363,39 @@ Schedule regular evaluations:
 
 After mastering these advanced examples:
 
-1. **Production Deployment**:
-   - Set up CI/CD integration
-   - Configure monitoring and alerting
-   - Establish performance baselines
+1. **Production Integration:**
+   - Set up CI/CD integration with promptfoo
+   - Configure automated regression testing
+   - Establish performance baselines and alerting
 
-2. **Custom Development**:
-   - Build domain-specific RAG providers
+2. **Custom Development:**
+   - Build domain-specific test cases
    - Create custom assertion libraries
    - Integrate with existing testing frameworks
 
-3. **Advanced Topics**:
+3. **Advanced Topics:**
    - Distributed evaluation at scale
    - Real-time monitoring dashboards
-   - Automated regression detection
+   - Automated model selection
+
+---
+
+## Related Resources
+
+- [Promptfoo Documentation](https://promptfoo.dev/docs/)
+- [MLflow Documentation](https://mlflow.org/docs/)
+- [Zhipu AI API](https://open.bigmodel.cn/)
+- [RAGAS Framework](https://docs.ragas.io/)
+
+---
+
+## Additional Advanced Examples
+
+The advanced directory also contains these earlier examples:
+
+- `rag_basics.yaml` - Basic RAG evaluation with static context
+- `rag_evaluation.yaml` - RAG with custom Python provider
+- `rag_comparison.yaml` - Comparing RAG configurations
+- `mlflow_integration.py` - MLflow integration demo
+
+See the earlier sections of this README for details on these examples.

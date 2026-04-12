@@ -3,6 +3,12 @@ MLflow integration for promptfoo evaluation results.
 
 This module provides utilities for parsing promptfoo evaluation outputs
 and logging them to MLflow for centralized experiment tracking.
+
+Extended with support for advanced topic-specific metrics including:
+- RAG metrics: context relevance, faithfulness, recall
+- Hallucination metrics: refusal rate, hallucination rate
+- Temperature metrics: per-temperature pass rates
+- Factuality metrics: category-specific accuracy
 """
 
 import json
@@ -18,6 +24,14 @@ console: Final[Console] = Console()
 
 # Default experiment name
 DEFAULT_EXPERIMENT_NAME: Final[str] = "promptfoo-evaluation"
+
+# Advanced experiment names
+ADVANCED_EXPERIMENTS: Final[dict[str, str]] = {
+    "rag_pipeline": "promptfoo-advanced-rag",
+    "prevent_hallucination": "promptfoo-advanced-hallucination",
+    "choosing_right_temperature": "promptfoo-advanced-temperature",
+    "evaluating_factuality": "promptfoo-advanced-factuality",
+}
 
 
 @beartype
@@ -163,6 +177,64 @@ class PromptfooResultParser:
 
         return metrics
 
+    def get_assertion_scores(self, assertion_type: str) -> list[float]:
+        """
+        Extract scores for a specific assertion type.
+
+        Args:
+            assertion_type: Type of assertion to extract scores for
+                (e.g., "context-relevance", "factuality").
+
+        Returns:
+            List of scores for the specified assertion type.
+
+        """
+        scores: list[float] = []
+
+        for result in self.results.get("results", []):
+            for output in result.get("outputs", []):
+                grading_result = output.get("gradingResult", {})
+                if isinstance(grading_result, dict):
+                    for key, value in grading_result.items():
+                        if assertion_type.lower() in key.lower():
+                            if isinstance(value, dict):
+                                score = value.get("score", 0.0)
+                                if score > 0:
+                                    scores.append(score)
+                            elif isinstance(value, (float, int)):
+                                scores.append(float(value))
+
+        return scores
+
+    def get_scenario_metrics(self) -> dict[str, dict[str, float]]:
+        """
+        Extract metrics grouped by scenario (useful for temperature comparisons).
+
+        Returns:
+            Dictionary mapping scenario descriptions to their metrics.
+
+        """
+        scenario_metrics: dict[str, dict[str, float]] = {}
+
+        for result in self.results.get("results", []):
+            scenario = result.get("description", "unknown")
+            outputs = result.get("outputs", [])
+
+            passed = sum(1 for o in outputs if o.get("pass", False))
+            total = len(outputs)
+            pass_rate = passed / total if total > 0 else 0.0
+
+            scores = [o.get("score", 0.0) for o in outputs if "score" in o]
+            avg_score = sum(scores) / len(scores) if scores else 0.0
+
+            scenario_metrics[scenario] = {
+                "pass_rate": pass_rate,
+                "avg_score": avg_score,
+                "total": total,
+            }
+
+        return scenario_metrics
+
 
 @beartype
 class MLflowExperimentManager:
@@ -213,7 +285,7 @@ class MLflowExperimentManager:
 
         experiment_id = mlflow.create_experiment(self.experiment_name, tags=default_tags)
 
-        console.print(f"[green]✓[/green] Created MLflow experiment: {self.experiment_name}")
+        console.print(f"[green]Created MLflow experiment:[/green] {self.experiment_name}")
 
         return experiment_id
 
@@ -286,6 +358,25 @@ class MLflowExperimentManager:
 
         """
         return mlflow.start_run(run_name=run_name)
+
+
+@beartype
+def get_advanced_experiment_name(topic: str) -> str:
+    """
+    Get the MLflow experiment name for an advanced topic.
+
+    Args:
+        topic: Name of the advanced topic.
+
+    Returns:
+        MLflow experiment name for the topic.
+
+    Example:
+        >>> get_advanced_experiment_name("rag_pipeline")
+        'promptfoo-advanced-rag'
+
+    """
+    return ADVANCED_EXPERIMENTS.get(topic, f"promptfoo-advanced-{topic}")
 
 
 @beartype
@@ -372,6 +463,6 @@ def log_promptfoo_run_to_mlflow(
         )
         manager.log_text(summary, "summary.txt")
 
-    console.print(f"[green]✓[/green] Logged results to MLflow experiment: {experiment_name}")
+    console.print(f"[green]Logged results to MLflow[/green] experiment: {experiment_name}")
 
     return run.info.run_id

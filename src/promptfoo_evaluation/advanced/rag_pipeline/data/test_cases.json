@@ -1,0 +1,176 @@
+[
+  {
+    "vars": {
+      "context": "The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210.",
+      "question": "When are individual tax returns due in Australia?"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "October"
+      },
+      {
+        "type": "icontains",
+        "value": "31"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    ctx = context.get('vars', {}).get('context', '').lower()\n    answer = output.lower()\n    # Verify answer uses information from context\n    has_october = 'october' in answer\n    has_info = len(answer) > 20\n    return {'pass': has_october and has_info, 'score': 1.0 if has_october else 0.5, 'reason': 'Answer should mention October and be substantive'}"
+      }
+    ],
+    "description": "Good context - question is directly answerable from context"
+  },
+  {
+    "vars": {
+      "context": "Taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains.",
+      "question": "How is taxable income calculated in Australia?"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "assessable"
+      },
+      {
+        "type": "contains",
+        "value": "deductions"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should explain the formula: assessable - deductions\n    has_formula = 'assessable' in answer and 'deduct' in answer\n    has_income = 'income' in answer\n    return {'pass': has_formula and has_income, 'score': 1.0 if has_formula else 0.7, 'reason': 'Should explain taxable income calculation formula'}"
+      }
+    ],
+    "description": "Complete context - all information present"
+  },
+  {
+    "vars": {
+      "context": "The Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare.",
+      "question": "What is the Medicare levy and what is it used for?"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "2"
+      },
+      {
+        "type": "icontains",
+        "value": "medicare"
+      },
+      {
+        "type": "icontains",
+        "value": "healthcare"
+      }
+    ],
+    "description": "Good context with rate and purpose"
+  },
+  {
+    "vars": {
+      "context": "GST stands for Goods and Services Tax.",
+      "question": "What is the GST rate in Australia and what does it apply to?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Model should acknowledge insufficient context for rate\n    acknowledges_limitation = any(word in answer for word in ['not mentioned', 'insufficient', 'does not say', 'context does not', 'provided'])\n    has_gst = 'gst' in answer or 'goods' in answer\n    return {'pass': has_gst, 'score': 1.0 if acknowledges_limitation else 0.3, 'reason': 'Should acknowledge missing rate information'}"
+      }
+    ],
+    "description": "Insufficient context - model should acknowledge limitations"
+  },
+  {
+    "vars": {
+      "context": "Business expenses must be directly related to earning income. Capital expenses are not immediately deductible.",
+      "question": "What are the current tax rates for different income brackets?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Model should clearly state context doesn't contain tax rate information\n    refuses = any(phrase in answer for phrase in ['not mentioned', 'does not provide', 'context does not contain', 'cannot answer', 'insufficient'])\n    return {'pass': refuses, 'score': 1.0 if refuses else 0.0, 'reason': 'Should refuse to answer when context is irrelevant'}"
+      }
+    ],
+    "description": "Irrelevant context - model should detect mismatch"
+  },
+  {
+    "vars": {
+      "context": "Tax File Number (TFN) is a unique identifier issued by the ATO. You can apply for a TFN online through the Australian Taxation Office website or by visiting a post office.",
+      "question": "How can someone obtain a Tax File Number in Australia?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "ato"
+      },
+      {
+        "type": "contains-any",
+        "value": ["online", "website", "post office"]
+      }
+    ],
+    "description": "Good context - practical information"
+  },
+  {
+    "vars": {
+      "context": "The income tax rates for Australian residents (2024-25) are: 0% on $0-$18,200, 19% on $18,201-$45,000, 32.5% on $45,001-$120,000, 37% on $120,001-$180,000, and 45% on income over $180,000.",
+      "question": "What is the tax rate for someone earning $50,000?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should identify the correct bracket and mention 32.5%\n    has_correct_rate = '32.5' in answer or '32.5%' in answer\n    has_bracket_info = '45000' in answer or '120000' in answer or '45,000' in answer or '120,000' in answer\n    return {'pass': has_correct_rate, 'score': 1.0 if has_correct_rate else 0.5, 'reason': 'Should calculate correct tax rate from bracket information'}"
+      }
+    ],
+    "description": "Numerical data verification - test precision"
+  },
+  {
+    "vars": {
+      "context": "Immediate deduction for business expenses: Under $300, assets with effective life less than 3 years can be immediately deducted.",
+      "question": "Can I immediately deduct a laptop costing $2,500 for my business?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should note that context doesn't cover $2,500 assets (only under $300)\n    acknowledges_limit = any(word in answer for word in ['context does not', 'not mentioned', 'information provided', '300'])\n    return {'pass': True, 'score': 1.0 if acknowledges_limit else 0.7, 'reason': 'Should acknowledge context limitation for higher-value items'}"
+      }
+    ],
+    "description": "Partial context - model should identify gaps"
+  },
+  {
+    "vars": {
+      "context": "The Australian tax year runs from July 1 to June 30. Most individuals need to lodge a tax return by October 31.",
+      " question": "What are the key dates in the Australian tax calendar?"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "July"
+      },
+      {
+        "type": "contains",
+        "value": "June"
+      },
+      {
+        "type": "contains",
+        "value": "October"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should extract both dates mentioned in context\n    has_july_june = 'july' in answer and 'june' in answer\n    has_october = 'october' in answer\n    return {'pass': has_july_june and has_october, 'score': 1.0 if (has_july_june and has_october) else 0.7, 'reason': 'Should extract multiple dates from context'}"
+      }
+    ],
+    "description": "Multiple facts extraction - comprehensive coverage"
+  },
+  {
+    "vars": {
+      "context": "Small businesses with annual turnover under $10 million may be eligible for simplified tax reporting through the Small Business Income Tax Offset.",
+      "question": "What tax benefits are available for small businesses in Australia?"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "small business"
+      },
+      {
+        "type": "contains-any",
+        "value": ["offset", "simplified", "reporting"]
+      }
+    ],
+    "description": "Domain-specific terminology test"
+  }
+]

@@ -1,0 +1,133 @@
+{
+  "evalId": "eval-Ntz-2026-04-12T04:23:15",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T04:23:15.792Z",
+    "prompts": [
+      {
+        "id": "35cb49840ba2b7b1341c48aa8b300c083a9bb89db20179539a4044912cf6b351",
+        "raw": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuestion: {{question}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+        "label": "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuestion: {{question}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n",
+        "provider": "openai:glm-5",
+        "metrics": {
+          "score": 0,
+          "testPassCount": 0,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 0,
+          "assertFailCount": 0,
+          "totalLatencyMs": 0,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "total": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [],
+    "stats": {
+      "successes": 0,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 0,
+        "total": 0,
+        "numRequests": 0,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 3
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "RAG pipeline evaluation with context quality assertions",
+    "prompts": [
+      "You are a helpful assistant answering questions based on the provided context.\nUse only the information in the context to answer the question.\n\nContext:\n{{context}}\n\nQuestion: {{question}}\n\nIf the context doesn't contain enough information to answer the question,\nsay so clearly. Do not make up information.\n"
+    ],
+    "providers": [
+      "openai:chat:glm-5"
+    ],
+    "tests": [],
+    "scenarios": [],
+    "env": {},
+    "defaultTest": {
+      "assert": [
+        {
+          "type": "context-relevance",
+          "threshold": 0.7
+        },
+        {
+          "type": "context-faithfulness",
+          "threshold": 0.6
+        },
+        {
+          "type": "context-recall",
+          "threshold": 0.7
+        },
+        {
+          "type": "answer-relevance",
+          "threshold": 0.7
+        }
+      ],
+      "vars": {},
+      "options": {},
+      "metadata": {}
+    },
+    "outputPath": [
+      "../../promptfoo_results/rag_pipeline.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T04:23:15.881Z",
+    "evaluationCreatedAt": "2026-04-12T04:23:15.792Z"
+  }
+}

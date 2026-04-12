@@ -1,0 +1,186 @@
+[
+  {
+    "vars": {
+      "question": "What is the capital of Australia?",
+      "expected_answer": "Canberra"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "Canberra"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should contain Canberra and not other major cities as capital\n    has_canberra = 'canberra' in answer\n    not_sydney_melbourne = 'sydney is the capital' not in answer and 'melbourne is the capital' not in answer\n    return {'pass': has_canberra and not_sydney_melbourne, 'score': 1.0 if has_canberra else 0.0, 'reason': 'Must identify Canberra as capital'}"
+      }
+    ],
+    "description": "Capital city - factual entity verification"
+  },
+  {
+    "vars": {
+      "question": "In what year did World War II end?",
+      "expected_answer": "1945"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "1945"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should mention 1945\n    has_1945 = '1945' in answer\n    # Check for common wrong answers\n    not_wrong = '1944' not in answer and '1946' not in answer\n    return {'pass': has_1945 and not_wrong, 'score': 1.0 if has_1945 else 0.0, 'reason': 'WWII ended in 1945'}"
+      }
+    ],
+    "description": "Historical date - temporal fact verification"
+  },
+  {
+    "vars": {
+      "question": "What is the speed of light in vacuum?",
+      "expected_answer": "299,792,458"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Speed of light is approximately 3 x 10^8 m/s or 299,792,458 m/s\n    has_approx = '3 x 10' in answer or '3*10' in answer or '3e8' in answer\n    has_exact = '299' in answer and ('458' in answer or '792' in answer)\n    has_km = 'km/s' in answer or 'kilomet' in answer\n    # Accept approximate or exact, in m/s or km/s\n    return {'pass': has_approx or has_exact, 'score': 1.0 if (has_exact or has_approx) else 0.5, 'reason': 'Speed of light ~3e8 m/s or 299,792,458 m/s'}"
+      }
+    ],
+    "description": "Scientific constant - numerical verification"
+  },
+  {
+    "vars": {
+      "question": "Who wrote the novel '1984'?",
+      "expected_answer": "George Orwell"
+    },
+    "assert": [
+      {
+        "type": "contains-all",
+        "value": ["George", "Orwell"]
+      },
+      {
+        "type": "not-contains",
+        "value": "Aldous Huxley"
+      }
+    ],
+    "description": "Author attribution - entity verification"
+  },
+  {
+    "vars": {
+      "question": "What is the chemical formula for water?",
+      "expected_answer": "H2O"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Water is H2O\n    has_h2o = 'h2o' in answer or ('h' in answer and '2' in answer and 'o' in answer)\n    has_description = 'hydrogen' in answer and 'oxygen' in answer\n    return {'pass': has_h2o or has_description, 'score': 1.0 if has_h2o else 0.8, 'reason': 'Water formula is H2O'}"
+      }
+    ],
+    "description": "Chemical formula - scientific notation"
+  },
+  {
+    "vars": {
+      "question": "What is the largest planet in our solar system?",
+      "expected_answer": "Jupiter"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "jupiter"
+      },
+      {
+        "type": "not-contains",
+        "value": "Saturn is the largest"
+      }
+    ],
+    "description": "Astronomical fact - entity comparison"
+  },
+  {
+    "vars": {
+      "question": "How many bones are in the adult human body?",
+      "expected_answer": "206"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Adults have 206 bones\n    has_206 = '206' in answer\n    # Common wrong answers to avoid\n    not_wrong = '208' not in answer and '204' not in answer\n    return {'pass': has_206 and not_wrong, 'score': 1.0 if has_206 else 0.0, 'reason': 'Adults have 206 bones'}"
+      }
+    ],
+    "description": "Anatomical fact - numerical precision"
+  },
+  {
+    "vars": {
+      "question": "Who was the first person to walk on the Moon?",
+      "expected_answer": "Neil Armstrong"
+    },
+    "assert": [
+      {
+        "type": "contains-all",
+        "value": ["Neil", "Armstrong"]
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should mention Neil Armstrong first, may mention Buzz Aldrin as second\n    has_armstrong = 'neil armstrong' in answer or ('neil' in answer and 'armstrong' in answer)\n    mentions_second = 'buzz' in answer or 'aldrin' in answer\n    # It's OK to mention Aldrin but Armstrong should be clearly first\n    return {'pass': has_armstrong, 'score': 1.0 if has_armstrong else 0.0, 'reason': 'Neil Armstrong was first'}"
+      }
+    ],
+    "description": "Historical achievement - sequence verification"
+  },
+  {
+    "vars": {
+      "question": "What is the boiling point of water at sea level in Celsius?",
+      "expected_answer": "100"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Water boils at 100°C at sea level\n    has_100 = '100' in answer or '100°' in answer or '100c' in answer\n    mentions_celsius = 'celsius' in answer or '°c' in answer or 'degrees' in answer\n    mentions_sea_level = 'sea level' in answer or 'standard' in answer\n    return {'pass': has_100, 'score': 1.0 if (has_100 and mentions_sea_level) else 0.7, 'reason': 'Water boils at 100°C at sea level'}"
+      }
+    ],
+    "description": "Physical property - conditional fact (depends on sea level)"
+  },
+  {
+    "vars": {
+      "question": "Which ocean is the largest by area?",
+      "expected_answer": "Pacific Ocean"
+    },
+    "assert": [
+      {
+        "type": "icontains-all",
+        "value": ["pacific", "ocean"]
+      },
+      {
+        "type": "not-contains",
+        "value": "Atlantic is the largest"
+      }
+    ],
+    "description": "Geographic fact - superlative verification"
+  },
+  {
+    "vars": {
+      "question": "What currency is used in Japan?",
+      "expected_answer": "Yen"
+    },
+    "assert": [
+      {
+        "type": "icontains",
+        "value": "yen"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Japanese yen is the currency\n    has_yen = 'yen' in answer\n    has_japan = 'japan' in answer or 'japanese' in answer\n    has_symbol = '¥' in answer\n    return {'pass': has_yen, 'score': 1.0 if (has_yen and has_japan) else 0.8, 'reason': 'Japan uses Yen (¥)'}"
+      }
+    ],
+    "description": "Economic fact - currency identification"
+  },
+  {
+    "vars": {
+      "question": "Who painted the Mona Lisa?",
+      "expected_answer": "Leonardo da Vinci"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Leonardo da Vinci painted the Mona Lisa\n    has_leonardo = 'leonardo' in answer\n    has_vinci = 'vinci' in answer or 'da vinci' in answer\n    has_davinci = 'da vinci' in answer\n    return {'pass': has_leonardo and (has_vinci or has_davinci), 'score': 1.0 if (has_leonardo and has_davinci) else 0.7, 'reason': 'Leonardo da Vinci painted Mona Lisa'}"
+      }
+    ],
+    "description": "Art history - creator attribution"
+  }
+]

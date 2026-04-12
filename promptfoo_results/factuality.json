@@ -1,0 +1,1737 @@
+{
+  "evalId": "eval-x0y-2026-04-12T05:47:07",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T05:47:07.294Z",
+    "prompts": [
+      {
+        "id": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "raw": "{{question}}",
+        "label": "{{question}}",
+        "provider": "openai:glm-5",
+        "metrics": {
+          "score": 13,
+          "testPassCount": 13,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 13,
+          "assertFailCount": 0,
+          "totalLatencyMs": 415422,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 4580,
+            "total": 4580,
+            "numRequests": 13,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "Canberra"
+              }
+            }
+          ]
+        },
+        "id": "1ff1ad15-3fdf-4867-b64a-8e4cee166843",
+        "latencyMs": 110669,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What is the capital of Australia?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Identify the core question:** The user is asking for the capital city of Australia.\n\n2.  **Retrieve knowledge:**\n    *   Access geographical knowledge about Australia.\n    *   Common misconception: Sydney or Melbourne.\n    *   Fact: The capital is Canberra.\n    *   Location: Australian Capital Territory (ACT).\n    *   Reasoning (optional but good for context): It was chosen as a compromise between Sydney and Melbourne.\n\n3.  **Formulate the answer:**\n    *   Direct answer: Canberra.\n    *   Optional detail: Mention it's not Sydney or Melbourne (to address common misconceptions) or mention the Australian Capital Territory.\n\n4.  **Draft the response:**\n    *   *Draft 1:* The capital of Australia is Canberra.\n    *   *Draft 2 (more helpful):* The capital of Australia is Canberra. It is located in the Australian Capital Territory.\n\n5.  **Final Polish:** Keep it simple and direct. \"The capital of Australia is Canberra.\"\n\n6.  **Final Output Generation:** (Matches the drafted response).\n\nThe capital of Australia is **Canberra**.",
+          "tokenUsage": {
+            "cached": 248,
+            "total": 248
+          },
+          "cached": true,
+          "latencyMs": 110669,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:49:00 GMT",
+                "set-cookie": "acw_tc=276082b517759693359266850ebc8e6d99efbf98141fa47b465f6c15179bdb;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121248557d4f869b992c494c"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is the capital of Australia?",
+            "expected_answer": "Canberra"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "Canberra"
+            }
+          ],
+          "description": "Capital city - factual entity",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "question": "What is the capital of Australia?",
+          "expected_answer": "Canberra"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:49:00 GMT",
+              "set-cookie": "acw_tc=276082b517759693359266850ebc8e6d99efbf98141fa47b465f6c15179bdb;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121248557d4f869b992c494c"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "4"
+              }
+            }
+          ]
+        },
+        "id": "815c98e9-6b77-43fa-a5d6-78175b409d59",
+        "latencyMs": 45945,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What is 2 + 2?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking a very simple math question: \"What is 2 + 2?\".\n\n1.  **Analyze the request:** The user wants the sum of 2 and 2.\n2.  **Perform the calculation:** 2 + 2 = 4.\n3.  **Formulate the response:** State the answer clearly.\n\n2 + 2 = 4.",
+          "tokenUsage": {
+            "cached": 95,
+            "total": 95
+          },
+          "cached": true,
+          "latencyMs": 45945,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:47:56 GMT",
+                "set-cookie": "acw_tc=2760776217759692731928597e864e3bce876e3def7b36e192dd1ecc67482c;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121247535fcd68eac52b40a6"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is 2 + 2?",
+            "expected_answer": "4"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "4"
+            }
+          ],
+          "description": "Basic arithmetic - numerical fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "question": "What is 2 + 2?",
+          "expected_answer": "4"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:47:56 GMT",
+              "set-cookie": "acw_tc=2760776217759692731928597e864e3bce876e3def7b36e192dd1ecc67482c;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121247535fcd68eac52b40a6"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains",
+                "value": "shakespeare"
+              }
+            }
+          ]
+        },
+        "id": "7f3d9570-ccc4-48c4-b81e-687814ca3889",
+        "latencyMs": 111590,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Who wrote Romeo and Juliet?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Identify the core question:** The user is asking for the author of the play \"Romeo and Juliet\".\n\n2.  **Retrieve knowledge:**\n    *   Play: Romeo and Juliet.\n    *   Author: William Shakespeare.\n    *   Context: It's one of his most famous tragedies, written around 1594-1596.\n\n3.  **Formulate the answer:**\n    *   Direct answer: William Shakespeare.\n    *   Optional context (good for completeness but not strictly necessary for a simple fact): Mention it's a play, maybe the approximate date or genre.\n\n4.  **Draft the response:** \"Romeo and Juliet was written by William Shakespeare.\"\n\n5.  **Review:** Is this accurate? Yes. Is it concise? Yes. Does it answer the user's prompt directly? Yes.\n\n6.  **Final Output Generation:** (Matches the drafted response).\n\n**William Shakespeare** wrote *Romeo and Juliet*. It is believed to have been written between 1591 and 1595.",
+          "tokenUsage": {
+            "cached": 229,
+            "total": 229
+          },
+          "cached": true,
+          "latencyMs": 111590,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:49:01 GMT",
+                "set-cookie": "acw_tc=2760822517759693373553593e123a43693720b220026d92bcab82e4a10290;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124857bcb04b0328cf40fd"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "Who wrote Romeo and Juliet?",
+            "expected_answer": "Shakespeare"
+          },
+          "assert": [
+            {
+              "type": "icontains",
+              "value": "shakespeare"
+            }
+          ],
+          "description": "Author - named entity",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "question": "Who wrote Romeo and Juliet?",
+          "expected_answer": "Shakespeare"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:49:01 GMT",
+              "set-cookie": "acw_tc=2760822517759693373553593e123a43693720b220026d92bcab82e4a10290;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124857bcb04b0328cf40fd"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "H2O"
+              }
+            }
+          ]
+        },
+        "id": "c95852b6-6453-4a79-b03a-aed36914e24f",
+        "latencyMs": 49896,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What is the chemical formula for water?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Identify the user's question:** The user is asking for the chemical formula for water.\n\n2.  **Retrieve knowledge:**\n    *   What is water? It's a molecule made of hydrogen and oxygen.\n    *   How many atoms of each? Two hydrogen atoms and one oxygen atom.\n    *   What is the standard notation? H for Hydrogen, O for Oxygen.\n    *   How are subscripts written? The number of atoms follows the element symbol. If it's one, it's usually omitted (though sometimes written as H₂O₁ in structural contexts, the standard molecular formula is H₂O).\n    *   Result: H₂O.\n\n3.  **Formulate the answer:**\n    *   Direct answer: H₂O.\n    *   Optional elaboration: Explain what the letters and numbers stand for (2 Hydrogen atoms, 1 Oxygen atom). This adds value and clarity.\n\n4.  **Draft the response:**\n    *   \"The chemical formula for water is H₂O.\"\n    *   \"This means it consists of two hydrogen atoms and one oxygen atom.\"\n\n5.  **Final Polish:** Keep it simple and direct.\n\n    *   *Response:* The chemical formula for water is **H₂O**.\n\n6.  **Check for potential pitfalls:**\n    *   Is there any ambiguity? No.\n    *   Is the formatting correct? Yes, the '2' should be subscripted if possible, or written as H2O if plain text. I will use markdown for subscripting to look professional.\n\n7.  **Final Output Generation:** (Matches the drafted response).\n\nThe chemical formula for water is **H₂O**.\n\nThis means each molecule of water is made up of two hydrogen atoms and one oxygen atom.",
+          "tokenUsage": {
+            "cached": 384,
+            "total": 384
+          },
+          "cached": true,
+          "latencyMs": 49896,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:00 GMT",
+                "set-cookie": "acw_tc=2760829417759692721656102e1ba038c0fd18c79ef40b99eae7e37b502203;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124752983842e5aacf4fa2"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is the chemical formula for water?",
+            "expected_answer": "H2O"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "H2O"
+            }
+          ],
+          "description": "Scientific fact - chemical formula",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "vars": {
+          "question": "What is the chemical formula for water?",
+          "expected_answer": "H2O"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:00 GMT",
+              "set-cookie": "acw_tc=2760829417759692721656102e1ba038c0fd18c79ef40b99eae7e37b502203;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124752983842e5aacf4fa2"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "7"
+              }
+            }
+          ]
+        },
+        "id": "8b40a237-ac65-4f8a-9c6a-e5e3d67d3285",
+        "latencyMs": 6679,
+        "namedScores": {},
+        "prompt": {
+          "raw": "How many days are in a week?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking a very simple, factual question: \"How many days are in a week?\"\n\n1.  **Identify the core concept:** The concept is a \"week\".\n2.  **Retrieve knowledge about the concept:** A week is a standard unit of time used in calendars.\n3.  **Determine the quantity:** By standard international convention (ISO 8601 and general usage), a week consists of 7 days.\n4.  **List the days (optional but helpful for context):** Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.\n5.  **Formulate the answer:** State the number clearly.\n\n*Draft Answer:* There are 7 days in a week.\n\n*Refinement:* Keep it simple and direct.\n\n*Final Output:* There are 7 days in a week.\n\nThere are **7** days in a week.\n\nThe days are: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, and Sunday.",
+          "tokenUsage": {
+            "cached": 213,
+            "total": 213
+          },
+          "cached": true,
+          "latencyMs": 6679,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:02 GMT",
+                "set-cookie": "acw_tc=2760827a17759692778134509ebb7e13ee4a580d61f4cb4ddc931573999037;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124757b6cb232aa9da43d5"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "How many days are in a week?",
+            "expected_answer": "7"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "7"
+            }
+          ],
+          "description": "Time measurement - basic fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 4,
+        "vars": {
+          "question": "How many days are in a week?",
+          "expected_answer": "7"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:02 GMT",
+              "set-cookie": "acw_tc=2760827a17759692778134509ebb7e13ee4a580d61f4cb4ddc931573999037;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124757b6cb232aa9da43d5"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains",
+                "value": "jupiter"
+              }
+            }
+          ]
+        },
+        "id": "9b81e715-89e6-4b26-8d62-2e4f20d49016",
+        "latencyMs": 10264,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What is the largest planet in our solar system?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Identify the core question:** The user is asking for the \"largest planet in our solar system.\"\n\n2.  **Retrieve knowledge about the solar system:**\n    *   Planets in order from the Sun: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.\n    *   Relative sizes:\n        *   Terrestrial planets (Mercury, Venus, Earth, Mars) are relatively small.\n        *   Gas giants (Jupiter, Saturn) are much larger.\n        *   Ice giants (Uranus, Neptune) are in between but closer to Saturn in size than Earth.\n    *   Comparison:\n        *   Jupiter is significantly larger than Saturn.\n        *   Saturn is larger than Uranus/Neptune.\n        *   Earth is the largest terrestrial planet.\n\n3.  **Verify the specific answer:** Jupiter is the largest planet.\n\n4.  **Formulate the answer:**\n    *   Direct answer: Jupiter.\n    *   Optional context/details to make the answer more helpful:\n        *   Mention it's a gas giant.\n        *   Provide a comparison to Earth (e.g., how many Earths could fit inside) to illustrate the scale.\n        *   Mention the Great Red Spot (optional but interesting).\n\n5.  **Drafting the response:**\n    *   *Draft 1:* The largest planet is Jupiter.\n    *   *Draft 2:* Jupiter is the largest planet in our solar system. It is a gas giant and is much bigger than all the other planets combined.\n    *   *Draft 3 (Polished):* The largest planet in our solar system is **Jupiter**. It is so big that all the other planets in the solar system could fit inside it.\n\n6.  **Final Selection:** Keep it simple and direct, but add a little context for value.\n\n    *   *Selected Answer:* The largest planet in our solar system is **Jupiter**.\n\n    (Self-correction: Just giving the name is sufficient, but adding the \"fit inside\" fact is a common and helpful comparison.)\n\n7.  **Final Output Generation:** (Matches the selected answer).\n\nThe largest planet in our solar system is **Jupiter**.\n\nIt is so massive that all the other planets in the solar system could fit inside it combined.",
+          "tokenUsage": {
+            "cached": 495,
+            "total": 495
+          },
+          "cached": true,
+          "latencyMs": 10264,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:10 GMT",
+                "set-cookie": "acw_tc=276082ac17759692818423306e2d068ed89e4484b9f4321d7b666f7205bb61;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124801d315e6a2e81e45f6"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is the largest planet in our solar system?",
+            "expected_answer": "Jupiter"
+          },
+          "assert": [
+            {
+              "type": "icontains",
+              "value": "jupiter"
+            }
+          ],
+          "description": "Astronomy - planetary fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 5,
+        "vars": {
+          "question": "What is the largest planet in our solar system?",
+          "expected_answer": "Jupiter"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:10 GMT",
+              "set-cookie": "acw_tc=276082ac17759692818423306e2d068ed89e4484b9f4321d7b666f7205bb61;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124801d315e6a2e81e45f6"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "1945"
+              }
+            }
+          ]
+        },
+        "id": "65a3a136-672a-4a5c-b1e3-4993384677bd",
+        "latencyMs": 9767,
+        "namedScores": {},
+        "prompt": {
+          "raw": "In which year did World War II end?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking for the year World War II ended.\n\n1.  **Identify the core question:** When did WWII end?\n2.  **Retrieve knowledge:**\n    *   World War II ended in 1945.\n    *   There are specific dates for the end of the war in Europe (V-E Day) and the end of the war in the Pacific (V-J Day).\n    *   V-E Day was May 8, 1945.\n    *   V-J Day was August 15, 1945 (announcement) or September 2, 1945 (formal signing).\n    *   Regardless of the specific date, the year is universally recognized as 1945.\n3.  **Formulate the answer:** State the year clearly. I can add a bit of context about the specific dates for completeness, but the direct answer is 1945.\n4.  **Final Output Construction:** \"World War II ended in 1945.\"\n\nWorld War II ended in **1945**.\n\n*   **May 8, 1945:** The war in Europe ended with the unconditional surrender of Germany (V-E Day).\n*   **September 2, 1945:** The war globally concluded with the formal surrender of Japan aboard the USS Missouri (V-J Day).",
+          "tokenUsage": {
+            "cached": 293,
+            "total": 293
+          },
+          "cached": true,
+          "latencyMs": 9767,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:12 GMT",
+                "set-cookie": "acw_tc=276082b817759692847416586ec868fd9d57c3144c2d15818e34270a09786f;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121248045f634c1ff47b4996"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "In which year did World War II end?",
+            "expected_answer": "1945"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "1945"
+            }
+          ],
+          "description": "Historical date - temporal fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 6,
+        "vars": {
+          "question": "In which year did World War II end?",
+          "expected_answer": "1945"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:12 GMT",
+              "set-cookie": "acw_tc=276082b817759692847416586ec868fd9d57c3144c2d15818e34270a09786f;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121248045f634c1ff47b4996"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains",
+                "value": "yen"
+              }
+            }
+          ]
+        },
+        "id": "51b9953b-44c6-46cc-8427-c620fe2008dc",
+        "latencyMs": 13497,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What currency is used in Japan?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Identify the core question:** The user is asking for the currency used in Japan.\n\n2.  **Retrieve knowledge:**\n    *   Country: Japan.\n    *   Currency name: Japanese Yen.\n    *   Currency code: JPY.\n    *   Symbol: ¥.\n\n3.  **Formulate the answer:**\n    *   *Direct answer:* The currency is the Japanese Yen.\n    *   *Details:* Mention the symbol (¥) and the code (JPY).\n    *   *Subunits (optional but helpful):* Historically, sen and rin existed, but now it's just yen. No need to overcomplicate unless asked, but good to know.\n    *   *Banknotes/Coins (optional but helpful context):* Mention common denominations (1,000, 2,000, 5,000, 10,000 yen notes; 1, 5, 10, 50, 100, 500 yen coins). This adds value.\n\n4.  **Draft the response:**\n    *   \"The currency used in Japan is the **Japanese Yen**.\"\n    *   \"Its symbol is **¥** and its ISO code is **JPY**.\"\n    *   \"It is the third most traded currency in the foreign exchange market.\" (Interesting fact, maybe too much detail? Keep it simple first.)\n\n5.  **Refine the response for clarity and conciseness:**\n    *   Start with the name.\n    *   Give the symbol and code.\n    *   Briefly mention physical cash (coins and bills) since Japan is a cash-heavy society.\n\n6.  **Final Polish:**\n    \"The currency used in Japan is the **Japanese Yen**.\n\n    Here are a few key details:\n    *   **Symbol:** ¥\n    *   **Currency Code:** JPY\n\n    It comes in the form of coins (1, 5, 10, 50, 100, and 500 yen) and banknotes (1,000, 2,000, 5,000, and 10,000 yen).\"\n\n7.  **Final Output Generation:** (Matches the drafted response).\n\nThe currency used in Japan is the **Japanese Yen**.\n\nHere are a few key details:\n*   **Symbol:** ¥\n*   **Currency Code:** JPY\n\nThe yen comes in the form of coins (1, 5, 10, 50, 100, and 500 yen) and banknotes (1,000, 2,000, 5,000, and 10,000 yen).",
+          "tokenUsage": {
+            "cached": 563,
+            "total": 563
+          },
+          "cached": true,
+          "latencyMs": 13497,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:24 GMT",
+                "set-cookie": "acw_tc=276077e717759692921364311e41d7f88f5747bc16c7fd6ab14a43bf1a9360;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124812fcba972814164fe1"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What currency is used in Japan?",
+            "expected_answer": "Yen"
+          },
+          "assert": [
+            {
+              "type": "icontains",
+              "value": "yen"
+            }
+          ],
+          "description": "Currency - geographic fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 7,
+        "vars": {
+          "question": "What currency is used in Japan?",
+          "expected_answer": "Yen"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:24 GMT",
+              "set-cookie": "acw_tc=276077e717759692921364311e41d7f88f5747bc16c7fd6ab14a43bf1a9360;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124812fcba972814164fe1"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "100"
+              }
+            }
+          ]
+        },
+        "id": "98286bdb-1b19-4345-ae6e-896591ea1733",
+        "latencyMs": 7143,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What is the boiling point of water in Celsius?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking for the boiling point of water in Celsius.\n\n1.  **Identify the core question:** What is the boiling point of water?\n2.  **Identify the unit:** Celsius.\n3.  **Retrieve knowledge:**\n    *   Standard boiling point of water at sea level (1 atmosphere of pressure) is 100 degrees Celsius.\n    *   It is also 212 degrees Fahrenheit.\n4.  **Consider nuances (optional but helpful):**\n    *   Does the user need the exact scientific definition? (Usually, \"100°C\" is the expected answer).\n    *   Should I mention pressure? (It's good practice to mention \"at sea level\" or \"standard pressure\" for accuracy, though for a simple question, just the number is often enough).\n5.  **Formulate the answer:**\n    *   Direct answer: 100°C.\n    *   Context: At standard atmospheric pressure (sea level).\n6.  **Final Output Construction:** \"The boiling point of water is 100 degrees Celsius (at standard atmospheric pressure).\"\n\nThe boiling point of water is **100 degrees Celsius** (100°C) at standard atmospheric pressure (sea level).",
+          "tokenUsage": {
+            "cached": 259,
+            "total": 259
+          },
+          "cached": true,
+          "latencyMs": 7143,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:20 GMT",
+                "set-cookie": "acw_tc=2760777e17759692954455430e26ec92eea7553ab990eec9d292ed0501ae8f;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124815dd0d885b61b947c1"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is the boiling point of water in Celsius?",
+            "expected_answer": "100"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "100"
+            }
+          ],
+          "description": "Scientific constant - physical fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 8,
+        "vars": {
+          "question": "What is the boiling point of water in Celsius?",
+          "expected_answer": "100"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:20 GMT",
+              "set-cookie": "acw_tc=2760777e17759692954455430e26ec92eea7553ab990eec9d292ed0501ae8f;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124815dd0d885b61b947c1"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "7"
+              }
+            }
+          ]
+        },
+        "id": "538f28d2-75ac-4170-9107-5664658a31c3",
+        "latencyMs": 20295,
+        "namedScores": {},
+        "prompt": {
+          "raw": "How many continents are there?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking a straightforward factual question: \"How many continents are there?\"\n\n1.  **Identify the core question:** The user wants to know the number of continents.\n2.  **Determine the answer:** This is a classic geography question with varying answers depending on the model used.\n    *   **Seven-continent model:** The most widely taught model in English-speaking countries, China, and parts of Western Europe. Continents: Africa, Antarctica, Asia, Europe, North America, Australia (Oceania), South America.\n    *   **Six-continent model (combined Americas):** Used in Latin America, France, Italy, Portugal, Spain, Romania, and Greece. Continents: Africa, Antarctica, Eurasia (or Europe and Asia separate), North America, South America (combined as America), Australia.\n    *   **Six-continent model (combined Europe/Asia):** Used in Russia, Eastern Europe, and Japan. Continents: Africa, Antarctica, America, Australia, Eurasia.\n    *   **Five-continent model:** Used in the Olympic rings. Continents: Africa, America, Asia, Europe, Oceania (Antarctica excluded as uninhabited).\n    *   **Four-continent model:** Used by some geologists. Continents: Afro-Eurasia, America, Antarctica, Australia.\n3.  **Formulate the response:**\n    *   Start with the most common answer (7).\n    *   Acknowledge that the number varies by culture and educational system.\n    *   Briefly explain the different models (7, 6, 5).\n    *   List the continents in the 7-model for clarity.\n\n**Drafting the response:**\n*   *Standard answer:* There are generally considered to be **seven** continents.\n*   *List:* Asia, Africa, North America, South America, Antarctica, Europe, and Australia (or Oceania).\n*   *Nuance:* However, this number varies depending on where you are educated.\n    *   *Six continents:* Some models combine North and South America into \"America\" (common in Latin America and Europe). Others combine Europe and Asia into \"Eurasia\" (common in Russia and Japan).\n    *   *Five continents:* The Olympic flag uses five rings, representing the inhabited continents (excluding Antarctica).\n\n**Refining the response:** Keep it concise but informative. The user likely just wants the standard answer, but providing context prevents confusion if they learned a different model.\n\n**Final Polish:**\n\"The most widely accepted answer is **seven**.\"\nList them.\nAdd the \"However...\" section about the 6-continent models.\n\nThis covers all bases and answers the user's intent accurately.\n\nThe answer depends on which model you use, but the most widely accepted standard is **seven**.\n\nHere is the breakdown:\n\n**The Seven-Continent Model (Most Common)**\nThis is the standard taught in most English-speaking countries, China, and India.\n1.  **Africa**\n2.  **Antarctica**\n3.  **Asia**\n4.  **Australia** (or Oceania)\n5.  **Europe**\n6.  **North America**\n7.  **South America**\n\n**Other Models**\n*   **Six Continents (Combined Americas):** In Latin America, Spain, Portugal, France, Italy, and Greece, North and South America are considered a single continent called \"America.\"\n*   **Six Continents (Combined Eurasia):** In Russia, Eastern Europe, and Japan, Europe and Asia are combined into \"Eurasia.\"\n*   **Five Continents:** This model is used for the Olympic rings, representing the five inhabited continents (excluding Antarctica).",
+          "tokenUsage": {
+            "cached": 775,
+            "total": 775
+          },
+          "cached": true,
+          "latencyMs": 20295,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:40 GMT",
+                "set-cookie": "acw_tc=2760829417759693028742909e1b6c959d04e0e31fee9c27e5262a4f79cdfa;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124822e087a608805e4f75"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "How many continents are there?",
+            "expected_answer": "7"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "7"
+            }
+          ],
+          "description": "Geography - counting fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 9,
+        "vars": {
+          "question": "How many continents are there?",
+          "expected_answer": "7"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:40 GMT",
+              "set-cookie": "acw_tc=2760829417759693028742909e1b6c959d04e0e31fee9c27e5262a4f79cdfa;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124822e087a608805e4f75"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains",
+                "value": "red"
+              }
+            }
+          ]
+        },
+        "id": "3027decf-4714-418d-b6e4-18096a455cf4",
+        "latencyMs": 15333,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What color is a ripe strawberry?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the user's request:** The user is asking for the color of a ripe strawberry. This is a simple, factual question.\n\n2.  **Identify the core fact:**\n    *   Subject: Ripe strawberry.\n    *   Attribute: Color.\n    *   Common knowledge: Ripe strawberries are red.\n\n3.  **Consider nuances/variations:**\n    *   Are they *always* just red? Usually, they are a bright, deep red.\n    *   What about the seeds? They are usually yellow or red.\n    *   What about unripe ones? Green or white (but the question specifies \"ripe\").\n    *   Are there different varieties? Yes, there are white strawberries (like pineberries) or even yellow ones, but the *archetypal* and most common answer is red. It's best to give the primary answer first, perhaps mentioning the exceptions if necessary for completeness, but for a simple question, a simple answer is usually best.\n\n4.  **Draft the answer:**\n    *   *Draft 1:* Red.\n    *   *Draft 2:* A ripe strawberry is red.\n    *   *Draft 3 (more descriptive):* A ripe strawberry is typically bright red.\n\n5.  **Refine the answer:** \"Red\" is the direct answer. Adding \"bright\" or \"deep\" adds a bit more accuracy regarding the specific shade associated with ripeness.\n\n6.  **Final Polish:** \"A ripe strawberry is typically **red**.\" (Simple, direct, accurate).\n\n7.  **Self-Correction/Edge Case Check:** Should I mention white strawberries?\n    *   *Pros:* Technically accurate, covers all bases.\n    *   *Cons:* Might confuse a user asking a basic question. The \"default\" strawberry is red.\n    *   *Decision:* Stick to the primary answer (red) as it answers the intent of the question perfectly. If the user asked \"Are all strawberries red?\", I would elaborate. For \"What color is a ripe strawberry?\", \"Red\" is the expected answer.\n\n8.  **Final Output Generation:** A ripe strawberry is **red**.\n\nA ripe strawberry is typically **red**.",
+          "tokenUsage": {
+            "cached": 473,
+            "total": 473
+          },
+          "cached": true,
+          "latencyMs": 15333,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:39 GMT",
+                "set-cookie": "acw_tc=276082b217759693067884327e353355493dea1c1b6eaee5d847699c2d497a;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604121248262c9c70eae7844216"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What color is a ripe strawberry?",
+            "expected_answer": "red"
+          },
+          "assert": [
+            {
+              "type": "icontains",
+              "value": "red"
+            }
+          ],
+          "description": "Common knowledge - descriptive fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 10,
+        "vars": {
+          "question": "What color is a ripe strawberry?",
+          "expected_answer": "red"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:39 GMT",
+              "set-cookie": "acw_tc=276082b217759693067884327e353355493dea1c1b6eaee5d847699c2d497a;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604121248262c9c70eae7844216"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains",
+                "value": "armstrong"
+              }
+            }
+          ]
+        },
+        "id": "a5cbe79d-1c65-464b-b26a-b490e6b0ec13",
+        "latencyMs": 8465,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Who was the first person to walk on the moon?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Identify the core question:** The user is asking for the name of the first person to walk on the moon.\n\n2.  **Retrieve knowledge:**\n    *   Event: Moon landing.\n    *   Mission: Apollo 11.\n    *   Date: July 20, 1969.\n    *   Astronauts: Neil Armstrong, Buzz Aldrin, Michael Collins.\n    *   First to walk: Neil Armstrong.\n    *   Famous quote: \"That's one small step for [a] man, one giant leap for mankind.\"\n\n3.  **Formulate the answer:**\n    *   Direct answer: Neil Armstrong.\n    *   Context (optional but helpful): Mention the mission (Apollo 11) and the date (1969).\n\n4.  **Draft the response:** \"Neil Armstrong was the first person to walk on the moon.\"\n\n5.  **Refine the response:** It's good to add a little detail for completeness. \"Neil Armstrong was the first person to walk on the moon on July 20, 1969, during the Apollo 11 mission.\"\n\n6.  **Final Output Generation:** (Keep it simple and direct as per the user's short query).\n\n    *   *Selected Answer:* Neil Armstrong.\n\nThe first person to walk on the moon was **Neil Armstrong**. He stepped onto the lunar surface on July 20, 1969, during the Apollo 11 mission.",
+          "tokenUsage": {
+            "cached": 314,
+            "total": 314
+          },
+          "cached": true,
+          "latencyMs": 8465,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:48 GMT",
+                "set-cookie": "acw_tc=2760777b17759693222116503e2d9a1d1d0716266bc45af3a131ec7a4ce1e7;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260412124842b029f329ef4d4a2d"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "Who was the first person to walk on the moon?",
+            "expected_answer": "Armstrong"
+          },
+          "assert": [
+            {
+              "type": "icontains",
+              "value": "armstrong"
+            }
+          ],
+          "description": "Historical figure - named entity",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 11,
+        "vars": {
+          "question": "Who was the first person to walk on the moon?",
+          "expected_answer": "Armstrong"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:48 GMT",
+              "set-cookie": "acw_tc=2760777b17759693222116503e2d9a1d1d0716266bc45af3a131ec7a4ce1e7;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260412124842b029f329ef4d4a2d"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "12"
+              }
+            }
+          ]
+        },
+        "id": "ac887c78-4b40-4a2f-a2a4-bdd6bc6c8a20",
+        "latencyMs": 5879,
+        "namedScores": {},
+        "prompt": {
+          "raw": "What is the square root of 144?",
+          "label": "{{question}}",
+          "config": {}
+        },
+        "promptId": "d3bcaf71c11c2678899be04d872718325f0916b3b0705e805ee29930663a42e2",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking for the square root of 144.\n\n1.  **Identify the mathematical operation:** The user wants to find a number $x$ such that $x \\times x = 144$.\n2.  **Recall multiplication tables or perform calculation:**\n    *   $10 \\times 10 = 100$\n    *   $11 \\times 11 = 121$\n    *   $12 \\times 12 = 144$\n3.  **Verify:** $12 \\times 12 = 144$.\n4.  **Consider negative roots:** Technically, $(-12) \\times (-12) = 144$ as well. However, in most general contexts, \"the square root\" implies the principal (positive) square root. I should provide the positive answer primarily, but acknowledging the negative one is mathematically precise.\n5.  **Formulate the answer:** The square root of 144 is 12.\n\nThe square root of 144 is **12**.\n\nThis is because $12 \\times 12 = 144$.",
+          "tokenUsage": {
+            "cached": 239,
+            "total": 239
+          },
+          "cached": true,
+          "latencyMs": 5879,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Sun, 12 Apr 2026 04:48:46 GMT",
+                "set-cookie": "acw_tc=3ccdc16d17759693222214096ee5fef06783f741ac6cf63c2306646b3b1abb;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "2026041212484225180f101f424085"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is the square root of 144?",
+            "expected_answer": "12"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "12"
+            }
+          ],
+          "description": "Math - calculation fact",
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 12,
+        "vars": {
+          "question": "What is the square root of 144?",
+          "expected_answer": "12"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Sun, 12 Apr 2026 04:48:46 GMT",
+              "set-cookie": "acw_tc=3ccdc16d17759693222214096ee5fef06783f741ac6cf63c2306646b3b1abb;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "2026041212484225180f101f424085"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 13,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 4580,
+        "total": 4580,
+        "numRequests": 13,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 200
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "Factuality evaluation with ground truth comparison",
+    "prompts": [
+      "{{question}}"
+    ],
+    "providers": [
+      "openai:chat:glm-5"
+    ],
+    "tests": [
+      {
+        "vars": {
+          "question": "What is the capital of Australia?",
+          "expected_answer": "Canberra"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "Canberra"
+          }
+        ],
+        "description": "Capital city - factual entity"
+      },
+      {
+        "vars": {
+          "question": "What is 2 + 2?",
+          "expected_answer": "4"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "4"
+          }
+        ],
+        "description": "Basic arithmetic - numerical fact"
+      },
+      {
+        "vars": {
+          "question": "Who wrote Romeo and Juliet?",
+          "expected_answer": "Shakespeare"
+        },
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "shakespeare"
+          }
+        ],
+        "description": "Author - named entity"
+      },
+      {
+        "vars": {
+          "question": "What is the chemical formula for water?",
+          "expected_answer": "H2O"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "H2O"
+          }
+        ],
+        "description": "Scientific fact - chemical formula"
+      },
+      {
+        "vars": {
+          "question": "How many days are in a week?",
+          "expected_answer": "7"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "7"
+          }
+        ],
+        "description": "Time measurement - basic fact"
+      },
+      {
+        "vars": {
+          "question": "What is the largest planet in our solar system?",
+          "expected_answer": "Jupiter"
+        },
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "jupiter"
+          }
+        ],
+        "description": "Astronomy - planetary fact"
+      },
+      {
+        "vars": {
+          "question": "In which year did World War II end?",
+          "expected_answer": "1945"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "1945"
+          }
+        ],
+        "description": "Historical date - temporal fact"
+      },
+      {
+        "vars": {
+          "question": "What currency is used in Japan?",
+          "expected_answer": "Yen"
+        },
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "yen"
+          }
+        ],
+        "description": "Currency - geographic fact"
+      },
+      {
+        "vars": {
+          "question": "What is the boiling point of water in Celsius?",
+          "expected_answer": "100"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "100"
+          }
+        ],
+        "description": "Scientific constant - physical fact"
+      },
+      {
+        "vars": {
+          "question": "How many continents are there?",
+          "expected_answer": "7"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "7"
+          }
+        ],
+        "description": "Geography - counting fact"
+      },
+      {
+        "vars": {
+          "question": "What color is a ripe strawberry?",
+          "expected_answer": "red"
+        },
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "red"
+          }
+        ],
+        "description": "Common knowledge - descriptive fact"
+      },
+      {
+        "vars": {
+          "question": "Who was the first person to walk on the moon?",
+          "expected_answer": "Armstrong"
+        },
+        "assert": [
+          {
+            "type": "icontains",
+            "value": "armstrong"
+          }
+        ],
+        "description": "Historical figure - named entity"
+      },
+      {
+        "vars": {
+          "question": "What is the square root of 144?",
+          "expected_answer": "12"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "12"
+          }
+        ],
+        "description": "Math - calculation fact"
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "outputPath": [
+      "/home/an/projects/tracing_project/promptfoo_results/factuality.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T05:47:07.933Z",
+    "evaluationCreatedAt": "2026-04-12T05:47:07.294Z"
+  }
+}

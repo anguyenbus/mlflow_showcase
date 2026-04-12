@@ -1,0 +1,65 @@
+[
+  {
+    "question": "What is the Goods and Services Tax (GST) rate in Australia?",
+    "contexts": [
+      "GST is a broad-based tax of 10% on most goods, services and other items in Australia.",
+      "Some goods and services are GST-free, including basic food, some medical services, and some educational courses."
+    ],
+    "response": "The GST rate in Australia is 10% for most goods and services, though some items are GST-free.",
+    "reference_answer": "The GST rate is 10%, with certain items being GST-free such as basic food and medical services."
+  },
+  {
+    "question": "What are the Australian income tax rates for the 2024-25 financial year?",
+    "contexts": [
+      "For the 2024-25 financial year, income tax rates are: 0% on income up to $18,200, 19% on income between $18,201 and $45,000, 32.5% on income between $45,001 and $120,000, 37% on income between $120,001 and $180,000, and 45% on income over $180,000."
+    ],
+    "response": "For 2024-25, Australian income tax rates range from 0% on income up to $18,200 to 45% on income over $180,000, with intermediate rates of 19%, 32.5%, and 37%.",
+    "reference_answer": "Income tax rates for 2024-25 are 0% up to $18,200, 19% ($18,201-$45,000), 32.5% ($45,001-$120,000), 37% ($120,001-$180,000), and 45% (over $180,000)."
+  },
+  {
+    "question": "What work-related expenses can I claim as tax deductions in Australia?",
+    "contexts": [
+      "Common work-related expenses include vehicle and travel expenses, clothing and laundry expenses, home office expenses, and self-education expenses.",
+      "You must have spent the money yourself and it must be directly related to earning your income.",
+      "You must have records to prove your expenses."
+    ],
+    "response": "You can claim work-related expenses such as vehicle and travel costs, work clothing, home office expenses, and self-education costs, provided they're directly related to your work and you have proper records.",
+    "reference_answer": "Deductible work expenses include vehicle/travel, work clothing, home office, and self-education costs, provided they're work-related and documented."
+  },
+  {
+    "question": "Do I need a Tax File Number (TFN) in Australia?",
+    "contexts": [
+      "A Tax File Number (TFN) is a unique identifier issued by the Australian Taxation Office (ATO) to individuals and organisations.",
+      "While it's not mandatory to have a TFN, not having one means your employer may withhold tax at the highest rate.",
+      "You can apply for a TFN online through the ATO website if you meet certain eligibility criteria."
+    ],
+    "response": "While a TFN is not legally mandatory, it's highly recommended as without one you'll pay higher tax rates. You can apply online through the ATO."
+  },
+  {
+    "question": "How is capital gains tax (CGT) calculated in Australia?",
+    "contexts": [
+      "Capital gains tax is the tax you pay on profits from selling assets like property or shares.",
+      "CGT is calculated as the difference between the sale price and the cost base, which includes the purchase price plus acquisition costs.",
+      "Assets held longer than 12 months may qualify for a 50% CGT discount for individuals."
+    ],
+    "response": "CGT is calculated on the profit from selling assets. For assets held over 12 months, individuals generally get a 50% discount on the taxable gain."
+  },
+  {
+    "question": "What are the tax implications for foreign residents earning income in Australia?",
+    "contexts": [
+      "Foreign residents are generally taxed at a higher rate than Australian residents on their Australian-sourced income.",
+      "Foreign residents cannot claim the tax-free threshold of $18,200.",
+      "Foreign residents may be subject to withholding tax on certain types of income at rates of 10% to 30% depending on the income type."
+    ],
+    "response": "Foreign residents pay higher tax rates on Australian income, cannot access the tax-free threshold, and may have withholding tax applied to certain income types."
+  },
+  {
+    "question": "What is the Medicare levy and how much do I pay?",
+    "contexts": [
+      "The Medicare levy is 2% of your taxable income and helps fund Australia's public healthcare system.",
+      "Some individuals may pay a reduced Medicare levy or be exempt based on their income and circumstances.",
+      "High-income earners without private health insurance may also pay the Medicare levy surcharge."
+    ],
+    "response": "The standard Medicare levy is 2% of taxable income, though some people may qualify for reductions or exemptions depending on their circumstances."
+  }
+]

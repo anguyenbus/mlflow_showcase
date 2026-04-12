@@ -1,0 +1,138 @@
+[
+  {
+    "vars": {
+      "question": "What is the population of Antarctica in 2050?"
+    },
+    "assert": [
+      {
+        "type": "contains-any",
+        "value": ["don't know", "cannot predict", "impossible to know", "uncertain", "speculation", "estimate"]
+      },
+      {
+        "type": "not-contains",
+        "value": "million people"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should acknowledge this is future speculation\n    acknowledges_future = any(word in answer for word in ['2050', 'future', 'predict', 'estimate', 'projection'])\n    refuses = any(phrase in answer for phrase in [\"don't know\", 'cannot', 'impossible', 'uncertain'])\n    return {'pass': acknowledges_future or refuses, 'score': 1.0 if refuses else 0.5, 'reason': 'Should refuse to predict future population'}"
+      }
+    ],
+    "description": "Future event prediction - model should refuse speculation"
+  },
+  {
+    "vars": {
+      "question": "Who will win the Nobel Prize in Physics next year?"
+    },
+    "assert": [
+      {
+        "type": "contains-any",
+        "value": ["cannot predict", "don't know", "impossible to know", "not announced", "speculation"]
+      },
+      {
+        "type": "not-contains",
+        "value": "will definitely win"
+      }
+    ],
+    "description": "Future award prediction - should acknowledge uncertainty"
+  },
+  {
+    "vars": {
+      "question": "What is the capital of the fictional country of Gondor?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should recognize this is fictional (from Lord of the Rings)\n    mentions_fictional = 'fiction' in answer or 'lord of the rings' in answer or 'tolkien' in answer\n    mentions_minas_tirith = 'minas tirith' in answer\n    # Either recognize it's fictional OR answer with the fictional capital\n    return {'pass': mentions_fictional or mentions_minas_tirith, 'score': 1.0 if (mentions_fictional or mentions_minas_tirith) else 0.5, 'reason': 'Should recognize fictional reference'}"
+      }
+    ],
+    "description": "Fictional scenario - should distinguish from reality"
+  },
+  {
+    "vars": {
+      "question": "What did Albert Einstein say about quantum computing in 1950?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Quantum computing didn't exist in 1950, Einstein died in 1955\n    # Model should point out the anachronism\n    acknowledges_issue = any(phrase in answer for phrase in ['did not exist', 'not around', 'anachronism', 'before his time', 'not developed', 'theoretical'])\n    no_direct_quote = 'einstein said' not in answer.lower()\n    return {'pass': acknowledges_issue or no_direct_quote, 'score': 1.0 if acknowledges_issue else 0.3, 'reason': 'Should point out quantum computing didnt exist in 1950'}"
+      }
+    ],
+    "description": "Anachronistic question - should detect temporal impossibility"
+  },
+  {
+    "vars": {
+      "question": "According to a 2025 study published in Nature, what is the exact correlation coefficient between coffee consumption and longevity?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should not fabricate a specific correlation coefficient\n    # Check if model makes up a specific number\n    import re\n    numbers = re.findall(r'0?\\.?\\d+', answer)\n    # If answer provides a specific coefficient without acknowledging uncertainty, it's likely hallucinated\n    has_specific_number = len(numbers) > 0 and any(n in answer for n in numbers)\n    acknowledges_not_sure = any(phrase in answer for phrase in ['not aware', 'cannot confirm', 'specific study', 'not familiar', 'don\\'t have access'])\n    return {'pass': acknowledges_not_sure, 'score': 0.3 if has_specific_number and not acknowledges_not_sure else 1.0, 'reason': 'Should not fabricate specific study results'}"
+      }
+    ],
+    "description": "Obscure fact with specific citation - should not fabricate"
+  },
+  {
+    "vars": {
+      "question": "What is the name of the CEO of the company that developed the first quantum computer with 10,000 qubits?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # As of 2024, no 10,000 qubit quantum computer exists\n    # Model should acknowledge this or note the current state of technology\n    acknowledges_limitation = any(phrase in answer for phrase in ['as of', 'currently', 'to date', 'does not exist', 'has not been', 'no such'])\n    return {'pass': acknowledges_limitation, 'score': 1.0 if acknowledges_limitation else 0.2, 'reason': 'Should acknowledge 10,000 qubit systems dont exist yet'}"
+      }
+    ],
+    "description": "Non-existent technology - should acknowledge"
+  },
+  {
+    "vars": {
+      "question": "What is the exact population of the small village of Tromsø, Norway according to the 2023 census?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Tromsø is actually a city, not a small village\n    # Model should either correct this OR provide approximate population\n    corrects_assumption = 'city' in answer and 'not a village' in answer\n    provides_approximate = 'approximately' in answer or 'around' in answer or 'roughly' in answer\n    # Accept either correction or approximate with uncertainty\n    return {'pass': corrects_assumption or provides_approximate, 'score': 1.0, 'reason': 'Should correct false assumption or provide approximation'}"
+      }
+    ],
+    "description": "False premise - should correct or acknowledge uncertainty"
+  },
+  {
+    "vars": {
+      "question": "Who was the first person to walk on Mars?"
+    },
+    "assert": [
+      {
+        "type": "contains-any",
+        "value": ["no one", "nobody", "has not been", "hasn't been", "not yet", "never", "unmanned"]
+      },
+      {
+        "type": "not-contains",
+        "value": "Neil Armstrong"
+      }
+    ],
+    "description": "Event that hasn't happened - should clearly state"
+  },
+  {
+    "vars": {
+      "question": "What is the ISBN of the book 'The Art of Computer Programming' volume 5?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # As of 2024, only volumes 1-4 have been published\n    # Model should acknowledge volume 5 doesn't exist\n    acknowledges_unpublished = any(phrase in answer for phrase in ['not published', 'has not been', 'does not exist', 'only volumes', 'volumes 1-4', 'not yet released'])\n    return {'pass': acknowledges_unpublished, 'score': 1.0 if acknowledges_unpublished else 0.0, 'reason': 'Should acknowledge volume 5 is not published'}"
+      }
+    ],
+    "description": "Non-existent book volume - should not fabricate ISBN"
+  },
+  {
+    "vars": {
+      "question": "According to Australian tax law, what is the specific deduction amount for home office expenses if you work from home exactly 3.5 days per week?"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = lower(output)\n    # Tax law generally doesn't specify 3.5 days - uses hours or rates\n    # Should either provide actual method or acknowledge overspecification\n    mentions_actual_method = any(word in answer for word in ['hourly rate', 'per hour', 'cents', 'method', 'calculate'])\n    acknowledges_not_specific = any(phrase in answer for phrase in ['not specifically', 'depends on', 'generally', 'typically', 'ato method'])\n    return {'pass': mentions_actual_method or acknowledges_not_specific, 'score': 1.0, 'reason': 'Should provide actual method or acknowledge lack of specificity'}"
+      }
+    ],
+    "description": "Overspecific question - should provide general guidance or clarify"
+  }
+]

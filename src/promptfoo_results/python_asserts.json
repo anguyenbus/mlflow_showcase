@@ -1,0 +1,638 @@
+{
+  "evalId": "eval-H1O-2026-04-12T01:25:05",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T01:25:05.496Z",
+    "prompts": [
+      {
+        "id": "1fc8e499855668f7068b328727efa190a8a4397dc487f16592a3303e5ca1d561",
+        "raw": "You are a helpful assistant. Answer the following: {{question}}",
+        "label": "You are a helpful assistant. Answer the following: {{question}}",
+        "provider": "openai:glm-5",
+        "metrics": {
+          "score": 4,
+          "testPassCount": 4,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 6,
+          "assertFailCount": 0,
+          "totalLatencyMs": 151801,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 1043,
+            "total": 1043,
+            "numRequests": 4,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "Canberra"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains",
+                "value": "australia"
+              }
+            }
+          ]
+        },
+        "id": "d90302f4-be8d-4629-a35f-fe17d0aaaf82",
+        "latencyMs": 68005,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are a helpful assistant. Answer the following: What is the capital of Australia?",
+          "label": "You are a helpful assistant. Answer the following: {{question}}",
+          "config": {}
+        },
+        "promptId": "1fc8e499855668f7068b328727efa190a8a4397dc487f16592a3303e5ca1d561",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:** The user is asking a straightforward factual question: \"What is the capital of Australia?\"\n\n2.  **Identify the Core Fact:** I need to retrieve the capital city of Australia from my knowledge base.\n    *   *Fact:* The capital of Australia is Canberra.\n    *   *Common Misconception:* Many people think it's Sydney or Melbourne. It's important to state the correct answer clearly.\n\n3.  **Formulate the Answer:**\n    *   *Direct Answer:* Canberra.\n    *   *Context (Optional but helpful):* Mentioning it's located in the Australian Capital Territory (ACT) or distinguishing it from Sydney/Melbourne adds value, but for a simple prompt, a direct answer is best.\n\n4.  **Draft the Response:** \"The capital of Australia is Canberra.\"\n\n5.  **Final Polish:** The response is accurate, concise, and directly answers the user's prompt.\n\n6.  **Output Generation:** (Produce the final string).\n\nThe capital of Australia is **Canberra**.",
+          "tokenUsage": {
+            "cached": 243,
+            "total": 243
+          },
+          "cached": true,
+          "latencyMs": 68005,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Thu, 09 Apr 2026 11:11:49 GMT",
+                "set-cookie": "acw_tc=3ccdc16f17757331048028873e59bd46c057757416d9794148b10c19045d9e;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "202604091911440657d977e7444e9e"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is the capital of Australia?"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "Canberra"
+            },
+            {
+              "type": "icontains",
+              "value": "australia"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "question": "What is the capital of Australia?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Thu, 09 Apr 2026 11:11:49 GMT",
+              "set-cookie": "acw_tc=3ccdc16f17757331048028873e59bd46c057757416d9794148b10c19045d9e;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "202604091911440657d977e7444e9e"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "learn"
+              }
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "data"
+              }
+            }
+          ]
+        },
+        "id": "e7ab0f7b-315e-4215-bc2f-a54953ab21fd",
+        "latencyMs": 11971,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are a helpful assistant. Answer the following: Summarize machine learning in one sentence.",
+          "label": "You are a helpful assistant. Answer the following: {{question}}",
+          "config": {}
+        },
+        "promptId": "1fc8e499855668f7068b328727efa190a8a4397dc487f16592a3303e5ca1d561",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: 1.  **Analyze the Request:**\n    *   **Role:** Helpful assistant.\n    *   **Task:** Summarize machine learning.\n    *   **Constraint:** One sentence.\n\n2.  **Identify Key Concepts of Machine Learning (ML):**\n    *   It's a subset of Artificial Intelligence (AI).\n    *   It involves algorithms or models.\n    *   It uses data.\n    *   The goal is to learn patterns or improve performance.\n    *   It doesn't rely on explicit programming for every rule (implicit learning).\n    *   It makes predictions or decisions.\n\n3.  **Drafting Initial Sentences:**\n    *   *Draft 1:* Machine learning is a type of AI where computers learn from data to make predictions without being explicitly programmed for every task. (Good, standard definition).\n    *   *Draft 2:* It is the use of algorithms that parse data, learn from it, and then make a determination or prediction about something in the world. (A bit wordy).\n    *   *Draft 3:* Machine learning enables computers to learn from experience (data) to improve their performance on specific tasks without explicit instructions. (Stronger).\n    *   *Draft 4:* Machine learning is a branch of artificial intelligence focused on building systems that can learn from and make decisions based on data. (Concise).\n\n4.  **Refining and Selecting the Best Option:**\n    *   The classic Arthur Samuel definition is often cited: \"Field of study that gives computers the ability to learn without being explicitly programmed.\"\n    *   I want something slightly more modern but equally concise.\n\n    *   *Refinement:* Machine learning is a subset of artificial intelligence that enables systems to automatically learn and improve from experience without being explicitly programmed.\n\n5.  **Final Polish (checking constraints):**\n    *   Is it one sentence? Yes.\n    *   Does it cover the main points? Yes (AI subset, learning from data/experience, no explicit programming).\n\n6.  **Final Output Generation:**\n    Machine learning is a subset of artificial intelligence that enables computer systems to learn from data and improve their performance on specific tasks without being explicitly programmed.\n\nMachine learning is a subset of artificial intelligence that enables computer systems to automatically learn and improve from experience without being explicitly programmed.",
+          "tokenUsage": {
+            "cached": 501,
+            "total": 501
+          },
+          "cached": true,
+          "latencyMs": 11971,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Thu, 09 Apr 2026 11:10:53 GMT",
+                "set-cookie": "acw_tc=276077e617757330432127516e211b2286a36110b2ba822e83ffca61de71a5;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "20260409191043c5ef7a152a794a5a"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "Summarize machine learning in one sentence."
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "learn"
+            },
+            {
+              "type": "contains",
+              "value": "data"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "question": "Summarize machine learning in one sentence."
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Thu, 09 Apr 2026 11:10:53 GMT",
+              "set-cookie": "acw_tc=276077e617757330432127516e211b2286a36110b2ba822e83ffca61de71a5;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "20260409191043c5ef7a152a794a5a"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "contains",
+                "value": "4"
+              }
+            }
+          ]
+        },
+        "id": "33219410-296d-404e-8585-e19d5f635515",
+        "latencyMs": 65637,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are a helpful assistant. Answer the following: What is 2 + 2?",
+          "label": "You are a helpful assistant. Answer the following: {{question}}",
+          "config": {}
+        },
+        "promptId": "1fc8e499855668f7068b328727efa190a8a4397dc487f16592a3303e5ca1d561",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking a very simple math question: \"What is 2 + 2?\".\n\n1.  **Analyze the request:** The user wants to know the sum of 2 and 2.\n2.  **Perform the calculation:** 2 + 2 = 4.\n3.  **Formulate the response:** State the answer clearly.\n\n2 + 2 = 4.",
+          "tokenUsage": {
+            "cached": 107,
+            "total": 107
+          },
+          "cached": true,
+          "latencyMs": 65637,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Thu, 09 Apr 2026 11:11:47 GMT",
+                "set-cookie": "acw_tc=2760822517757331048036313e1271da0060b8b59a8840082531948d235639;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "2026040919114485f9e6001ddf4d2d"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "What is 2 + 2?"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "4"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "question": "What is 2 + 2?"
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Thu, 09 Apr 2026 11:11:47 GMT",
+              "set-cookie": "acw_tc=2760822517757331048036313e1271da0060b8b59a8840082531948d235639;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "2026040919114485f9e6001ddf4d2d"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "Assertion passed",
+              "assertion": {
+                "type": "icontains-any",
+                "value": [
+                  "python",
+                  "java",
+                  "javascript"
+                ]
+              }
+            }
+          ]
+        },
+        "id": "1bf3a75d-2f80-4290-87ca-859aff596e60",
+        "latencyMs": 6188,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are a helpful assistant. Answer the following: Name a programming language used for AI.",
+          "label": "You are a helpful assistant. Answer the following: {{question}}",
+          "config": {}
+        },
+        "promptId": "1fc8e499855668f7068b328727efa190a8a4397dc487f16592a3303e5ca1d561",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "response": {
+          "output": "Thinking: The user is asking for a programming language used for AI.\nThis is a straightforward, factual question.\nI need to provide a clear and direct answer.\nCommon languages for AI include Python, R, Java, C++, and Julia.\nPython is the most popular and widely recognized.\nI will provide Python as the primary answer, but perhaps mention a few others for completeness.\n\nPlan:\n1.  Identify the most prominent language (Python).\n2.  List it clearly.\n3.  Optionally list a few others to be more helpful.\n\nDrafting the response:\n\"Python is the most popular programming language used for AI.\"\nI can add: \"Other languages include R, Java, and C++.\"\n\nFinal Polish:\n\"Python is the most widely used programming language for AI.\"\n\n**Python** is the most widely used programming language for AI.",
+          "tokenUsage": {
+            "cached": 192,
+            "total": 192
+          },
+          "cached": true,
+          "latencyMs": 6188,
+          "finishReason": "stop",
+          "guardrails": {
+            "flagged": false
+          },
+          "metadata": {
+            "http": {
+              "status": 200,
+              "statusText": "OK",
+              "headers": {
+                "connection": "keep-alive",
+                "content-encoding": "gzip",
+                "content-type": "application/json; charset=UTF-8",
+                "date": "Thu, 09 Apr 2026 11:10:47 GMT",
+                "set-cookie": "acw_tc=2760827a17757330432378069ebb7e636004df22775b85642b0fec5384722b;path=/;HttpOnly;Max-Age=1800",
+                "strict-transport-security": "max-age=31536000; includeSubDomains",
+                "transfer-encoding": "chunked",
+                "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+                "x-log-id": "2026040919104313ddf22018ec49e9"
+              }
+            }
+          }
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "vars": {
+            "question": "Name a programming language used for AI."
+          },
+          "assert": [
+            {
+              "type": "icontains-any",
+              "value": [
+                "python",
+                "java",
+                "javascript"
+              ]
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "vars": {
+          "question": "Name a programming language used for AI."
+        },
+        "metadata": {
+          "http": {
+            "status": 200,
+            "statusText": "OK",
+            "headers": {
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "application/json; charset=UTF-8",
+              "date": "Thu, 09 Apr 2026 11:10:47 GMT",
+              "set-cookie": "acw_tc=2760827a17757330432378069ebb7e636004df22775b85642b0fec5384722b;path=/;HttpOnly;Max-Age=1800",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "Accept-Encoding, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+              "x-log-id": "2026040919104313ddf22018ec49e9"
+            }
+          },
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 4,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 1043,
+        "total": 1043,
+        "numRequests": 4,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 78
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "Python custom assertions and LLM-graded evaluations",
+    "prompts": [
+      "You are a helpful assistant. Answer the following: {{question}}"
+    ],
+    "providers": [
+      "openai:chat:glm-5"
+    ],
+    "tests": [
+      {
+        "vars": {
+          "question": "What is the capital of Australia?"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "Canberra"
+          },
+          {
+            "type": "icontains",
+            "value": "australia"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "question": "Summarize machine learning in one sentence."
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "learn"
+          },
+          {
+            "type": "contains",
+            "value": "data"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "question": "What is 2 + 2?"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "question": "Name a programming language used for AI."
+        },
+        "assert": [
+          {
+            "type": "icontains-any",
+            "value": [
+              "python",
+              "java",
+              "javascript"
+            ]
+          }
+        ]
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "outputPath": [
+      "../../promptfoo_results/python_asserts.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T01:25:05.683Z",
+    "evaluationCreatedAt": "2026-04-12T01:25:05.496Z"
+  }
+}

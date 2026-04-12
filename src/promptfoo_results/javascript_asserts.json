@@ -1,0 +1,288 @@
+{
+  "evalId": "eval-H63-2026-04-12T01:19:41",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-12T01:19:41.141Z",
+    "prompts": [
+      {
+        "id": "e8ddfa4d0dadea891d55160f96e211d8582220fffc680a811d4a33deafdeedeb",
+        "raw": "Answer the question: {{question}}",
+        "label": "Answer the question: {{question}}",
+        "provider": "openai:glm-5",
+        "metrics": {
+          "score": 0,
+          "testPassCount": 0,
+          "testFailCount": 0,
+          "testErrorCount": 3,
+          "assertPassCount": 0,
+          "assertFailCount": 0,
+          "totalLatencyMs": 0,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "total": 0,
+            "numRequests": 0,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "0f4b3c5c-9d16-4ac9-9a9d-8adde9cbcee2",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Answer the question: What is the capital of France?",
+          "label": "Answer the question: {{question}}",
+          "config": {}
+        },
+        "promptId": "e8ddfa4d0dadea891d55160f96e211d8582220fffc680a811d4a33deafdeedeb",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "question": "What is the capital of France?"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "Paris"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "question": "What is the capital of France?"
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      },
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "aa621e57-1a73-46ef-8c82-011fe11e24c3",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Answer the question: What is 5 + 7?",
+          "label": "Answer the question: {{question}}",
+          "config": {}
+        },
+        "promptId": "e8ddfa4d0dadea891d55160f96e211d8582220fffc680a811d4a33deafdeedeb",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "question": "What is 5 + 7?"
+          },
+          "assert": [
+            {
+              "type": "contains",
+              "value": "12"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "question": "What is 5 + 7?"
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      },
+      {
+        "cost": 0,
+        "error": "Error: API key is not set. Set the OPENAI_API_KEY environment variable or add `apiKey` to the provider config.\n    at OpenAiChatCompletionProvider.callApi (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/chat-BReGLly7.js:499:57)\n    at file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:107\n    at ProviderRateLimitState.executeWithRetry (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5520:26)\n    at async RateLimitRegistry.execute (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/providers-BVqrddQM.js:5826:19)\n    at async runEval (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:3661:38)\n    at async processEvalStep (file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4246:17)\n    at async file:///home/an/.npm/_npx/1ddbeaccabfe00a4/node_modules/promptfoo/dist/src/evaluator-U43FIjA2.js:4447:5",
+        "gradingResult": null,
+        "id": "be764671-b487-4eff-af9a-5a2cd130fdf4",
+        "latencyMs": 0,
+        "namedScores": {},
+        "prompt": {
+          "raw": "Answer the question: Name a primary color.",
+          "label": "Answer the question: {{question}}",
+          "config": {}
+        },
+        "promptId": "e8ddfa4d0dadea891d55160f96e211d8582220fffc680a811d4a33deafdeedeb",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openai:glm-5",
+          "label": ""
+        },
+        "score": 0,
+        "success": false,
+        "testCase": {
+          "vars": {
+            "question": "Name a primary color."
+          },
+          "assert": [
+            {
+              "type": "icontains-any",
+              "value": [
+                "red",
+                "blue",
+                "yellow"
+              ]
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "question": "Name a primary color."
+        },
+        "metadata": {
+          "errorContext": {
+            "providerId": "openai:glm-5",
+            "providerLabel": ""
+          }
+        },
+        "failureReason": 2
+      }
+    ],
+    "stats": {
+      "successes": 0,
+      "failures": 0,
+      "errors": 3,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 0,
+        "total": 0,
+        "numRequests": 0,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 38
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "JavaScript assertions for cross-platform compatibility",
+    "prompts": [
+      "Answer the question: {{question}}"
+    ],
+    "providers": [
+      "openai:chat:glm-5"
+    ],
+    "tests": [
+      {
+        "vars": {
+          "question": "What is the capital of France?"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "Paris"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "question": "What is 5 + 7?"
+        },
+        "assert": [
+          {
+            "type": "contains",
+            "value": "12"
+          }
+        ]
+      },
+      {
+        "vars": {
+          "question": "Name a primary color."
+        },
+        "assert": [
+          {
+            "type": "icontains-any",
+            "value": [
+              "red",
+              "blue",
+              "yellow"
+            ]
+          }
+        ]
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "outputPath": [
+      "../../promptfoo_results/javascript_asserts.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v22.20.0",
+    "platform": "linux",
+    "arch": "x64",
+    "exportedAt": "2026-04-12T01:19:41.255Z",
+    "evaluationCreatedAt": "2026-04-12T01:19:41.141Z"
+  }
+}

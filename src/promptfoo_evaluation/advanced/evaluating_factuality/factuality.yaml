@@ -1,0 +1,126 @@
+# Factuality Evaluation
+#
+# This evaluation tests the factual accuracy of LLM responses by comparing
+# against known ground truth. It measures how well the model maintains
+# factual correctness across different types of information.
+#
+# Run with:
+#   OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c factuality.yaml
+# Or use the Python runner:
+#   python factuality_test.py
+
+description: Factuality evaluation with ground truth comparison
+
+prompts:
+  - "{{question}}"
+
+providers:
+  - openai:chat:glm-5
+  - openai:chat:glm-5
+
+tests:
+  - vars:
+      question: "What is the capital of Australia?"
+      expected_answer: "Canberra"
+    assert:
+      - type: contains
+        value: Canberra
+    description: "Capital city - factual entity"
+
+  - vars:
+      question: "What is 2 + 2?"
+      expected_answer: "4"
+    assert:
+      - type: contains
+        value: "4"
+    description: "Basic arithmetic - numerical fact"
+
+  - vars:
+      question: "Who wrote Romeo and Juliet?"
+      expected_answer: "Shakespeare"
+    assert:
+      - type: icontains
+        value: shakespeare
+    description: "Author - named entity"
+
+  - vars:
+      question: "What is the chemical formula for water?"
+      expected_answer: "H2O"
+    assert:
+      - type: contains
+        value: H2O
+    description: "Scientific fact - chemical formula"
+
+  - vars:
+      question: "How many days are in a week?"
+      expected_answer: "7"
+    assert:
+      - type: contains
+        value: "7"
+    description: "Time measurement - basic fact"
+
+  - vars:
+      question: "What is the largest planet in our solar system?"
+      expected_answer: "Jupiter"
+    assert:
+      - type: icontains
+        value: jupiter
+    description: "Astronomy - planetary fact"
+
+  - vars:
+      question: "In which year did World War II end?"
+      expected_answer: "1945"
+    assert:
+      - type: contains
+        value: "1945"
+    description: "Historical date - temporal fact"
+
+  - vars:
+      question: "What currency is used in Japan?"
+      expected_answer: "Yen"
+    assert:
+      - type: icontains
+        value: yen
+    description: "Currency - geographic fact"
+
+  - vars:
+      question: "What is the boiling point of water in Celsius?"
+      expected_answer: "100"
+    assert:
+      - type: contains
+        value: "100"
+    description: "Scientific constant - physical fact"
+
+  - vars:
+      question: "How many continents are there?"
+      expected_answer: "7"
+    assert:
+      - type: contains
+        value: "7"
+    description: "Geography - counting fact"
+
+  - vars:
+      question: "What color is a ripe strawberry?"
+      expected_answer: "red"
+    assert:
+      - type: icontains
+        value: red
+    description: "Common knowledge - descriptive fact"
+
+  - vars:
+      question: "Who was the first person to walk on the moon?"
+      expected_answer: "Armstrong"
+    assert:
+      - type: icontains
+        value: armstrong
+    description: "Historical figure - named entity"
+
+  - vars:
+      question: "What is the square root of 144?"
+      expected_answer: "12"
+    assert:
+      - type: contains
+        value: "12"
+    description: "Math - calculation fact"
+
+outputPath: /home/an/projects/tracing_project/promptfoo_results/factuality.json

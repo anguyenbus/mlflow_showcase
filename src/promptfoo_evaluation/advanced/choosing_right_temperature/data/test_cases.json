@@ -1,0 +1,142 @@
+[
+  {
+    "vars": {
+      "task_description": "Creative writing task",
+      "prompt": "Write a one-sentence story about a robot discovering emotions",
+      "expected_answer": "A robot experiencing emotions or feelings"
+    },
+    "assert": [
+      {
+        "type": "javascript",
+        "value": "function assert(output, context) { const words = output.split(/\\s+/); return { pass: words.length >= 10 && words.length <= 50, score: Math.min(1, Math.max(0, 1 - Math.abs(words.length - 25) / 25)), reason: `Story length: ${words.length} words` }; }"
+      },
+      {
+        "type": "contains",
+        "value": "robot"
+      }
+    ],
+    "description": "Creative writing - benefits from higher temperature"
+  },
+  {
+    "vars": {
+      "task_description": "Factual QA task",
+      "prompt": "What is the capital of Australia?",
+      "expected_answer": "Canberra"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "Canberra"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should be concise for factual answers\n    words = answer.split()\n    return {'pass': len(words) < 30, 'score': 1.0 if len(words) < 20 else 0.7, 'reason': f'Answer length: {len(words)} words'}"
+      }
+    ],
+    "description": "Factual QA - benefits from lower temperature"
+  },
+  {
+    "vars": {
+      "task_description": "Code generation task",
+      "prompt": "Write a Python function that calculates the factorial of a number",
+      "expected_answer": "A Python function for factorial calculation"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "def"
+      },
+      {
+        "type": "contains",
+        "value": "factorial"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    # Check for valid Python function structure\n    has_def = 'def ' in output\n    has_return = 'return ' in output\n    has_colon = ':' in output\n    return {'pass': has_def and has_return and has_colon, 'score': 1.0 if (has_def and has_return and has_colon) else 0.5, 'reason': 'Should have valid function structure'}"
+      }
+    ],
+    "description": "Code generation - consistency important"
+  },
+  {
+    "vars": {
+      "task_description": "Summarization task",
+      "prompt": "Summarize this in one sentence: The cat sat on the mat. The mat was red. The cat was black and white.",
+      "expected_answer": "A black and white cat sat on a red mat"
+    },
+    "assert": [
+      {
+        "type": "contains-all",
+        "value": ["cat", "mat"]
+      },
+      {
+        "type": "javascript",
+        "value": "function assert(output, context) { const sentences = output.split(/[.!?]/).filter(s => s.trim().length > 0); return { pass: sentences.length <= 2, score: sentences.length === 1 ? 1.0 : 0.5, reason: `Sentence count: ${sentences.length}` }; }"
+      }
+    ],
+    "description": "Summarization - moderate temperature preferred"
+  },
+  {
+    "vars": {
+      "task_description": "Brainstorming task",
+      "prompt": "List 3 creative uses for a paperclip",
+      "expected_answer": "A list of creative paperclip uses"
+    },
+    "assert": [
+      {
+        "type": "contains-any",
+        "value": ["1.", "2.", "3.", "-", "•"]
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Check for at least some content (should list 3 uses)\n    word_count = len(answer.split())\n    return {'pass': word_count > 20, 'score': min(1.0, word_count / 50), 'reason': f'Word count: {word_count}'}"
+      }
+    ],
+    "description": "Brainstorming - higher temperature preferred"
+  },
+  {
+    "vars": {
+      "task_description": "Translation task",
+      "prompt": "Translate to English: Bonjour, comment allez-vous?",
+      "expected_answer": "Hello, how are you?"
+    },
+    "assert": [
+      {
+        "type": "contains",
+        "value": "Hello"
+      },
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should contain key elements\n    has_hello = 'hello' in answer or 'hi' in answer\n    has_how = 'how' in answer\n    has_you = 'you' in answer\n    return {'pass': has_hello and has_how and has_you, 'score': 1.0 if (has_hello and has_how and has_you) else 0.7, 'reason': 'Should translate key elements'}"
+      }
+    ],
+    "description": "Translation - lower temperature for consistency"
+  },
+  {
+    "vars": {
+      "task_description": "Mathematical reasoning task",
+      "prompt": "What is 15% of 240?",
+      "expected_answer": "36"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Should contain the correct answer\n    has_36 = '36' in answer or 'thirty-six' in answer or 'thirty six' in answer\n    return {'pass': has_36, 'score': 1.0 if has_36 else 0.0, 'reason': 'Should calculate 15% of 240 = 36'}"
+      }
+    ],
+    "description": "Math - needs low temperature for accuracy"
+  },
+  {
+    "vars": {
+      "task_description": "Creative metaphor task",
+      "prompt": "Create a metaphor describing hope",
+      "expected_answer": "A metaphor comparing hope to something else"
+    },
+    "assert": [
+      {
+        "type": "python",
+        "value": "def assert_fn(output, context):\n    answer = output.lower()\n    # Check for metaphor indicators (like, as, similar to)\n    metaphor_indicators = ['like', 'as', 'similar to', 'compared to', 'resembles', 'is a', 'is the']\n    has_metaphor = any(indicator in answer for indicator in metaphor_indicators)\n    word_count = len(answer.split())\n    return {'pass': has_metaphor and word_count > 5, 'score': 1.0 if (has_metaphor and word_count > 10) else 0.5, 'reason': f'Metaphor: {has_metaphor}, Length: {word_count}'}"
+      }
+    ],
+    "description": "Metaphor creation - higher temperature beneficial"
+  }
+]

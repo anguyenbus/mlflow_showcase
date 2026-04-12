@@ -1,0 +1,97 @@
+# RAG Pipeline Evaluation
+#
+# This evaluation tests the quality of Retrieval-Augmented Generation (RAG)
+# systems by measuring context relevance, faithfulness, and answer relevance
+# across different context quality scenarios.
+#
+# Run with:
+#   OPENAI_API_KEY=$ZHIPU_API_KEY npx promptfoo eval -c rag_pipeline.yaml
+# Or use the Python runner:
+#   python rag_pipeline_test.py
+#
+# The Python assertion returns named_scores that appear as metrics in the UI:
+# - context_relevance: How well context matches the query
+# - context_faithfulness: Response sticks to context (no hallucination)
+# - answer_relevance: Response addresses the query
+
+description: RAG pipeline evaluation with LLM-based scoring
+
+prompts:
+  - |
+    You are a helpful assistant answering questions based on the provided context.
+    Use only the information in the context to answer the question.
+
+    Context:
+    {{context}}
+
+    Query: {{query}}
+
+    If the context doesn't contain enough information to answer the question,
+    say so clearly. Do not make up information.
+
+providers:
+  - id: openai:chat:glm-5
+    label: GLM-5
+    config:
+      temperature: 0
+      baseURL: https://open.bigmodel.cn/api/paas/v4/
+
+# Python assertion for RAG scoring with named_scores that appear in UI
+defaultTest:
+  assert:
+    - type: python
+      value: file://rag_assertion.py
+      metric: RAG_Quality
+
+tests:
+  - description: "Good context - question is directly answerable from context"
+    vars:
+      context: "The Australian Tax Office (ATO) is the government revenue collection agency. Individual tax returns are due by October 31 each year. Late returns may incur penalties starting at $210."
+      query: "When are individual tax returns due in Australia?"
+
+  - description: "Complete context - all information present"
+    vars:
+      context: "Taxable income in Australia is calculated as assessable income minus allowable deductions. Assessable income includes salary, wages, business income, investment income, and capital gains."
+      query: "How is taxable income calculated in Australia?"
+
+  - description: "Specific factual information in context"
+    vars:
+      context: "The Medicare levy is 2% of taxable income for most taxpayers. It helps fund Australia's public healthcare system called Medicare."
+      query: "What is the Medicare levy rate?"
+
+  - description: "Multiple valid answers possible"
+    vars:
+      context: "Australian tax returns can be lodged online via myTax or through a registered tax agent."
+      query: "What are the lodgment methods for Australian tax returns?"
+
+  - description: "Numerical data verification"
+    vars:
+      context: "The tax-free threshold for Australian residents is $18,200 in the 2023-24 financial year."
+      query: "What is the tax-free threshold for residents?"
+
+  - description: "Multiple tax rates mentioned"
+    vars:
+      context: "Company tax rate is 30% for base rate entities, while small businesses may qualify for a 25% rate."
+      query: "What is the company tax rate?"
+
+  - description: "Percentage extraction"
+    vars:
+      context: "GST (Goods and Services Tax) is a 10% value-added tax on most goods and services in Australia."
+      query: "What is the GST rate?"
+
+  - description: "Date range verification"
+    vars:
+      context: "The financial year in Australia runs from July 1 to June 30."
+      query: "When does the Australian financial year start and end?"
+
+  - description: "Threshold amount verification"
+    vars:
+      context: "Individual taxpayers with income over $45,000 may be required to pay HELP debt repayments."
+      query: "What is the HELP debt repayment threshold?"
+
+  - description: "Insufficient context - should acknowledge limitation"
+    vars:
+      context: "Insufficient context provided about tax rates."
+      query: "What are the tax brackets for 2024?"
+
+outputPath: /home/an/projects/tracing_project/promptfoo_results/rag_pipeline.json
