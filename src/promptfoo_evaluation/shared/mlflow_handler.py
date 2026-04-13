@@ -31,6 +31,7 @@ ADVANCED_EXPERIMENTS: Final[dict[str, str]] = {
     "prevent_hallucination": "promptfoo-advanced-hallucination",
     "choosing_right_temperature": "promptfoo-advanced-temperature",
     "evaluating_factuality": "promptfoo-advanced-factuality",
+    "redteam": "promptfoo-advanced-redteam",
 }
 
 

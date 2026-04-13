@@ -37,78 +37,132 @@ providers:
       baseURL: https://open.bigmodel.cn/api/paas/v4/
 
 tests:
+  # Test 1: Format compliance - lower temperatures should be more consistent
   - vars:
-      task_description: "Summarize this text"
-      prompt: "AI is transforming industries by automating tasks and providing insights from data."
-      expected_answer: "AI transforms industries"
-    assert:
-      - type: similar
-        value: "AI transforms industries"
-        threshold: 0.4
-    description: "Factual summarization - lower temperature preferred"
-
-  - vars:
-      task_description: "Write a story about"
-      prompt: "A robot learning to paint"
-      expected_answer: "robot"
+      task_description: "Answer in exactly this format: 'Answer: [your answer]'"
+      prompt: "What is 5 + 3?"
     assert:
       - type: contains
-        value: robot
-    description: "Creative writing - higher temperature preferred"
-
-  - vars:
-      task_description: "Calculate"
-      prompt: "What is 2 + 2?"
-      expected_answer: "4"
-    assert:
+        value: "Answer:"
       - type: contains
-        value: "4"
-    description: "Math - consistency critical"
+        value: "8"
+    description: "Format compliance - low temp favored"
 
+  # Test 2: Creative vocabulary - higher temperatures should be more creative
   - vars:
-      task_description: "Explain"
-      prompt: "What is photosynthesis?"
-      expected_answer: "process"
+      task_description: "Write a one-sentence creative description of"
+      prompt: "A sunset over the ocean"
     assert:
-      - type: contains
-        value: process
-    description: "Educational - clarity important"
+      - type: javascript
+        value: |
+          // Check for descriptive content (longer, more detailed)
+          const hasColor = /red|orange|pink|purple|gold|yellow|blue|ocean|water|sun/i.test(output);
+          const hasAction = /paint|shine|reflect|dance|glow|spread|fill|light|ray/i.test(output);
+          const isDetailed = output.length > 30;
+          return hasColor && (hasAction || isDetailed);
+    description: "Creative vocabulary - high temp favored"
 
+  # Test 3: Conciseness - lower temperatures should be more direct
   - vars:
-      task_description: "Write code for"
-      prompt: "A function that adds two numbers"
-      expected_answer: "def add"
+      task_description: "Briefly answer"
+      prompt: "What is the capital of France?"
+    assert:
+      - type: javascript
+        value: |
+          // Check if answer is concise and correct
+          // Lower temps should be more concise, higher temps more verbose
+          const hasParis = output.toLowerCase().includes('paris');
+          // Count actual content chars (ignore reasoning sections if present)
+          const lines = output.split('\n');
+          let contentLines = [];
+          let inReasoning = false;
+          for (const line of lines) {
+            if (line.includes('Thinking:') || line.trim().startsWith('*')) {
+              inReasoning = true;
+            } else if (line.includes('**Answer**') || line.includes('Answer:')) {
+              inReasoning = false;
+            }
+            if (!inReasoning && line.trim().length > 0 && !line.includes('Thinking')) {
+              contentLines.push(line);
+            }
+          }
+          const contentLength = contentLines.join(' ').length;
+          return hasParis && contentLength < 150;
+    description: "Conciseness - low temp favored"
+
+  # Test 4: Code syntax - lower temperatures should produce more reliable code
+  - vars:
+      task_description: "Write a Python function that"
+      prompt: "Returns the sum of two numbers"
     assert:
       - type: contains
         value: "def"
-    description: "Code generation - consistency important"
+      - type: contains
+        value: "return"
+    description: "Code syntax - low temp favored"
 
+  # Test 5: Creativity variety - higher temps should be more varied
   - vars:
-      task_description: "Translate to Spanish"
-      prompt: "Hello"
-      expected_answer: "Hola"
+      task_description: "Name this coffee drink:"
+      prompt: "A chocolate-orange espresso"
     assert:
       - type: contains
-        value: Hola
-    description: "Translation - consistency important"
+        value: "Orange"
+      - type: icontains
+        value: "mocha"
+    description: "Creative naming - high temp favored"
 
+  # Test 6: Factual accuracy - lower temperatures should be more accurate
   - vars:
-      task_description: "Brainstorm ideas for"
-      prompt: "Marketing a new coffee shop"
-      expected_answer: "coffee"
+      task_description: "What year did"
+      prompt: "World War II end?"
     assert:
       - type: contains
-        value: coffee
-    description: "Brainstorming - creativity valued"
+        value: "1945"
+    description: "Factual accuracy - low temp favored"
 
+  # Test 7: Divergent thinking - higher temps should generate more ideas
   - vars:
-      task_description: "List the capitals of"
-      prompt: "France, Germany, and Italy"
-      expected_answer: "Paris"
+      task_description: "List uses for"
+      prompt: "A brick"
     assert:
       - type: contains
-        value: Paris
-    description: "Factual - accuracy critical"
+        value: "build"
+    description: "Divergent thinking - higher temp favored"
+
+  # Test 8: Word repetition check - higher temps might ramble
+  - vars:
+      task_description: "Explain briefly"
+      prompt: "Why is the sky blue?"
+    assert:
+      - type: contains
+        value: "blue"
+    description: "Brief explanation - all temps should pass"
+
+  # Test 9: Translation consistency - lower temps should be more consistent
+  - vars:
+      task_description: "Translate to French"
+      prompt: "Hello, how are you?"
+    assert:
+      - type: contains
+        value: "Bonjour"
+    description: "Translation - low temp favored"
+
+  # Test 10: Storytelling creativity - higher temps should be more creative
+  - vars:
+      task_description: "Write a one-sentence story about"
+      prompt: "A cat who learned to fly"
+    assert:
+      - type: javascript
+        value: |
+          // Check for story elements (just needs cat and some flying reference)
+          // Handle verbose reasoning outputs
+          const hasCat = /cat|kitten|feline|mittens|whiskers|barnaby|felix/i.test(output);
+          const hasFly = /fly|flew|soar|wing|sky|air|float|gravity/i.test(output);
+          // Be more lenient on length since models include reasoning
+          const hasContent = output.length > 50;
+          return hasCat && hasFly && hasContent;
+    description: "Story creativity - high temp favored"
 
 outputPath: /home/an/projects/tracing_project/promptfoo_results/temperature_sweep.json
 

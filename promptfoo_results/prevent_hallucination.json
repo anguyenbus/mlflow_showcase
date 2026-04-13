@@ -1,8 +1,8 @@
 {
-  "evalId": "eval-oTh-2026-04-12T05:42:11",
+  "evalId": "eval-0pE-2026-04-13T00:37:53",
   "results": {
     "version": 3,
-    "timestamp": "2026-04-12T05:42:11.882Z",
+    "timestamp": "2026-04-13T00:37:53.029Z",
     "prompts": [
       {
         "id": "413ff960ae278681b32e86502ff749286745f56940b91466416e00482d2c571a",
@@ -79,7 +79,7 @@
             }
           ]
         },
-        "id": "255241f5-e445-421c-b85b-75e0a997d15c",
+        "id": "bc5b8efc-f1fa-42ba-a3ca-0317af4f7abd",
         "latencyMs": 60193,
         "namedScores": {},
         "prompt": {
@@ -199,7 +199,7 @@
             }
           ]
         },
-        "id": "27fb7396-0265-4fdb-b848-87d5efb0e8ec",
+        "id": "784ecfd2-e0ad-4a93-a41d-a394b637119f",
         "latencyMs": 58273,
         "namedScores": {},
         "prompt": {
@@ -329,7 +329,7 @@
             }
           ]
         },
-        "id": "fa95417d-7992-488c-ad51-7d7951d7cb0e",
+        "id": "37690ce7-d54d-4d9a-a2fa-9e53b6698640",
         "latencyMs": 13881,
         "namedScores": {},
         "prompt": {
@@ -453,7 +453,7 @@
             }
           ]
         },
-        "id": "e2dc052b-0dfe-4ae9-94c7-160069e12f4e",
+        "id": "0fd0b850-82ba-462a-b732-f7bd48830de0",
         "latencyMs": 128317,
         "namedScores": {},
         "prompt": {
@@ -573,7 +573,7 @@
             }
           ]
         },
-        "id": "bc3cb8cb-d2a1-4c09-8b12-0d4212347617",
+        "id": "7cca0065-c577-4be5-bf0c-1fe5553bfdac",
         "latencyMs": 13859,
         "namedScores": {},
         "prompt": {
@@ -693,7 +693,7 @@
             }
           ]
         },
-        "id": "fc243e97-e7b6-418c-824f-7187c65dd8c1",
+        "id": "6a3d0bd7-df1c-4e1e-b33e-f0e5ee93eb19",
         "latencyMs": 12272,
         "namedScores": {},
         "prompt": {
@@ -814,7 +814,7 @@
             }
           ]
         },
-        "id": "0734f538-ce11-4bcd-a338-d6674163b993",
+        "id": "8fd10fb7-a50b-4f91-bf19-d5a634fcc440",
         "latencyMs": 11819,
         "namedScores": {},
         "prompt": {
@@ -934,7 +934,7 @@
             }
           ]
         },
-        "id": "44d0236b-cc51-4e5d-ae64-b0aaa52e9805",
+        "id": "572b1515-5d7a-42a8-9ffc-71fb522eb98e",
         "latencyMs": 12365,
         "namedScores": {},
         "prompt": {
@@ -1054,7 +1054,7 @@
             }
           ]
         },
-        "id": "237266b8-a48e-4280-b6f9-30dde1734d84",
+        "id": "3919cfcf-4d95-496f-986a-03eb7ed4f86e",
         "latencyMs": 9716,
         "namedScores": {},
         "prompt": {
@@ -1174,7 +1174,7 @@
             }
           ]
         },
-        "id": "30a684b1-63b0-4791-9e9c-45810be59007",
+        "id": "b45694d2-5837-490c-b663-c566014d018f",
         "latencyMs": 30054,
         "namedScores": {},
         "prompt": {
@@ -1292,7 +1292,7 @@
           }
         }
       },
-      "durationMs": 177
+      "durationMs": 107
     }
   },
   "config": {
@@ -1495,7 +1495,7 @@
     "nodeVersion": "v22.20.0",
     "platform": "linux",
     "arch": "x64",
-    "exportedAt": "2026-04-12T05:42:12.271Z",
-    "evaluationCreatedAt": "2026-04-12T05:42:11.882Z"
+    "exportedAt": "2026-04-13T00:37:53.298Z",
+    "evaluationCreatedAt": "2026-04-13T00:37:53.029Z"
   }
 }

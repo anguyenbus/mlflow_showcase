@@ -20,8 +20,11 @@ prompts:
     Question: {{question}}
 
 providers:
-  - openai:chat:glm-5
-  - openai:chat:glm-5
+  - id: openai:chat:glm-5
+    label: GLM-5
+    config:
+      temperature: 0
+      baseURL: https://open.bigmodel.cn/api/paas/v4/
 
 tests:
   - vars:
