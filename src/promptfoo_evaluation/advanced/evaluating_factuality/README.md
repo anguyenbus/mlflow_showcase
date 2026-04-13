@@ -64,7 +64,7 @@ The `data/test_cases.json` file contains 12 test cases across 4 categories:
 
 ```bash
 cd src/promptfoo_evaluation/advanced/evaluating_factuality
-python factuality_test.py
+uv run python factuality_test.py
 ```
 
 ### Option 2: Using promptfoo directly
@@ -82,6 +82,18 @@ npx promptfoo view
 ```
 
 ## Understanding Results
+
+### Example Test Cases
+
+The following screenshots show the factuality evaluation in action.
+
+![Factuality Test Cases Table](screenshots/factuality_test_1.png)
+
+**Figure 1:** Promptfoo evaluation interface showing factuality test cases. The table displays each test case with its question and expected answer. Test cases cover various fact types including dates (World War II end), numbers (speed of light), entities (capital of Australia), and relationships (Einstein's theory). The interface shows pass/fail status for each test, making it easy to identify which factual queries the model answers correctly.
+
+![Factuality Test Detailed Results](screenshots/factuality_test_2.png)
+
+**Figure 2:** Detailed view of factuality test results. The left panel shows the test case details (description, question, and expected answer). The center panel displays the model's response with factual information extracted. The right panel shows the assertion results - whether the expected answer was found in the response. Tests pass when the model includes the correct factual information (like "299,792,458" for speed of light or "Canberra" as Australia's capital).
 
 ### Metrics
 

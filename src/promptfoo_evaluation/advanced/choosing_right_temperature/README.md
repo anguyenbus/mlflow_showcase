@@ -72,7 +72,7 @@ The `data/test_cases.json` file contains 8 task types:
 
 ```bash
 cd src/promptfoo_evaluation/advanced/choosing_right_temperature
-python temperature_test.py
+uv run python temperature_test.py
 ```
 
 ### Option 2: Using promptfoo directly
@@ -90,6 +90,24 @@ npx promptfoo view
 ```
 
 ## Understanding Results
+
+### Example Temperature Comparison
+
+The following screenshot shows how different temperatures affect the same creative task:
+
+![Temperature Comparison Results](screenshots/choosing_right_temperature.png)
+
+**Figure 1:** Temperature comparison for a creative writing task ("Write a one-sentence creative description of a sunset over the ocean"). All four temperatures (0.0, 0.3, 0.7, 1.0) passed the test, but produced different creative approaches:
+
+- **Temperature 0.0**: Produced "The sun melted into the horizon like a drop of golden fire, setting the ocean waves ablaze with the day's final, fleeting light." - Focused, precise imagery with controlled vocabulary.
+
+- **Temperature 0.3**: Produced "The sun dissolved into the horizon like a drop of golden ink, staining the heaving ocean with streaks of amber and violet in a final, shimmering farewell." - Similar creativity with slightly more descriptive elements.
+
+- **Temperature 0.7**: Produced "The sun melted into the sea, spilling a path of liquid amber across the waves as the sky surrendered to the violet bruise of twilight." - More evocative with stronger metaphorical language ("violet bruise").
+
+- **Temperature 1.0**: Produced "The weary sun slowly dissolved into the ocean's embrace, bleeding streaks of tangerine and violet across the canvas of the twilight sky." - Highest creativity with personification ("weary sun") and artistic metaphors.
+
+**Key insight**: While all temperatures passed this creative task, higher temperatures produced more varied, imaginative descriptions with stronger emotional language and unique metaphors.
 
 ### Metrics by Temperature
 
