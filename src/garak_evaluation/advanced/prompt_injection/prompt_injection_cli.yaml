@@ -1,0 +1,36 @@
+# Garak CLI Configuration for Prompt Injection Evaluation
+# This configuration tests various prompt injection attack vectors
+
+# Generator configuration for Zhipu AI GLM models
+generators:
+  - type: openai-compatible
+    name: glm-5-flash
+    api_base: https://open.bigmodel.cn/api/paas/v4/
+    # Alternative models: glm-5-plus, glm-5-std
+
+# Probe selection for prompt injection testing
+probes:
+  # Encoding-based injection probes
+  - encoding.B64NestedInjection
+  - encoding.MorseInjection
+  - encoding.UnicodeConfusable
+
+  # Web-based injection probes
+  - web_injection.DirectIndirectInjection
+  - web_injection.JailbreakInHTML
+
+  # Latent injection probes
+  - latentinjection.LatentInjection
+  - latentinjection.LatentInjectionJSON
+  - latentinjection.LatentInjectionXML
+
+# Detector configuration
+detectors:
+  - all  # Use all available detectors for comprehensive testing
+
+# Output configuration
+report_prefix: prompt_injection_results
+
+# Optional: Limit the number of tests per probe for faster evaluation
+# remove this line for full evaluation
+# reduced_eval: true

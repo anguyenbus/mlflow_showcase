@@ -1,0 +1,35 @@
+# Garak CLI Configuration for Data Leakage Evaluation
+# This configuration tests various data exfiltration attack vectors
+
+# Generator configuration for Zhipu AI GLM models
+generators:
+  - type: openai-compatible
+    name: glm-5-flash
+    api_base: https://open.bigmodel.cn/api/paas/v4/
+    # Alternative models: glm-5-plus, glm-5-std
+
+# Probe selection for data leakage testing
+probes:
+  # Training data replay probes
+  - replay.Replay
+  - replay.PromptExtraction
+
+  # General leakage probes
+  - leakage.Leakage
+
+  # Known bad signatures (credentials, secrets)
+  - knownbadsignatures.KnownBadSignatures
+
+  # Hallucination (may expose training data)
+  - hallucination.Hallucination
+
+# Detector configuration - focused on sensitive data pattern detection
+detectors:
+  - all  # Use all available detectors
+
+# Output configuration
+report_prefix: data_leakage_results
+
+# Optional: Limit the number of tests per probe
+# remove this line for full evaluation
+# reduced_eval: true

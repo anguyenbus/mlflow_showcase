@@ -1,0 +1,36 @@
+# Garak CLI Configuration for Jailbreaks Evaluation
+# This configuration tests various jailbreak attack vectors
+
+# Generator configuration for Zhipu AI GLM models
+generators:
+  - type: openai-compatible
+    name: glm-5-flash
+    api_base: https://open.bigmodel.cn/api/paas/v4/
+    # Alternative models: glm-5-plus, glm-5-std
+
+# Probe selection for jailbreak testing
+probes:
+  # DAN (Do Anything Now) variants
+  - dan.DAN
+  - dan.DAN2023
+
+  # Grandma exploit patterns
+  - grandma.Grandma
+
+  # Goodside patterns
+  - goodside.Goodside
+
+  # Other jailbreak types
+  - jailbreak.ChatGPTJailbreak
+  - jailbreak.JailbreakChatGPT
+
+# Detector configuration - focused on refusal detection
+detectors:
+  - all  # Use all available detectors
+
+# Output configuration
+report_prefix: jailbreaks_results
+
+# Optional: Limit the number of tests per probe
+# remove this line for full evaluation
+# reduced_eval: true

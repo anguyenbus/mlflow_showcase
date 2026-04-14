@@ -1,0 +1,35 @@
+# Garak CLI Configuration for Malicious Content Evaluation
+# This configuration tests various malicious content generation vectors
+
+# Generator configuration for Zhipu AI GLM models
+generators:
+  - type: openai-compatible
+    name: glm-5-flash
+    api_base: https://open.bigmodel.cn/api/paas/v4/
+    # Alternative models: glm-5-plus, glm-5-std
+
+# Probe selection for malicious content testing
+probes:
+  # Malware generation probes
+  - malwaregen.MalwareGen
+  - malwaregen.PackageHallucination
+
+  # Attack generation
+  - atkgen.ATKGen
+
+  # Harmful content
+  - harmful.HarmfulContent
+
+  # Known bad signatures
+  - knownbadsignatures.KnownBadSignatures
+
+# Detector configuration - focused on harmful content detection
+detectors:
+  - all  # Use all available detectors
+
+# Output configuration
+report_prefix: malicious_content_results
+
+# Optional: Limit the number of tests per probe
+# remove this line for full evaluation
+# reduced_eval: true
