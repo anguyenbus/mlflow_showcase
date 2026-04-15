@@ -45,7 +45,7 @@ Each topic can be evaluated using three approaches:
 
 1. **CLI-based execution**:
    ```bash
-   garak --model_type openai-compatible --model_name glm-5-flash \
+   garak --model_type openai-compatible --model_name glm-4-plus \
          --probe_type dan.DAN --openai_base https://open.bigmodel.cn/api/paas/v4/
    ```
 
@@ -290,7 +290,7 @@ python prompt_injection_test.py
 
 # Or run with CLI
 garak --model_type openai-compatible \
-      --model_name glm-5-flash \
+      --model_name glm-4-plus \
       --probe_type encoding.B64NestedInjection \
       --openai_base https://open.bigmodel.cn/api/paas/v4/ \
       --report_prefix prompt_injection_results
@@ -322,7 +322,7 @@ Simplest approach for quick tests:
 
 ```bash
 garak --model_type openai-compatible \
-      --model_name glm-5-flash \
+      --model_name glm-4-plus \
       --probe_type dan.DAN \
       --openai_base https://open.bigmodel.cn/api/paas/v4/
 ```
@@ -334,7 +334,7 @@ For repeatable, version-controlled evaluations:
 ```yaml
 generators:
   - type: openai-compatible
-    name: glm-5-flash
+    name: glm-4-plus
     api_base: https://open.bigmodel.cn/api/paas/v4/
 
 probes:
@@ -355,7 +355,7 @@ For programmatic evaluation and custom analysis:
 import garak.generators
 import garak.probes
 
-generator = garak.generators.Generator("glm-5-flash")
+generator = garak.generators.Generator("glm-4-plus")
 probe = garak.probes.Probe("dan.DAN")
 
 results = probe.run(generator)
@@ -430,7 +430,7 @@ echo $ZHIPU_API_KEY
 curl -X POST https://open.bigmodel.cn/api/paas/v4/chat/completions \
   -H "Authorization: Bearer $ZHIPU_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"glm-5-flash","messages":[{"role":"user","content":"test"}]}'
+  -d '{"model":"glm-4-plus","messages":[{"role":"user","content":"test"}]}'
 
 # Reload environment
 source .env
@@ -452,7 +452,7 @@ curl -I https://open.bigmodel.cn/api/paas/v4/
 # Should be: https://open.bigmodel.cn/api/paas/v4/
 
 # Verify model name
-# Valid options: glm-5-flash, glm-5-plus, glm-5-std
+# Valid options: glm-4-plus, glm-5-plus, glm-5-std
 ```
 
 ### Issue: JSONL parsing errors
@@ -484,7 +484,7 @@ garak -c config.yaml --report_prefix new_eval
 ```bash
 # Test basic model access first
 garak --model_type openai-compatible \
-      --model_name glm-5-flash \
+      --model_name glm-4-plus \
       --probe_type continuation.Continuation \
       --openai_base https://open.bigmodel.cn/api/paas/v4/
 

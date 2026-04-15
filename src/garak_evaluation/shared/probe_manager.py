@@ -16,43 +16,35 @@ from beartype import beartype
 from garak_evaluation.shared.console_output import console, print_section_header
 
 # Garak probe categories mapped to OWASP LLM Top 10
+# NOTE: Probe names match actual Garak class names
 PROBE_CATEGORIES: Final[dict[str, dict[str, Any]]] = {
     "prompt_injection": {
         "probes": [
-            "blake.AvalancheInjection",
-            "blake.Injector",
-            "gcg.GCGConfig",
-            "encoding.B64NestedInjection",
-            "encoding.MorseInjection",
-            "encoding.UnicodeConfusable",
-            "web_injection.DirectIndirectInjection",
-            "web_injection.JailbreakInHTML",
-            "latentinjection.LatentInjection",
-            "latentinjection.LatentInjectionJSON",
+            "encoding.InjectBase64",
+            "encoding.InjectMorse",
+            "encoding.UnicodeTagChars",
+            "web_injection.MarkdownXSS",
+            "web_injection.StringAssemblyDataExfil",
         ],
         "owasp": "LLM01",
         "description": "Direct and indirect prompt injection attacks",
     },
     "jailbreaks": {
         "probes": [
-            "dan.DAN",
-            "dan.DAN2023",
-            "grandma.Grandma",
-            "goodside.Goodside",
-            "jailbreak.ChatGPTJailbreak",
-            "jailbreak.JailbreakChatGPT",
-            "payloadanalyzer.PayloadAnalyzer",
+            "dan.DAN_Jailbreak",
+            "dan.Dan_11_0",
+            "dan.AntiDAN",
+            "dan.STAN",
         ],
         "owasp": "LLM01",
         "description": "Jailbreak attempts to bypass safety guardrails",
     },
     "data_leakage": {
         "probes": [
-            "replay.Replay",
-            "replay.PromptExtraction",
-            "knownbadsignatures.KnownBadSignatures",
-            "hallucination.Hallucination",
-            "leakage.Leakage",
+            "leakreplay.Leakage",
+            "leakreplay.ContinueLeakage",
+            "divergence.Divergence",
+            "atkgen.ATKGen",
         ],
         "owasp": "LLM06",
         "description": "Training data extraction and sensitive information leakage",
@@ -60,9 +52,8 @@ PROBE_CATEGORIES: Final[dict[str, dict[str, Any]]] = {
     "malicious_content": {
         "probes": [
             "malwaregen.MalwareGen",
-            "malwaregen.PackageHallucination",
-            "knownbadsignatures.KnownBadSignatures",
-            "harmful.HarmfulContent",
+            "packagehallucination.PackageHallucination",
+            "realtoxicityprompts.RealToxicityPrompts",
             "atkgen.ATKGen",
         ],
         "owasp": "LLM03",
@@ -327,24 +318,20 @@ def get_recommended_probes(
     # Prioritize commonly used probes
     priority_probes = {
         "prompt_injection": [
-            "encoding.B64NestedInjection",
-            "web_injection.DirectIndirectInjection",
-            "latentinjection.LatentInjection",
+            "encoding.InjectBase64",
+            "web_injection.MarkdownXSS",
         ],
         "jailbreaks": [
-            "dan.DAN",
-            "grandma.Grandma",
-            "goodside.Goodside",
+            "dan.DAN_Jailbreak",
+            "dan.Dan_11_0",
         ],
         "data_leakage": [
-            "replay.Replay",
-            "hallucination.Hallucination",
-            "leakage.Leakage",
+            "leakreplay.Leakage",
+            "divergence.Divergence",
         ],
         "malicious_content": [
             "malwaregen.MalwareGen",
-            "malwaregen.PackageHallucination",
-            "harmful.HarmfulContent",
+            "packagehallucination.PackageHallucination",
         ],
     }
 
