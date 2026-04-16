@@ -1,0 +1,438 @@
+# RAGas Configuration Examples
+# This file contains working RAGas configurations for common RAG evaluation scenarios
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+#
+# RAGas is a Python library that uses code-based configuration rather than YAML.
+# These examples show Python code for common evaluation scenarios.
+#
+# To run these examples:
+# 1. Install RAGas: pip install ragas
+# 2. Set up API keys: export OPENAI_API_KEY=sk-...
+# 3. Save example code to a Python file
+# 4. Run: python example.py
+
+# =============================================================================
+# EXAMPLE 1: Basic RAG Evaluation
+# =============================================================================
+
+# """
+# Basic RAG evaluation with core metrics
+# """
+
+from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy
+
+# Prepare your dataset
+dataset = [
+    {
+        "question": "What is the capital of France?",
+        "answer": "Paris is the capital of France.",
+        "contexts": ["France is a country in Western Europe. Its capital is Paris."],
+    }
+]
+
+# Run evaluation
+result = evaluate(
+    dataset=dataset,
+    metrics=[faithfulness, answer_relevancy]
+)
+
+# View results
+print(result)
+# result.to_pandas()  # For DataFrame view
+
+# =============================================================================
+# EXAMPLE 2: Complete RAG Evaluation
+# =============================================================================
+
+# """
+# Complete RAG evaluation with all core metrics
+# """
+
+from ragas import evaluate
+from ragas.metrics import (
+    faithfulness,
+    answer_relevancy,
+    context_precision,
+    context_recall,
+)
+
+# Prepare dataset with ground truth
+dataset = [
+    {
+        "question": "What is RAG?",
+        "answer": "RAG stands for Retrieval-Augmented Generation, a technique that enhances LLMs with retrieved context.",
+        "contexts": [
+            "Retrieval-Augmented Generation (RAG) is an AI framework that retrieves relevant data.",
+            "RAG enhances large language models by providing external knowledge."
+        ],
+        "ground_truth": "RAG is Retrieval-Augmented Generation, combining retrieval with generation.",
+    }
+]
+
+# Run evaluation with all metrics
+result = evaluate(
+    dataset=dataset,
+    metrics=[
+        faithfulness,
+        answer_relevancy,
+        context_precision,
+        context_recall,
+    ]
+)
+
+print(result)
+
+# =============================================================================
+# EXAMPLE 3: Custom Evaluator LLM
+# =============================================================================
+
+# """
+# Use a custom LLM backend for evaluation
+# """
+
+from ragas import evaluate
+from ragas.metrics import Faithfulness
+from ragas.llms import LangchainLLMWrapper
+from langchain_openai import ChatOpenAI
+
+# Configure evaluator LLM
+evaluator_llm = LangchainLLMWrapper(
+    ChatOpenAI(model="gpt-4o", temperature=0.1)  # Low temperature for consistency
+)
+
+# Create metric with custom backend
+faithfulness = Faithfulness(llm=evaluator_llm)
+
+# Run evaluation
+dataset = [
+    {
+        "question": "What is the capital of France?",
+        "answer": "Paris is the capital of France.",
+        "contexts": ["France is a country. Its capital is Paris."],
+    }
+]
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[faithfulness]
+)
+
+print(result)
+
+# =============================================================================
+# EXAMPLE 4: Evaluation with Run Configuration
+# =============================================================================
+
+# """
+# Configure evaluation run with custom settings
+# """
+
+from ragas import evaluate, RunConfig
+from ragas.metrics import faithfulness, answer_relevancy
+
+# Configure run settings
+run_config = RunConfig(
+    timeout=10,  # Timeout in seconds
+    max_retries=3,  # Number of retries
+    max_wait=60,  # Maximum wait time in seconds
+)
+
+dataset = [
+    {
+        "question": "What is the capital of France?",
+        "answer": "Paris is the capital of France.",
+        "contexts": ["France is a country. Its capital is Paris."],
+    }
+]
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[faithfulness, answer_relevancy],
+    run_config=run_config
+)
+
+print(result)
+
+# =============================================================================
+# EXAMPLE 5: Context Entity Recall
+# =============================================================================
+
+# """
+# Evaluate entity-level recall in retrieved context
+# """
+
+from ragas import evaluate
+from ragas.metrics import context_entity_recall
+
+dataset = [
+    {
+        "question": "Who founded Apple Computer?",
+        "answer": "Apple Computer was founded by Steve Jobs and Steve Wozniak.",
+        "contexts": [
+            "Apple Computer was founded in April 1976 by Steve Jobs, Steve Wozniak, and Ronald Wayne.",
+            "Steve Jobs and Steve Wozniak are known as the primary founders of Apple."
+        ],
+        "ground_truth": "Apple was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne.",
+    }
+]
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[context_entity_recall]
+)
+
+print(result)
+
+# =============================================================================
+# EXAMPLE 6: Answer Similarity
+# =============================================================================
+
+# """
+# Evaluate semantic similarity between answer and ground truth
+# """
+
+from ragas import evaluate
+from ragas.metrics import answer_similarity
+
+dataset = [
+    {
+        "question": "What is the capital of France?",
+        "answer": "Paris is the capital of France.",
+        "ground_truth": "France's capital is Paris.",
+    }
+]
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[answer_similarity]
+)
+
+print(result)
+
+# =============================================================================
+# EXAMPLE 7: Batch Evaluation
+# =============================================================================
+
+# """
+# Evaluate multiple questions in batch
+# """
+
+from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy
+
+dataset = [
+    {
+        "question": "What is the capital of France?",
+        "answer": "Paris is the capital of France.",
+        "contexts": ["France is a country. Its capital is Paris."],
+    },
+    {
+        "question": "What is the capital of Germany?",
+        "answer": "Berlin is the capital of Germany.",
+        "contexts": ["Germany is a country. Its capital is Berlin."],
+    },
+    {
+        "question": "What is the capital of Japan?",
+        "answer": "Tokyo is the capital of Japan.",
+        "contexts": ["Japan is a country. Its capital is Tokyo."],
+    },
+]
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[faithfulness, answer_relevancy]
+)
+
+# Convert to DataFrame for easier analysis
+df = result.to_pandas()
+print(df)
+
+# =============================================================================
+# EXAMPLE 8: MLflow Integration
+# =============================================================================
+
+# """
+# Log RAGas evaluation to MLflow
+# """
+
+import mlflow
+from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy
+
+# Start MLflow run
+with mlflow.start_run():
+    # Log parameters
+    mlflow.log_params({
+        "model": "gpt-4",
+        "evaluator": "gpt-4",
+        "metrics": "faithfulness,answer_relevancy"
+    })
+
+    # Run evaluation
+    dataset = [
+        {
+            "question": "What is the capital of France?",
+            "answer": "Paris is the capital of France.",
+            "contexts": ["France is a country. Its capital is Paris."],
+        }
+    ]
+
+    result = evaluate(
+        dataset=dataset,
+        metrics=[faithfulness, answer_relevancy]
+    )
+
+    # Log metrics
+    result_dict = result.to_dict()
+    for metric_name, metric_value in result_dict.items():
+        mlflow.log_metric(metric_name, metric_value)
+
+    print("Evaluation logged to MLflow")
+
+# =============================================================================
+# EXAMPLE 9: Custom Metric
+# =============================================================================
+
+# """
+# Create a custom RAG evaluation metric
+# """
+
+from ragas.metrics import Metric
+from typing import Any, Dict
+from ragas.dataset_schema import SingleTurnSample
+
+class CustomMetric(Metric):
+    """Custom metric for evaluating answer length"""
+
+    name = "answer_length"
+    required_columns = ["answer"]
+
+    def __init__(self, max_length: int = 100):
+        self.max_length = max_length
+
+    def score(self, row: SingleTurnSample) -> float:
+        answer_length = len(row.answer)
+        # Score is 1.0 if under max length, decreases linearly otherwise
+        if answer_length <= self.max_length:
+            return 1.0
+        else:
+            return max(0.0, 1.0 - (answer_length - self.max_length) / self.max_length)
+
+# Use custom metric
+from ragas import evaluate
+
+dataset = [
+    {
+        "question": "What is the capital of France?",
+        "answer": "Paris",
+        "contexts": ["France is a country. Its capital is Paris."],
+    }
+]
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[CustomMetric(max_length=50)]
+)
+
+print(result)
+
+# =============================================================================
+# EXAMPLE 10: Evaluation from File
+# =============================================================================
+
+# """
+# Load evaluation dataset from JSON file
+# """
+
+import json
+from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy
+
+# Load dataset from JSON
+with open("evaluation_dataset.json", "r") as f:
+    dataset = json.load(f)
+
+# Run evaluation
+result = evaluate(
+    dataset=dataset,
+    metrics=[faithfulness, answer_relevancy]
+)
+
+print(result)
+
+# Example JSON file format:
+# [
+#     {
+#         "question": "What is the capital of France?",
+#         "answer": "Paris is the capital of France.",
+#         "contexts": ["France is a country. Its capital is Paris."],
+#         "ground_truth": "Paris is the capital."
+#     },
+#     ...
+# ]
+
+# =============================================================================
+# METRIC REFERENCE
+# =============================================================================
+
+# | Metric | Requires Ground Truth | Description |
+# |--------|---------------------|-------------|
+# | faithfulness | No | Factual consistency with context |
+# | answer_relevancy | No | How well answer addresses question |
+# | context_precision | Yes | Relevance of retrieved context |
+# | context_recall | Yes | Completeness of retrieved context |
+# | context_entity_recall | Yes | Entity-level retrieval completeness |
+# | answer_correctness | Yes | Factual accuracy vs ground truth |
+# | answer_similarity | Yes | Semantic similarity to ground truth |
+
+# =============================================================================
+# SCORE INTERPRETATION
+# =============================================================================
+
+# Score ranges and interpretation:
+# - 0.0 - 0.5: Poor - significant issues
+# - 0.5 - 0.7: Fair - needs improvement
+# - 0.7 - 0.9: Good - acceptable quality
+# - 0.9 - 1.0: Excellent - high quality
+
+# =============================================================================
+# COMMON WORKFLOWS
+# =============================================================================
+
+# Workflow 1: Quick RAG Check (no ground truth)
+# Use: faithfulness, answer_relevancy
+
+# Workflow 2: Complete RAG Evaluation (with ground truth)
+# Use: faithfulness, answer_relevancy, context_precision, context_recall
+
+# Workflow 3: Retrieval System Evaluation
+# Use: context_precision, context_recall, context_entity_recall
+
+# Workflow 4: Generation Quality Evaluation
+# Use: faithfulness, answer_relevancy, answer_correctness
+
+# =============================================================================
+# FOR MORE INFORMATION
+# =============================================================================
+#
+# RAGas Documentation: https://docs.ragas.io/
+# RAGas GitHub: https://github.com/explodinggradients/ragas
+#
+# Project Tutorials:
+# @src/ragas_evaluation/README.md
+
+# =============================================================================
+# BEST PRACTICES
+# =============================================================================
+
+# 1. Use low temperature (0.1-0.3) for evaluator LLMs
+# 2. Set appropriate timeouts for API calls
+# 3. Evaluate with multiple metrics for comprehensive view
+# 4. Track results over time to identify trends
+# 5. Use MLflow integration for experiment tracking
+# 6. Consider API costs when using LLM-based metrics
+# 7. Validate ground truth data for accuracy

@@ -1,0 +1,276 @@
+# Garak Configuration Examples
+# This file contains working Garak configurations for common security evaluation scenarios
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+#
+# Garak primarily uses CLI commands rather than YAML configuration.
+# These examples show the equivalent CLI commands for common scenarios.
+#
+# To run these examples, copy the command and replace placeholder values:
+# - $MODEL_TYPE: The type of model (openai, huggingface, etc.)
+# - $MODEL_NAME: The specific model name
+# - $PROBE_TYPE: The probe category to run
+# - $API_KEY: Your API key (as environment variable)
+#
+# Example:
+#   export OPENAI_API_KEY=sk-...
+#   python -m garak --model_type openai --model_name gpt-4 --probes promptinject
+
+# =============================================================================
+# EXAMPLE 1: Basic Security Scan
+# =============================================================================
+
+# Command: Basic prompt injection scan
+# python -m garak --model_type openai --model_name gpt-4 --probes promptinject
+
+# Equivalent with environment variables:
+# export OPENAI_API_KEY=sk-...
+# python -m garak \
+#   --model_type openai \
+#   --model_name gpt-4 \
+#   --probes promptinject
+
+# =============================================================================
+# EXAMPLE 2: Comprehensive OWASP Coverage
+# =============================================================================
+
+# Command: Run probes covering OWASP LLM Top 10
+# python -m garak --model_type openai --model_name gpt-4 \
+#   --probes promptinject,dan,encoding,leakreplay,malwaregen,packagehallucination
+
+# Breakdown by OWASP category:
+# LLM01 (Prompt Injection): promptinject, encoding, dan
+# LLM03 (Data Poisoning): leakreplay
+# LLM05 (Supply Chain): packagehallucination
+# LLM06 (Data Disclosure): leakreplay, donotanswer
+# LLM09 (Overreliance): snowball
+
+# =============================================================================
+# EXAMPLE 3: Specific Probe Selection
+# =============================================================================
+
+# DAN Jailbreak Testing
+# python -m garak --model_type openai --model_name gpt-4 --probes dan
+
+# Encoding-based Injection Testing
+# python -m garak --model_type openai --model_name gpt-4 --probes encoding
+
+# Training Data Leakage Testing
+# python -m garak --model_type openai --model_name gpt-4 --probes leakreplay
+
+# Package Hallucination Testing
+# python -m garak --model_type openai --model_name gpt-4 --probes packagehallucination
+
+# Malware Generation Testing
+# python -m garak --model_type openai --model_name gpt-4 --probes malwaregen
+
+# XSS Testing
+# python -m garak --model_type openai --model_name gpt-4 --probes xss
+
+# =============================================================================
+# EXAMPLE 4: Hugging Face Model Testing
+# =============================================================================
+
+# Test a local Hugging Face model
+# python -m garak \
+#   --model_type huggingface \
+#   --model_name gpt2 \
+#   --probes dan
+
+# Test with Hugging Face Inference API
+# python -m garak \
+#   --model_type huggingface.InferenceAPI \
+#   --model_name mosaicml/mpt-7b-instruct \
+#   --probes promptinject
+
+# =============================================================================
+# EXAMPLE 5: AWS Bedrock Testing
+# =============================================================================
+
+# Test Anthropic Claude via Bedrock
+# export AWS_ACCESS_KEY_ID=...
+# export AWS_SECRET_ACCESS_KEY=...
+# export AWS_REGION_NAME=us-east-1
+#
+# python -m garak \
+#   --model_type bedrock \
+#   --model_name claude-3-sonnet \
+#   --probes promptinject,dan
+
+# =============================================================================
+# EXAMPLE 6: Custom Probe Configuration
+# =============================================================================
+
+# Run specific probe variants
+# python -m garak \
+#   --model_type openai \
+#   --model_name gpt-4 \
+#   --probes dan.Dan_11_0
+
+# Run multiple specific probes
+# python -m garak \
+#   --model_type openai \
+#   --model_name gpt-4 \
+#   --probes promptinject.ProbeInjectIndependent,dan.Dan_11_0,encoding.InjectBase64
+
+# =============================================================================
+# EXAMPLE 7: Report Configuration
+# =============================================================================
+
+# Run with custom report prefix
+# python -m garak \
+#   --model_type openai \
+#   --model_name gpt-4 \
+#   --probes promptinject \
+#   --report_prefix security_scan_$(date +%Y%m%d)
+
+# =============================================================================
+# EXAMPLE 8: Detector Configuration
+# =============================================================================
+
+# Run with specific detector
+# python -m garak \
+#   --model_type openai \
+#   --model_name gpt-4 \
+#   --probes promptinject \
+#   --detectors keyword
+
+# Run with all detectors
+# python -m garak \
+#   --model_type openai \
+#   --model_name gpt-4 \
+#   --probes promptinject \
+#   --detectors all
+
+# =============================================================================
+# EXAMPLE 9: CI/CD Integration
+# =============================================================================
+
+# GitHub Actions compatible command
+# python -m garak \
+#   --model_type openai \
+#   --model_name ${MODEL_NAME} \
+#   --probes promptinject,dan \
+#   --report_prefix ci_scan_${GITHUB_RUN_ID}
+#
+# Exit code: 0 if all pass, non-zero if failures detected
+
+# =============================================================================
+# EXAMPLE 10: List Available Options
+# =============================================================================
+
+# List all available probes
+# python -m garak --list_probes
+
+# List all available detectors
+# python -m garak --list_detectors
+
+# List all available generators (model types)
+# python -m garak --list_generators
+
+# =============================================================================
+# PROBE COVERAGE REFERENCE
+# =============================================================================
+
+# | Probe Category | OWASP Coverage | Description |
+# |----------------|----------------|-------------|
+# | promptinject | LLM01 | Comprehensive prompt injection testing |
+# | dan | LLM01 | DAN and DAN-style jailbreaks |
+# | encoding | LLM01 | Encoding-based injection (Base64, etc.) |
+# | gcg | LLM01 | Greedy Coordinate Gradient attacks |
+# | xss | LLM02 | Cross-site scripting patterns |
+# | malwaregen | LLM02 | Malicious code generation |
+# | leakreplay | LLM03, LLM06 | Training data extraction |
+# | packagehallucination | LLM05 | Non-existent package references |
+# | donotanswer | LLM06 | Sensitive information disclosure |
+# | continuation | LLM09 | Harmful content continuation |
+# | snowball | LLM09 | Hallucination testing |
+
+# =============================================================================
+# COMMON WORKFLOWS
+# =============================================================================
+
+# Workflow 1: Quick Security Check
+# python -m garak --model_type openai --model_name gpt-4 --probes promptinject,dan
+
+# Workflow 2: Full Security Assessment
+# python -m garak --model_type openai --model_name gpt-4 --probes all
+
+# Workflow 3: OWASP Compliance Check
+# python -m garak --model_type openai --model_name gpt-4 \
+#   --probes promptinject,dan,encoding,leakreplay,malwaregen,packagehallucination,xss
+
+# Workflow 4: Model Security Comparison
+# for model in gpt-4 claude-3-sonnet; do
+#   python -m garak --model_type openai --model_name $model \
+#     --probes promptinject --report_prefix ${model}_scan
+# done
+
+# =============================================================================
+# YAML CONFIGURATION (if needed)
+# =============================================================================
+
+# Garak can also use YAML configuration for complex setups:
+
+# garak_config.yaml:
+# generators:
+#   - type: openai
+#     name: gpt-4
+#     api_key_env_var: OPENAI_API_KEY
+#
+# probes:
+#   - promptinject
+#   - dan
+#   - encoding
+#
+# detectors:
+#   - keyword
+#   - always.Pass
+#
+# output:
+#   format: jsonl
+#   report_prefix: garak_scan
+
+# Run with YAML config:
+# python -m garak --config garak_config.yaml
+
+# =============================================================================
+# RESULT INTERPRETATION
+# =============================================================================
+
+# Garak outputs results in JSONL format with the following structure:
+# - status: "running" | "complete" | "error"
+# - passed: true | false
+# - probe: Probe name
+# - detector: Detector name
+# - pass_rate: Percentage of passed tests
+#
+# Pass rate interpretation:
+# - >80%: Strong security posture
+# - 60-80%: Moderate - consider improvements
+# - 40-60%: Weak - remediation needed
+# - <40%: Critical - not production ready
+
+# =============================================================================
+# FOR MORE INFORMATION
+# =============================================================================
+#
+# Garak Documentation: https://garak.readthedocs.io/
+# Garak GitHub: https://github.com/NVIDIA/garak
+#
+# Project Tutorials:
+# @src/garak_evaluation/advanced/README.md
+
+# =============================================================================
+# SECURITY BEST PRACTICES
+# =============================================================================
+
+# 1. Never commit API keys to version control
+# 2. Use environment variables for all credentials
+# 3. Run security scans regularly (at least weekly)
+# 4. Track results over time to identify regressions
+# 5. Use report prefixes to organize scan results
+# 6. Review failed probes carefully for false positives
+# 7. Update Garak regularly to get latest probes
